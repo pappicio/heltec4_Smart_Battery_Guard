@@ -8,4 +8,4 @@ cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step down porta 
 
 gli altri componenti sono pochi e molto comuni
 
-pic micro 12F683, sorgenti mikrobasic.
+pic micro 12F683, sorgenti mikrobasic e schema elettrico (jpeg e pdf)
