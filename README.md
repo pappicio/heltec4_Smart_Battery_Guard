@@ -31,3 +31,7 @@ OPPURE:
 Step down aliexpress:
 
 https://it.aliexpress.com/item/1005009490217801.html?spm=a2g0o.productlist.main.32.1ae5ef03EnD1ij&algo_pvid=58bdf994-9b7f-4d37-94b6-dd1a7387e2f5&aem_p4p_detail=2026031415023310395111494988990000630418&algo_exp_id=58bdf994-9b7f-4d37-94b6-dd1a7387e2f5-31&pdp_ext_f=%7B%22order%22%3A%22140%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%218.69%218.69%21%21%2167.26%2167.26%21%402103835e17735257538684047e832e%2112000049267392533%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=ka70ZRbwq3h8&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005009490217801%7C_p_origin_prod%3A&search_p4p_id=2026031415023310395111494988990000630418_9
+
+OPPURE:
+
+https://it.aliexpress.com/item/1005006151233979.html?spm=a2g0o.productlist.main.11.1ae5ef03EnD1ij&algo_pvid=a4c9e735-574e-42d4-9ae0-882bc106503d&algo_exp_id=a4c9e735-574e-42d4-9ae0-882bc106503d-10&pdp_ext_f=%7B%22order%22%3A%221058%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%211.65%211.64%21%21%2112.75%2112.71%21%40210391a017735263044668235eb964%2112000038896346008%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=WsLfBXwRgoxe&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005006151233979%7C_p_origin_prod%3A
