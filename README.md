@@ -12,7 +12,7 @@ gli altri componenti sono pochi e molto comuni
 
 pic micro 12F683, sorgenti mikrobasic e schema elettrico (jpeg e pdf)
 
-datasheet del pic micro (12G683)
+datasheet del pic micro (12F683)
 
 https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
 
