@@ -1,5 +1,7 @@
 # heltec4_Smart_Battery_Guard
 
+REV 2 del progetto: eliminata resistenza 10k sul pin CLR del pic micro e inserita gestione interna da codice mikrobasic.
+
 Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.2V e lo riattiva se poi risale oltre i 3.7V, 
 
 lo stepdown è un modulo che ha i ponticelli con varie tensioni, basta chiudere il ponticello, io ho scelto 3.3V, che eroga in realta 3.0V, 
