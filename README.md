@@ -4,6 +4,8 @@ Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtast
 
 lo tepdown è un modulo che ha i ponticelli con varie tensioni, bqasta chiudere il ponticello, io ho scelto 3.3V, che eroga in realta 3.0V, 
 
-cosi anche se la batteria da 4.5V oppure 3,4V, eroga sempre 3.0V, gli altri componenti sono pochi e molto comuni
+cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step down porta sempre alimentazione al pic da 3.0V (per acvere la costante del comparatore che misura il voltaggio della batteria)
+
+gli altri componenti sono pochi e molto comuni
 
 pic micro 12F683, sorgenti mikrobasic.
