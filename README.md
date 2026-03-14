@@ -1,4 +1,4 @@
-# heltec4.Smart.Battery.Guard
+# heltec4_Smart_Battery_Guard
 
 Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.2V e lo riattiva se poi risale oltre i 3.7V, 
 
