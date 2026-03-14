@@ -17,6 +17,6 @@ datasheet del pic micro (12F683)
 https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
 
 
-lo stepdown che vi consiglio è questo modello cpon ponticelli pee voltaggi fixed (3.3 è quello che ho usato io) e il PIN "EN" nn va utilizzato, saldare il ponticello che indica 3.3V
+lo stepdown che vi consiglio è questo modello con ponticelli per voltaggi fixed (3.3 è quello che ho usato io, ma testati 3 differenti ed erogavano 3.0V) e il PIN "EN" nn va utilizzato, saldare il ponticello che indica 3.3V
 
 https://www.amazon.it/ZkeeShop-alimentazione-step-down-convertitore-regolabile/dp/B08CVF4BFW/ref=sr_1_12?crid=2L7YJ98YYK6QC&dib=eyJ2IjoiMSJ9.GKlv5DQszLgq_LK5n0crl-LZyzy14A9M2XRjKJi2xWCCqLwgWRo3srD0MooDTUEBpFbBTtOVE-AWWb74bsnG_XGg4wq2QGu4Y_BDJ2Xh671aMHy8wx1NEpU3IyhLT3BEzHco6UVeIriE3vpc91ElZu10hsVv657xwLbnRsnYQlt8BdA-fc1P7dgbHocSt4mavAwtESl5kJ_vQQBW5VQocvimQmC5j3ZutorXpWckRHpvCHWcvV_RHlC2DihOXUO3SbHPs1Ebx8yQo_GZcRv0D8_E41QN40DCS_Tff98F7YE.Aslo3HLAKDHMFaejLaiD0FafWqjTtJy69g64mXzOSEg&dib_tag=se&keywords=step+down+5v&qid=1773518897&refinements=p_85%3A20930965031&rnid=20930964031&rps=1&sprefix=step+down+%2Caps%2C262&sr=8-12
