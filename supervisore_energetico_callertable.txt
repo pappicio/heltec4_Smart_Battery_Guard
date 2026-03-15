@@ -1,5 +1,0 @@
-main
-	Init_Hardware
-	ADC_Read
-		Delay_22us
-	EEPROM_Write
