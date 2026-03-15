@@ -41,3 +41,9 @@ https://it.aliexpress.com/item/1005009490217801.html?spm=a2g0o.productlist.main.
 OPPURE:
 
 https://it.aliexpress.com/item/1005006151233979.html?spm=a2g0o.productlist.main.11.1ae5ef03EnD1ij&algo_pvid=a4c9e735-574e-42d4-9ae0-882bc106503d&algo_exp_id=a4c9e735-574e-42d4-9ae0-882bc106503d-10&pdp_ext_f=%7B%22order%22%3A%221058%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%211.65%211.64%21%21%2112.75%2112.71%21%40210391a017735263044668235eb964%2112000038896346008%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=WsLfBXwRgoxe&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005006151233979%7C_p_origin_prod%3A
+
+
+
+video per meglio comprendere le funzioni del tasto
+
+
