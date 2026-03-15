@@ -1,19 +1,11 @@
-program Solar_Power_Manager_EEPROM
+program Solar_Power_Manager_Final
 
 dim valore_adc as word
 dim i as byte
 dim secondi_contatore as word
+dim in_manutenzione as boolean
 
-sub procedure Init_Hardware()
-    OSCCON = %01100000    ' 4MHz
-    CMCON0 = 7
-    ANSEL  = %00000010    ' RA1 Analogico
-    TRISIO = %00001011    ' RA0, RA1, RA3 In | RA2, RA5 Out
-    OPTION_REG.7 = 0
-    WPU.0 = 1             ' Pull-up Pin 7
-
-    GPIO.2 = 1            ' Heltec SPENTO al boot
-
+sub procedure Segnale_Avvio()
     for i = 1 to 3
         GPIO.5 = 1
         delay_ms(150)
@@ -22,58 +14,110 @@ sub procedure Init_Hardware()
     next i
 end sub
 
+sub procedure Salva_EEPROM()
+    valore_adc = ADC_Read(1)
+    EEPROM_Write(0, Hi(valore_adc))
+    delay_ms(20)
+    EEPROM_Write(1, Lo(valore_adc))
+    delay_ms(20)
+end sub
+
+sub procedure Init_Hardware()
+    OSCCON = %01100000    ' 4MHz
+    CMCON0 = 7
+    ANSEL  = %00000010    ' RA1 Analogico
+    TRISIO = %00001011    ' RA0, RA1, RA3 In | RA2, RA5 Out
+    OPTION_REG.7 = 0
+    WPU.0 = 1
+    GPIO.2 = 1            ' Heltec SPENTO al boot
+    in_manutenzione = false
+    Segnale_Avvio()
+end sub
+
 main:
     Init_Hardware()
     secondi_contatore = 300
 
     while (TRUE)
-
-        ' --- 1. GESTIONE TASTO + SALVATAGGIO EEPROM ---
+        ' --- GESTIONE TASTO ---
         if (GPIO.0 = 0) then
             i = 0
-            while (GPIO.0 = 0) and (i < 10)
+            ' Finché tieni premuto, contiamo i decimi di secondo
+            while (GPIO.0 = 0) and (i < 50)
                 delay_ms(100)
                 i = i + 1
+                if (i >= 10) then GPIO.5 = 1 end if ' Accende LED dopo 1 secondo
             wend
 
-            if (i >= 10) then
-                ' 1A. LEGGE L'ULTIMO VALORE PRIMA DI SPEGNERE
-                valore_adc = ADC_Read(1)
+            ' CASO 1: RELEASE TRA 1 E 5 SECONDI (Salva e riavvia Heltec)
 
-                ' 1B. SCRIVE IN EEPROM (Offset 0 e 1)
-                ' Lo salviamo in due byte: Parte Alta e Parte Bassa
-                EEPROM_Write(0, Hi(valore_adc))
-                delay_ms(20) ' Ritardo obbligatorio per scrittura EEPROM
-                EEPROM_Write(1, Lo(valore_adc))
-                delay_ms(20)
+            if (i >= 10) and (i < 50) then
+                Salva_EEPROM()
+                GPIO.2 = 1 ' riavvia heltec
+                ' spegne led
+                GPIO.5 = 0
+                delay_ms(1000)
+                GPIO.2 = 0 ' riavvia heltec
+                ' Reset del contatore per evitare che l'ADC lo rispegna subito
+                secondi_contatore = 0
+            end if
 
-                ' 1C. AZIONE FISICA
-                GPIO.2 = 1 ' Spegne Heltec
-                GPIO.5 = 1 ' Accende LED fisso (Conferma salvataggio e spegnimento)
+            ' CASO 2: PRESSIONE OLTRE 5 SECONDI (Entra in Manutenzione)
+            if (i >= 50) then
+                Salva_EEPROM()
+                GPIO.2 = 1 ' Spegne Heltec per manutenzione
 
-                while (GPIO.0 = 0)
-                    delay_ms(10)
+                ' Lampeggio veloce 10 volte (conferma entrata)
+                for i = 1 to 20
+                    GPIO.5 = not GPIO.5
+                    delay_ms(100)
+                next i
+                GPIO.5 = 0
+
+                in_manutenzione = true
+
+                ' --- LOOP MANUTENZIONE ---
+                while (in_manutenzione = true)
+                    GPIO.5 = 1 ' Blink lento: 500ms ON
+                    delay_ms(500)
+                    GPIO.5 = 0 ' 500ms OFF
+
+                    ' Controllo uscita: pressione di altri 5 secondi
+                    if (GPIO.0 = 0) then
+                        secondi_contatore = 0
+                        while (GPIO.0 = 0) and (secondi_contatore < 50)
+                            delay_ms(100)
+                            secondi_contatore = secondi_contatore + 1
+                        wend
+
+                        if (secondi_contatore >= 50) then
+                            Salva_EEPROM()    ' Salva anche all'uscita
+                            in_manutenzione = false
+                        end if
+                    else
+                        delay_ms(500) ' Se non premo, finisco il ciclo del secondo
+                    end if
                 wend
 
-                GPIO.5 = 0 ' Spegne LED al rilascio
-                secondi_contatore = 300 ' Forza rilettura al rilascio
+                ' USCITA DALLA MANUTENZIONE
+                Segnale_Avvio() ' I 3 lampeggi di boot
+                GPIO.2 = 0      ' Riaccende Heltec
+                secondi_contatore = 300
             end if
+
+            ' Se hai rilasciato prima di 1 secondo, spegni comunque il LED se era acceso
+            GPIO.5 = 0
         end if
 
-        ' --- 2. LOGICA ADC STANDARD ---
-        secondi_contatore = secondi_contatore + 1
-        if (secondi_contatore >= 300) then
-            valore_adc = ADC_Read(1)
-
-            if (valore_adc < 582) then
-                GPIO.2 = 1
+        ' --- LOGICA ADC STANDARD ---
+        if (in_manutenzione = false) then
+            secondi_contatore = secondi_contatore + 1
+            if (secondi_contatore >= 300) then
+                valore_adc = ADC_Read(1)
+                if (valore_adc < 582) then GPIO.2 = 1 end if
+                if (valore_adc > 651) then GPIO.2 = 0 end if
+                secondi_contatore = 0
             end if
-
-            if (valore_adc > 651) then
-                GPIO.2 = 0
-            end if
-
-            secondi_contatore = 0
         end if
 
         delay_ms(100)

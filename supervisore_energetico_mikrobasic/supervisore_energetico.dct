@@ -182,6 +182,7 @@ hts_bit
 i
 ics_auto
 ics_off
+in_manutenzione
 indf
 init_hardware
 int2double
@@ -316,12 +317,14 @@ rp0
 rp0_bit
 rp1
 rp1_bit
+salva_eeprom
 sboden
 sboden_bit
 scs
 scs_bit
 sdiv3232l
 secondi_contatore
+segnale_avvio
 setfdz32
 setfov32
 setfun32
