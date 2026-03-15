@@ -45,5 +45,5 @@ https://it.aliexpress.com/item/1005006151233979.html?spm=a2g0o.productlist.main.
 
 
 video per meglio comprendere le funzioni del tasto
-
+https://github.com/pappicio/heltec4_Smart_Battery_Guard/blob/main/simulazione%20pic%20micro.mp4
 
