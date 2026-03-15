@@ -1,0 +1,81 @@
+program Solar_Power_Manager_EEPROM
+
+dim valore_adc as word
+dim i as byte
+dim secondi_contatore as word
+
+sub procedure Init_Hardware()
+    OSCCON = %01100000    ' 4MHz
+    CMCON0 = 7
+    ANSEL  = %00000010    ' RA1 Analogico
+    TRISIO = %00001011    ' RA0, RA1, RA3 In | RA2, RA5 Out
+    OPTION_REG.7 = 0
+    WPU.0 = 1             ' Pull-up Pin 7
+
+    GPIO.2 = 1            ' Heltec SPENTO al boot
+
+    for i = 1 to 3
+        GPIO.5 = 1
+        delay_ms(150)
+        GPIO.5 = 0
+        delay_ms(150)
+    next i
+end sub
+
+main:
+    Init_Hardware()
+    secondi_contatore = 300
+
+    while (TRUE)
+
+        ' --- 1. GESTIONE TASTO + SALVATAGGIO EEPROM ---
+        if (GPIO.0 = 0) then
+            i = 0
+            while (GPIO.0 = 0) and (i < 10)
+                delay_ms(100)
+                i = i + 1
+            wend
+
+            if (i >= 10) then
+                ' 1A. LEGGE L'ULTIMO VALORE PRIMA DI SPEGNERE
+                valore_adc = ADC_Read(1)
+
+                ' 1B. SCRIVE IN EEPROM (Offset 0 e 1)
+                ' Lo salviamo in due byte: Parte Alta e Parte Bassa
+                EEPROM_Write(0, Hi(valore_adc))
+                delay_ms(20) ' Ritardo obbligatorio per scrittura EEPROM
+                EEPROM_Write(1, Lo(valore_adc))
+                delay_ms(20)
+
+                ' 1C. AZIONE FISICA
+                GPIO.2 = 1 ' Spegne Heltec
+                GPIO.5 = 1 ' Accende LED fisso (Conferma salvataggio e spegnimento)
+
+                while (GPIO.0 = 0)
+                    delay_ms(10)
+                wend
+
+                GPIO.5 = 0 ' Spegne LED al rilascio
+                secondi_contatore = 300 ' Forza rilettura al rilascio
+            end if
+        end if
+
+        ' --- 2. LOGICA ADC STANDARD ---
+        secondi_contatore = secondi_contatore + 1
+        if (secondi_contatore >= 300) then
+            valore_adc = ADC_Read(1)
+
+            if (valore_adc < 582) then
+                GPIO.2 = 1
+            end if
+
+            if (valore_adc > 651) then
+                GPIO.2 = 0
+            end if
+
+            secondi_contatore = 0
+        end if
+
+        delay_ms(100)
+    wend
+end.
