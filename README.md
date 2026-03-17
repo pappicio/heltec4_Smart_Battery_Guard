@@ -9,13 +9,13 @@ Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare 
 
 Agiunto piccolo script batch per calcolare precise soglie da inserire nel codice a seconda del voltaggio in uscita (con pic collegato su) dello stepdown o LDO
 
-Va precisato che valori sotto i 2.4V e sopra i 3.3V, potrebbero rendere il sistem stesso instabile, quindi i valori ottimali sono dai 2.7 ai 3.2V, anche se da 2.4 a 3.3, vanno bene uguale, usate lo script per calcolare i valori dopo aver misurato la tensione in uscita, inseritele nel progetto mikrobasi /mikroc e compilate hex dea caricare sul pic micro!
+Va precisato che valori sotto i 2.4V e sopra i 3.1V, potrebbero rendere il sistem stesso instabile, quindi i valori ottimali sono dai 2.5 ai 2.8V, anche se da 2.4 a 3.0, vanno bene uguale, usate lo script per calcolare i valori dopo aver misurato la tensione in uscita, inseritele nel progetto mikrobasi /mikroc e compilate hex dea caricare sul pic micro!
 
-Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.2V e lo riattiva se poi risale oltre i 3.7V, 
+Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.3V e lo riattiva se poi risale oltre i 3.7V, 
 
 lo stepdown è un modulo che ha i ponticelli con varie tensioni, basta chiudere il ponticello, io ho scelto 3.3V, che eroga in realta 3.0V, 
 
-cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step down porta sempre alimentazione al pic da 3.0V (per acvere la costante del comparatore che misura il voltaggio della batteria)
+cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step down porta sempre alimentazione al pic da 2.5/2.8V (per acvere la costante del comparatore che misura il voltaggio della batteria)
 
 gli altri componenti sono pochi e molto comuni
 
