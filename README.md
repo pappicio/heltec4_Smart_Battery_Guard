@@ -6,7 +6,10 @@ una breve spiegazione sulla funzione del tasto:
 pressione tra 1 e 5 secondi, accende led e lo lascia cceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01 cosi da poter verificare che siano coerenti con il voltaggio effettivo attualed ella batteria e riavvia heltec, 
 Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare manutenzione, esempio, cambio antenna senzxa far soffrire la componentistica della radio in assenza del finale (l'antenna appunto), il led inizia a lampeggiare per 500ms ogni secondo, per idicare l'ingresso nello stato menutentivo, per tornare al funzionamento normale, tenere premuto il tasto per altri 5 secondi almeno, il led fara i 3 lampeggi classsici dell'avvio e si spegne, heltec si riavvia e torna a funzionare in modo regolare.
 
-REV 2 del progetto: eliminata resistenza 10k sul pin CLR del pic micro e inserita gestione interna da codice mikrobasic.
+
+Agiunto piccolo script batch per calcolare precise soglie da inserire nel codice a seconda del voltaggio in uscita (con pic collegato su) dello stepdown o LDO
+
+Va precisato che valori sotto i 2.4V e sopra i 3.3V, potrebbero rendere il sistem stesso instabile, quindi i valori ottimali sono dai 2.95 ai 3.05V, anche se da 2.4 a 3.3, vanno bene uguale, usate lo script per calcolare i valori dopo aver misurato la tensione in uscita, inseritele nel progetto mikrobasi /mikroc e compilate hex dea caricare sul pic micro!
 
 Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.2V e lo riattiva se poi risale oltre i 3.7V, 
 
