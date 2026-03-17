@@ -1,14 +1,16 @@
 @echo off
 setlocal enabledelayedexpansion
-title Calcolatore MikroBasic (VERSIONE CORRETTA)
+title Calcolatore Dual-Mode (Basic/C) - Precisione 2 Decimali
 
 :start
 cls
 echo ==================================================
-echo      GENERATORE CODICE MIKROBASIC (SOGLIE)
+echo      GENERATORE SOGLIE: MIKROBASIC e MIKROC
 echo ==================================================
 echo.
-set /p VDD="Inserisci V-LDO (es. 2.9 o 3.0): "
+echo Inserisci il valore con il punto (es. 2.95 o 3.00)
+echo.
+set /p VDD="Inserisci V-LDO misurata: "
 
 :: Pulizia spazi
 set "VDD=%VDD: =%"
@@ -16,32 +18,44 @@ set "VDD=%VDD: =%"
 :: Check del punto
 set "TEST_POINT=%VDD:.=%"
 if "%TEST_POINT%"=="%VDD%" (
-    echo [ERRORE] Manca il punto!
+    echo.
+    echo [ERRORE] MANCA IL PUNTO! Esempio: 3.00
     pause
     goto start
 )
 
-:: Estraiamo i decimi (es: 3.0 -> 30)
-set "VDD_C=%TEST_POINT%"
+:: Gestione 2 decimali (es. 3.2 -> 320, 3 -> 300)
+set "P1=" & set "P2="
+for /f "tokens=1,2 delims=." %%a in ("%VDD%") do (
+    set "P1=%%a"
+    set "P2=%%b"
+)
+set "P2=%P2%00"
+set "P2=%P2:~0,2%"
+set "VDD_C=%P1%%P2%"
 
-:: --- CALCOLO CORRETTO (SENZA ZERI EXTRA) ---
-:: Formula: (V_pin * 1024) / VDD
-:: Per 3.3V batteria (1.65V pin): 1.65 * 1024 = 1689.6
-:: In Batch usiamo: (16896 / VDD_C) -> 16896 / 30 = 563
-set /a soglia_off=16896 / %VDD_C%
-
-:: Per 3.7V batteria (1.85V pin): 1.85 * 1024 = 1894.4
-:: In Batch usiamo: (18944 / VDD_C) -> 18944 / 30 = 631
-set /a soglia_on=18944 / %VDD_C%
+:: --- CALCOLO ADC ---
+:: (1.65 * 1024) * 100 / VDD_C
+set /a soglia_off=168960 / %VDD_C%
+:: (1.85 * 1024) * 100 / VDD_C
+set /a soglia_on=189440 / %VDD_C%
 
 echo.
-echo COPIA E INCOLLA:
-echo --------------------------------------------------
-echo ' Alimentazione PIC misurata: %VDD%V
-echo if (valore_adc ^< %soglia_off%) then GPIO.2 = 1 end if  ' OFF (Batt ^< 3.3V)
-echo if (valore_adc ^> %soglia_on%) then GPIO.2 = 0 end if  ' ON (Batt ^> 3.7V)
-echo --------------------------------------------------
+echo ==================================================
+echo   PER MIKROBASIC
+echo ==================================================
+echo ' Alimentazione PIC: %P1%.%P2%V
+echo if (valore_adc ^< %soglia_off%) then GPIO.2 = 1 end if  ' OFF (3.3V)
+echo if (valore_adc ^> %soglia_on%) then GPIO.2 = 0 end if  ' ON  (3.7V)
 echo.
-echo Premi [Invio] per riprovare...
+echo ==================================================
+echo   PER MIKROC
+echo ==================================================
+echo // Alimentazione PIC: %P1%.%P2%V
+echo if (valore_adc ^< %soglia_off%) GPIO.F2 = 1; // OFF (3.3V)
+echo if (valore_adc ^> %soglia_on%)  GPIO.F2 = 0; // ON  (3.7V)
+echo ==================================================
+echo.
+echo Premi [Invio] per un nuovo calcolo...
 pause > nul
 goto start
