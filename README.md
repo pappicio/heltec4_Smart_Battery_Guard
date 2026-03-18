@@ -33,7 +33,7 @@ il file per la simulazione da caricare si chiama: smimulazione.sim1, ovviamente 
 
 l'LDO e lo step up come da link consumano circa 4uA, in pratica anni con batteira gia scarica..... 
 
-StepUP AMAZON:
+StepUP AMAZON 5V:
 
 https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHCI4NL&psc=1
 
