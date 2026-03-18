@@ -28,7 +28,10 @@ https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
 PER LA SIMULAZIONE scaricare SimulIDE: https://simulide.com/p/downloads/
 il file per la simulazione da caricare si chiama: smimulazione.sim1, ovviamente dovrete caricare il file hex compilato, nel PIC, per eseguirlo
 
-lo stepdown che vi consiglio è questo modello con ponticelli per voltaggi fixed (il ponticello che ho utilizzato il è "3.3V", testati 3 differenti ed erogavano tutti 3.0V, piu che sufficienti per tenere in vita il microchip) e il PIN "EN" nn va utilizzato, saldare il ponticello che indica 3.3V, oppure usare il potenziometro per avere un voltaggio  di 2.9V precisi.
+
+lo stepdown consuma troppo (potrete cmq usarne, ma sconsihliato)
+
+l'LDO invece circa 4uA, in pratica anni con batteira gia scarica..... quindi LDO
 
 Stepdown AMAZON:
 
