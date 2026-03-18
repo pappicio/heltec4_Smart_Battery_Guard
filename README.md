@@ -7,7 +7,7 @@ pressione tra 1 e 5 secondi, accende led e lo lascia cceso fino al rilascio del 
 Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare manutenzione, esempio, cambio antenna senzxa far soffrire la componentistica della radio in assenza del finale (l'antenna appunto), il led inizia a lampeggiare per 500ms ogni secondo, per idicare l'ingresso nello stato menutentivo, per tornare al funzionamento normale, tenere premuto il tasto per altri 5 secondi almeno, il led fara i 3 lampeggi classsici dell'avvio e si spegne, heltec si riavvia e torna a funzionare in modo regolare.
 
 
-Agiunto piccolo script batch per calcolare precise soglie da inserire nel codice a seconda del voltaggio in uscita (con pic collegato su) dello stepdown o LDO
+Agiunto piccolo script batch per calcolare precise soglie da inserire nel codice a seconda del voltaggio in uscita (con pic collegato su) dello stepup o LDO
 
 Va precisato che valori sotto i 2.4V e sopra i 3.1V, potrebbero rendere il sistem stesso instabile, quindi i valori ottimali sono dai 2.5 ai 2.8V, (PRECISANDO CHE UN VALORE VERAMENTE OTTIMO SI AGGIRA INTORNO AI 2.5/2.6V) anche se da 2.4 a 3.0, vanno bene uguale, usate lo script per calcolare i valori dopo aver misurato la tensione in uscita, inseritele nel progetto mikrobasi /mikroc e compilate hex dea caricare sul pic micro!
 
@@ -15,7 +15,7 @@ Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtast
 
 lo stepup/stepdown è un modulo che ha i ponticelli con varie tensioni, basta chiudere il ponticello, io ho scelto 3.3V, che eroga in realta 3.0V, 
 
-cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step down porta sempre alimentazione al pic da 2.5/2.8V o a 5V per lo step up (per avere la costante del comparatore che misura il voltaggio della batteria)
+cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step up porta sempre alimentazione al pic da 5V  (per avere la costante del comparatore che misura il voltaggio della batteria)
 
 gli altri componenti sono pochi e molto comuni
 
