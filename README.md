@@ -39,7 +39,19 @@ StepUP AMAZON 5V:
 
 https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHCI4NL&psc=1
 
-ldo da 2.5V (o da 3.0V), che trovate su aliexpress
+LDO da 2.5V (o da 3.0V)
+
+***per LDO, utilizzare schema rev2, e soprattutto moltiplicare per 2 il valore dei 5000mv,  quindi 5000 diventa 10000mv, 5010, diventa 10020***
+***questa parter qui***
+ 
+ ' Calcolo: (ADC * 5000) / 1024
+ 
+ ' batteria_mv = (LongWord(valore_adc) * 5000) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
+
+
+***senza toccare altre righe di codice sul listato***
+
+quindi LDO che trovate su aliexpress
 
 https://it.aliexpress.com/item/1005004789258458.html?spm=a2g0o.productlist.main.13.bfb6UybJUybJP0&algo_pvid=b6bdde25-6901-49c2-9dc7-6fe755df9e97&algo_exp_id=b6bdde25-6901-49c2-9dc7-6fe755df9e97-12&pdp_ext_f=%7B%22order%22%3A%2251%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%212.02%210.88%21%21%212.27%210.99%21%40210390c917737370809014252ee6d6%2112000030494325303%21sea%21IT%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A63d35bfc%3Bm03_new_user%3A-29895%3BpisId%3A5000000197840834&curPageLogUid=x5MpdVa0tD1p&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005004789258458%7C_p_origin_prod%3A
 
