@@ -41,7 +41,11 @@ https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHC
 
 LDO da 2.5V (o da 3.0V), che trovate su aliexpress
 
-***per LDO, utilizzare schema rev2, e soprattutto moltiplicare per 2 il valore dei 5000mv,  quindi 5000 foventa 10000mv, 5010, doventa 10020***
+***per LDO, utilizzare schema rev2, e soprattutto moltiplicare per 2 il valore dei 5000mv,  quindi 5000 diventa 10000mv, 5010, diventa 10020***
+*** questa parter qui ***
+ ' Calcolo: (ADC * 5000) / 1024
+ ' batteria_mv = (LongWord(valore_adc) * 5000) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
+
 
 ***senza toccare altre righe di codice sul listato***
 
