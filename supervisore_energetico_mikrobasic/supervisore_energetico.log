@@ -6,8 +6,8 @@ hint: 154	1010	Hint: Unit "supervisore_energetico.mbas" has been recompiled	supe
 diagnostics: 0	134	Compiled Successfully	C:\projects\accensione_heltec\supervisore_energetico_mikrobasic\supervisore_energetico.mbas
 diagnostics: 0	139	All files Compiled in 16 ms	 
 hint: 0	1144	Used RAM (bytes): 13 (12%)  Free RAM (bytes): 99 (88%)	Used RAM (bytes): 13 (12%)  Free RAM (bytes): 99 (88%)
-hint: 0	1144	Used ROM (program words): 679 (33%)  Free ROM (program words): 1369 (67%)	Used ROM (program words): 679 (33%)  Free ROM (program words): 1369 (67%)
+hint: 0	1144	Used ROM (program words): 682 (33%)  Free ROM (program words): 1366 (67%)	Used ROM (program words): 682 (33%)  Free ROM (program words): 1366 (67%)
 diagnostics: 0	145	Project Linked Successfully	supervisore_energetico.mbppi
-diagnostics: 0	140	Linked in 78 ms	 
-diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 250 ms	 
-diagnostics: 0	103	Finished successfully: 19 mar 2026, 12:39:05	supervisore_energetico.mbppi
+diagnostics: 0	140	Linked in 16 ms	 
+diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 188 ms	 
+diagnostics: 0	103	Finished successfully: 19 mar 2026, 17:46:33	supervisore_energetico.mbppi

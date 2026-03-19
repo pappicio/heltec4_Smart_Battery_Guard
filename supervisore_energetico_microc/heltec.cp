@@ -1,14 +1,14 @@
-#line 1 "C:/Users/io/Desktop/microc_project/heltec.c"
+#line 1 "C:/projects/accensione_heltec/supervisore_energetico_microc/heltec.c"
 
 unsigned int valore_adc;
+unsigned long batteria_mv;
 unsigned char i;
 unsigned int secondi_contatore;
-bit in_manutenzione;
+short in_manutenzione;
 
 
 void Segnale_Avvio() {
- unsigned char j;
- for (j = 1; j <= 3; j++) {
+ for (i = 1; i <= 3; i++) {
  GPIO.F5 = 1;
  Delay_ms(250);
  GPIO.F5 = 0;
@@ -16,46 +16,50 @@ void Segnale_Avvio() {
  }
 }
 
+
 void Salva_EEPROM() {
+
+ ADC_Read(1);
+ Delay_ms(5);
  valore_adc = ADC_Read(1);
 
 
- EEPROM_Write(0, (unsigned char)(valore_adc >> 8));
- Delay_ms(20);
+ batteria_mv = ((unsigned long)valore_adc * 5000) >> 10;
 
 
- EEPROM_Write(1, (unsigned char)(valore_adc & 0xFF));
- Delay_ms(20);
+
+ EEPROM_Write(0, (unsigned short)(valore_adc >> 8));
+ Delay_ms(25);
+ EEPROM_Write(1, (unsigned short)(valore_adc & 0xFF));
+ Delay_ms(25);
+
+
+ EEPROM_Write(2, 0xFF);
+ Delay_ms(25);
+
+
+
+ EEPROM_Write(3, (unsigned short)(batteria_mv >> 24));
+ Delay_ms(25);
+ EEPROM_Write(4, (unsigned short)(batteria_mv >> 16));
+ Delay_ms(25);
+ EEPROM_Write(5, (unsigned short)(batteria_mv >> 8));
+ Delay_ms(25);
+ EEPROM_Write(6, (unsigned short)(batteria_mv & 0xFF));
+ Delay_ms(25);
 }
 
+
 void Init_Hardware() {
-
+ OSCCON = 0b01100000;
  CMCON0 = 7;
-
-
- ANSEL = 0x02;
-
-
- TRISIO.F0 = 1;
- TRISIO.F1 = 1;
- TRISIO.F2 = 0;
- TRISIO.F3 = 1;
- TRISIO.F4 = 0;
- TRISIO.F5 = 0;
-
-
- OPTION_REG.F7 = 0;
- WPU = 0x01;
-
+ ANSEL = 0b00000010;
+ TRISIO = 0b00001011;
+ OPTION_REG.NOT_GPPU = 0;
+ WPU = 0b00000001;
 
  GPIO.F2 = 1;
- GPIO.F5 = 0;
-
  in_manutenzione = 0;
-
-
- Delay_ms(100);
-
  Segnale_Avvio();
 }
 
@@ -67,15 +71,14 @@ void main() {
 
  if (GPIO.F0 == 0) {
  i = 0;
-
- while (GPIO.F0 == 0 && i < 50) {
+ while ((GPIO.F0 == 0) && (i < 50)) {
  Delay_ms(100);
  i++;
  if (i >= 10) GPIO.F5 = 1;
  }
 
 
- if (i >= 10 && i < 50) {
+ if ((i >= 10) && (i < 50)) {
  Salva_EEPROM();
  GPIO.F2 = 1;
  GPIO.F5 = 0;
@@ -88,8 +91,6 @@ void main() {
  if (i >= 50) {
  Salva_EEPROM();
  GPIO.F2 = 1;
-
-
  for (i = 1; i <= 20; i++) {
  GPIO.F5 = ~GPIO.F5;
  Delay_ms(100);
@@ -97,23 +98,22 @@ void main() {
  GPIO.F5 = 0;
  in_manutenzione = 1;
 
-
  while (in_manutenzione) {
- GPIO.F5 = 1; Delay_ms(500);
+ GPIO.F5 = 1;
+ Delay_ms(500);
  GPIO.F5 = 0;
-
  if (GPIO.F0 == 0) {
- i = 0;
- while (GPIO.F0 == 0 && i < 50) {
+ secondi_contatore = 0;
+ while ((GPIO.F0 == 0) && (secondi_contatore < 50)) {
  Delay_ms(100);
- i++;
+ secondi_contatore++;
  }
- if (i >= 50) {
+ if (secondi_contatore >= 50) {
  Salva_EEPROM();
  in_manutenzione = 0;
-
  for (i = 1; i <= 20; i++) {
- GPIO.F5 = ~GPIO.F5; Delay_ms(100);
+ GPIO.F5 = ~GPIO.F5;
+ Delay_ms(100);
  }
  GPIO.F5 = 0;
  }
@@ -121,10 +121,9 @@ void main() {
  Delay_ms(500);
  }
  }
-
  Segnale_Avvio();
  GPIO.F2 = 0;
- secondi_contatore = 300;
+ secondi_contatore = 0;
  }
  GPIO.F5 = 0;
  }
@@ -133,12 +132,26 @@ void main() {
  if (!in_manutenzione) {
  secondi_contatore++;
  if (secondi_contatore >= 300) {
+
  valore_adc = ADC_Read(1);
- if (valore_adc < 582) GPIO.F2 = 1;
- if (valore_adc > 651) GPIO.F2 = 0;
+ Delay_ms(5);
+ valore_adc = ADC_Read(1);
+
+
+ batteria_mv = ((unsigned long)valore_adc * 5000) >> 10;
+
+
+ if (batteria_mv <= 3300) {
+ GPIO.F2 = 1;
+ }
+ if (batteria_mv >= 3700) {
+ GPIO.F2 = 0;
+ }
+
  secondi_contatore = 0;
  }
  }
+
  Delay_ms(100);
  }
 }

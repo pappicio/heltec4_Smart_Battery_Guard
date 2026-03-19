@@ -4,7 +4,9 @@ main
 	Salva_EEPROM
 		ADC_Read
 			Delay_22us
+		Mul_32x32_U
 		EEPROM_Write
 	Segnale_Avvio
 	ADC_Read
 		Delay_22us
+	Mul_32x32_U

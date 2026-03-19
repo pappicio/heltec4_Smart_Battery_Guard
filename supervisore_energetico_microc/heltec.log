@@ -1,12 +1,12 @@
-0	1	mikroCPIC1618.exe -MSF -DBG -pP12F683 -GC -DL -O11111114 -fo4 -N"C:\Users\io\Desktop\microc_project\heltec.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"C:\Users\io\Desktop\microc_project\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" "heltec.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_ADC_A_E.mcl" "__Lib_EEPROM.mcl"	 
+0	1	mikroCPIC1618.exe -MSF -DBG -pP12F683 -GC -DL -O11111114 -fo4 -N"C:\projects\accensione_heltec\supervisore_energetico_microc\heltec.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" -SP"C:\projects\accensione_heltec\supervisore_energetico_microc\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Uses\P16\" "heltec.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_ADC_A_E.mcl" "__Lib_EEPROM.mcl"	 
 hint: 0	1139	Available RAM: 112 [bytes], Available ROM: 2048 [bytes]	 
 diagnostics: 0	122	Compilation Started	heltec.c
-diagnostics: 143	123	Compiled Successfully	heltec.c
-diagnostics: 0	127	All files Compiled in 78 ms	 
-hint: 0	1144	Used RAM (bytes): 10 (9%)  Free RAM (bytes): 102 (91%)	Used RAM (bytes): 10 (9%)  Free RAM (bytes): 102 (91%)
-hint: 0	1144	Used ROM (program words): 453 (22%)  Free ROM (program words): 1595 (78%)	Used ROM (program words): 453 (22%)  Free ROM (program words): 1595 (78%)
+diagnostics: 156	123	Compiled Successfully	heltec.c
+diagnostics: 0	127	All files Compiled in 79 ms	 
+hint: 0	1144	Used RAM (bytes): 17 (15%)  Free RAM (bytes): 95 (85%)	Used RAM (bytes): 17 (15%)  Free RAM (bytes): 95 (85%)
+hint: 0	1144	Used ROM (program words): 721 (35%)  Free ROM (program words): 1327 (65%)	Used ROM (program words): 721 (35%)  Free ROM (program words): 1327 (65%)
 diagnostics: 0	125	Project Linked Successfully	heltec.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
-diagnostics: 0	128	Linked in 47 ms	 
-diagnostics: 0	129	Project 'heltec.mcppi' completed: 282 ms	 
-diagnostics: 0	103	Finished successfully: 15 mar 2026, 21:23:41	heltec.mcppi
+diagnostics: 0	128	Linked in 62 ms	 
+diagnostics: 0	129	Project 'heltec.mcppi' completed: 297 ms	 
+diagnostics: 0	103	Finished successfully: 19 mar 2026, 17:51:08	heltec.mcppi

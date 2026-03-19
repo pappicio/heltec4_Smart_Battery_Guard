@@ -1,80 +1,156 @@
-// --- Dichiarazione Variabili ---
+// Definizione variabili globali
 unsigned int valore_adc;
-unsigned long batteria_mv; // Usiamo Long per i calcoli dei millivolt
+unsigned long batteria_mv;    // Usiamo unsigned long per evitare overflow
 unsigned char i;
 unsigned int secondi_contatore;
-bit in_manutenzione;
+short in_manutenzione;        // boolean in MikroC si esprime con short o bit
 
-// --- Procedure ---
-void Salva_EEPROM() {
-    valore_adc = ADC_Read(1);
-    // Calcoliamo i millivolt (Assumendo alimentazione PIC = 5.1V precisi)
-    batteria_mv = (unsigned long)valore_adc * 5100 >> 10;
-
-    // Byte 0-1: ADC Grezzo
-    EEPROM_Write(0, (unsigned char)(valore_adc >> 8)); Delay_ms(20);
-    EEPROM_Write(1, (unsigned char)(valore_adc & 0xFF)); Delay_ms(20);
-    
-    // Byte 2: Il tuo SEPARATORE FF
-    EEPROM_Write(2, 0xFF); Delay_ms(20);
-
-    // Byte 3-6: Millivolt (4 byte per un Long)
-    EEPROM_Write(3, (unsigned char)(batteria_mv >> 24)); Delay_ms(20);
-    EEPROM_Write(4, (unsigned char)(batteria_mv >> 16)); Delay_ms(20);
-    EEPROM_Write(5, (unsigned char)(batteria_mv >> 8));  Delay_ms(20);
-    EEPROM_Write(6, (unsigned char)(batteria_mv & 0xFF)); Delay_ms(20);
+// --- PROCEDURA SEGNALE AVVIO ---
+void Segnale_Avvio() {
+    for (i = 1; i <= 3; i++) {
+        GPIO.F5 = 1;
+        Delay_ms(250);
+        GPIO.F5 = 0;
+        Delay_ms(250);
+    }
 }
 
-// ... (Procedura Segnale_Avvio e Init_Hardware rimangono uguali) ...
+
+void Salva_EEPROM() {
+    // 1. Lettura pulita (Doppia lettura per 100k)
+    ADC_Read(1);
+    Delay_ms(5);
+    valore_adc = ADC_Read(1);
+
+    // Formula: (ADC * 5000) / 1024
+    batteria_mv = ((unsigned long)valore_adc * 5000) >> 10;
+
+    // 2. Salvataggio ADC Grezzo (16 bit -> 2 byte)
+    // Spostiamo i bit a destra di 8 per prendere la parte alta
+    EEPROM_Write(0, (unsigned short)(valore_adc >> 8));
+    Delay_ms(25);
+    EEPROM_Write(1, (unsigned short)(valore_adc & 0xFF));
+    Delay_ms(25);
+
+    // 3. SEPARATORE
+    EEPROM_Write(2, 0xFF);
+    Delay_ms(25);
+
+    // 4. Salvataggio Millivolt (32 bit -> 4 byte)
+    // Estraiamo i 4 byte uno per uno shiftando di 24, 16, 8 e 0 bit
+    EEPROM_Write(3, (unsigned short)(batteria_mv >> 24)); // MSB (pi� significativo)
+    Delay_ms(25);
+    EEPROM_Write(4, (unsigned short)(batteria_mv >> 16));
+    Delay_ms(25);
+    EEPROM_Write(5, (unsigned short)(batteria_mv >> 8));
+    Delay_ms(25);
+    EEPROM_Write(6, (unsigned short)(batteria_mv & 0xFF)); // LSB (meno significativo)
+    Delay_ms(25);
+}
+
+// --- INIZIALIZZAZIONE HARDWARE ---
+void Init_Hardware() {
+    OSCCON = 0b01100000;    // 4MHz interno
+    CMCON0 = 7;             // Comparatori OFF
+    ANSEL  = 0b00000010;    // ANS1 (GP1) Analogico
+    TRISIO = 0b00001011;    // RA0, RA1, RA3 Input | RA2, RA5 Output
+    OPTION_REG.NOT_GPPU = 0; // Abilita Pull-ups (bit 7)
+    WPU = 0b00000001;       // Pull-up su GP0 (Tasto)
+
+    GPIO.F2 = 1;            // Heltec SPENTO al boot (Logica Inversa 2N2222 su RST)
+    in_manutenzione = 0;    // False
+    Segnale_Avvio();
+}
 
 void main() {
     Init_Hardware();
-    secondi_contatore = 300; // Forza lettura immediata all'avvio
+    secondi_contatore = 300; // Forza lettura immediata al boot
 
     while (1) {
-        // --- GESTIONE TASTO (Logica Manutenzione) ---
+        // --- GESTIONE TASTO (GP0) ---
         if (GPIO.F0 == 0) {
             i = 0;
-            while (GPIO.F0 == 0 && i < 50) { Delay_ms(100); i++; if (i >= 10) GPIO.F5 = 1; }
+            while ((GPIO.F0 == 0) && (i < 50)) {
+                Delay_ms(100);
+                i++;
+                if (i >= 10) GPIO.F5 = 1; // Accendi LED dopo 1 sec
+            }
 
-            if (i >= 10 && i < 50) { // Reset rapido
+            // CASO 1: RELEASE TRA 1 E 5 SECONDI (Salva e riavvia Heltec)
+            if ((i >= 10) && (i < 50)) {
                 Salva_EEPROM();
-                GPIO.F2 = 1; Delay_ms(1000); GPIO.F2 = 0; // Spegne e riaccende
+                GPIO.F2 = 1; // Forza reset (OFF)
+                GPIO.F5 = 0;
+                Delay_ms(1000);
+                GPIO.F2 = 0; // Rilascia reset (ON)
                 secondi_contatore = 0;
             }
 
-            if (i >= 50) { // Entra in Manutenzione
+            // CASO 2: PRESSIONE OLTRE 5 SECONDI (Manutenzione)
+            if (i >= 50) {
                 Salva_EEPROM();
-                GPIO.F2 = 1; // FORZA SPEGNIMENTO (Logica inversa: 1 = OFF)
-                // ... (Loop manutenzione uguale a prima) ...
-                in_manutenzione = 1;
-                while(in_manutenzione) { 
-                    // Gestione uscita manutenzione (omessa per brevità, uguale al tuo)
+                GPIO.F2 = 1; // Spegne Heltec
+                for (i = 1; i <= 20; i++) {
+                    GPIO.F5 = ~GPIO.F5; // Lampeggio rapido ingresso
+                    Delay_ms(100);
                 }
-                GPIO.F2 = 0; // Torna ON
+                GPIO.F5 = 0;
+                in_manutenzione = 1; // True
+
+                while (in_manutenzione) {
+                    GPIO.F5 = 1;
+                    Delay_ms(500);
+                    GPIO.F5 = 0;
+                    if (GPIO.F0 == 0) {
+                        secondi_contatore = 0;
+                        while ((GPIO.F0 == 0) && (secondi_contatore < 50)) {
+                            Delay_ms(100);
+                            secondi_contatore++;
+                        }
+                        if (secondi_contatore >= 50) {
+                            Salva_EEPROM();
+                            in_manutenzione = 0;
+                            for (i = 1; i <= 20; i++) {
+                                GPIO.F5 = ~GPIO.F5;
+                                Delay_ms(100);
+                            }
+                            GPIO.F5 = 0;
+                        }
+                    } else {
+                        Delay_ms(500);
+                    }
+                }
+                Segnale_Avvio();
+                GPIO.F2 = 0; // Riaccende Heltec usciti dalla manutenzione
+                secondi_contatore = 0;
             }
+            GPIO.F5 = 0;
         }
 
-        // --- LOGICA ADC MILLIVOLT ---
+        // --- LOGICA ADC E CONTROLLO BATTERIA ---
         if (!in_manutenzione) {
             secondi_contatore++;
-            if (secondi_contatore >= 300) { // Ogni 30 secondi (se delay_ms è 100)
+            if (secondi_contatore >= 300) {
+                // Lettura ADC stabilizzata per 100k ohm
                 valore_adc = ADC_Read(1);
-              
-             // 5000=5000mv=5V, se fosse 50.1, scriveremmo: 5010
-                batteria_mv = (unsigned long)valore_adc * 5000 >> 10;
+                Delay_ms(5);
+                valore_adc = ADC_Read(1);
 
-                // LOGICA ISTERESI INVERTITA (1 = OFF, 0 = ON)
+                // Calcolo millivolt (Riferimento 5V Step-Up)
+                batteria_mv = ((unsigned long)valore_adc * 5000) >> 10;
+
+                // LOGICA ISTERESI (3.3V OFF - 3.7V ON)
                 if (batteria_mv <= 3300) {
-                    GPIO.F2 = 1; // BATTERIA SCARICA -> SPEGNE (Sollecita pin)
+                    GPIO.F2 = 1;  // RST a GND tramite transistor
                 }
                 if (batteria_mv >= 3700) {
-                    GPIO.F2 = 0; // BATTERIA CARICA -> ACCENDE (Rilascia pin)
+                    GPIO.F2 = 0;  // RST Libero
                 }
-                
+
                 secondi_contatore = 0;
             }
         }
-        Delay_ms(100);
+
+        Delay_ms(100); // Base tempi del ciclo main
     }
 }

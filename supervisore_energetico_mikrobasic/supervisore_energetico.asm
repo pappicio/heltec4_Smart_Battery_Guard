@@ -586,13 +586,16 @@ L__main99:
 	MOVWF      _valore_adc+0
 	MOVF       R0+1, 0
 	MOVWF      _valore_adc+1
-;supervisore_energetico.mbas,130 :: 		delay_us(50)
-	MOVLW      16
+;supervisore_energetico.mbas,130 :: 		delay_ms(5)
+	MOVLW      7
+	MOVWF      R12+0
+	MOVLW      125
 	MOVWF      R13+0
 L__main79:
 	DECFSZ     R13+0, 1
 	GOTO       L__main79
-	NOP
+	DECFSZ     R12+0, 1
+	GOTO       L__main79
 ;supervisore_energetico.mbas,131 :: 		valore_adc = ADC_Read(1)
 	MOVLW      1
 	MOVWF      FARG_ADC_Read_channel+0

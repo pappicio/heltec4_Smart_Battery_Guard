@@ -125,9 +125,9 @@ main:
         if (in_manutenzione = false) then
             secondi_contatore = secondi_contatore + 1
             if (secondi_contatore >= 300) then
-                ' Piccolo trucco: leggiamo l'ADC due volte per stabilizzare con la res 100k
+                ' Piccolo trucco: leggiamo l'ADC due volte per stabilizzare.
                 valore_adc = ADC_Read(1)
-                delay_us(50)
+                delay_ms(5)
                 valore_adc = ADC_Read(1)
 
                 ' Calcolo: (ADC * 5000) / 1024
