@@ -13,7 +13,7 @@ Va precisato che valori sotto i 2.4V e sopra i 3.1V, potrebbero rendere il siste
 
 Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.3V e lo riattiva se poi risale oltre i 3.7V, 
 
-lo stepup/stepdown è un modulo che ha i ponticelli con varie tensioni, basta chiudere il ponticello, io ho scelto 3.3V, che eroga in realta 3.0V, 
+lo stepup è un modulo che eroga 5V fissi al PIC MICRO, a prescindere dal voltaggio in ingresso, che sia 3V, che sia 4.3V.
 
 cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step up porta sempre alimentazione al pic da 5V  (per avere la costante del comparatore che misura il voltaggio della batteria)
 
@@ -41,7 +41,7 @@ ldo da 2.5V (o da 3.0V), che trovate su aliexpress
 
 https://it.aliexpress.com/item/1005004789258458.html?spm=a2g0o.productlist.main.13.bfb6UybJUybJP0&algo_pvid=b6bdde25-6901-49c2-9dc7-6fe755df9e97&algo_exp_id=b6bdde25-6901-49c2-9dc7-6fe755df9e97-12&pdp_ext_f=%7B%22order%22%3A%2251%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%212.02%210.88%21%21%212.27%210.99%21%40210390c917737370809014252ee6d6%2112000030494325303%21sea%21IT%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3A63d35bfc%3Bm03_new_user%3A-29895%3BpisId%3A5000000197840834&curPageLogUid=x5MpdVa0tD1p&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005004789258458%7C_p_origin_prod%3A
 
-o dove volete, sigla:HT7325 oppure da 3.0V HT7330, sarebbe anche preferibile, perche assorbe ancora meno corrente dello step down
+o dove volete, sigla:HT7325 oppure da 3.0V HT7330, sarebbe anche preferibile, perche assorbe ancora meno corrente dello step UP, ma siamo sempre nell'ordine dei microAmpere.
 
 video per meglio comprendere le funzioni del tasto
 https://github.com/pappicio/heltec4_Smart_Battery_Guard/blob/main/simulazione%20pic%20micro.mp4
