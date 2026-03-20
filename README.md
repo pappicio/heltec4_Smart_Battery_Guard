@@ -3,7 +3,8 @@
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
 
 una breve spiegazione sulla funzione del tasto:
-pressione tra 1 e 5 secondi, accende led e lo lascia cceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01 cosi da poter verificare che siano coerenti con il voltaggio effettivo attualed ella batteria e riavvia heltec, 
+pressione tra 1 e 5 secondi, accende led e lo lascia cceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01, mentre dall'iffset 3 al 7 scrive  su 4 bytes i dati relativi al voltaggio attuale in chiaro, cioe 00002222, tradotto in decimale darà oò voltaggio in millivolt letti al momento,
+cosi da poter verificare che siano coerenti con il voltaggio effettivo attualed ella batteria e riavvia heltec, 
 Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare manutenzione, esempio, cambio antenna senzxa far soffrire la componentistica della radio in assenza del finale (l'antenna appunto), il led inizia a lampeggiare per 500ms ogni secondo, per idicare l'ingresso nello stato menutentivo, per tornare al funzionamento normale, tenere premuto il tasto per altri 5 secondi almeno, il led fara i 3 lampeggi classsici dell'avvio e si spegne, heltec si riavvia e torna a funzionare in modo regolare.
 
 
