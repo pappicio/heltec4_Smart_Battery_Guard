@@ -41,7 +41,7 @@ https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHC
 
 LDO da 2.5V (o da 3.0V)
 
-***per LDO, utilizzare schema rev2, e soprattutto moltiplicare per 2 il valore dei 5000mv,  quindi 5000 diventa 10000mv, 5010, diventa 10020***
+***per LDO, utilizzare schema rev2, e soprattutto moltiplicare per 2 il valore dei 5000mv,  quindi 5000 diventa 10000mv, 5010, diventa 10020mv, 5100 diventa 10200 ecc***
 ***questa parter qui***
  
  ' Calcolo: (ADC * 5000) / 1024
