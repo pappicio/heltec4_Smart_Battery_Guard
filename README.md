@@ -1,5 +1,7 @@
 # heltec4_Smart_Battery_Guard
 
+***AGGIUNTA VERSIONE MIKROBASIC CON WATCHDOG E DEEP SLEEP, comsumo 10 v0lte di meno, essendo per lo piu in stato di deel sleep il pic micro e si sveflia solo ogni 30 secondi per verificare lo stato della batteria.***
+
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
 
 una breve spiegazione sulla funzione del tasto:
