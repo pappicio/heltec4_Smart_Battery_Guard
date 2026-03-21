@@ -1,0 +1,178 @@
+program Solar_Power_Manager_683_Final_WDT
+
+dim valore_adc as word
+dim batteria_mv as LongWord
+dim i as byte
+dim sveglie_wdt as word
+dim in_manutenzione as boolean
+dim dummy as byte ' Variabile per lettura fittizia GPIO
+
+' --- RITARDO SICURO PER NON FAR RESETTARE IL PIC MENTRE IL LED LAMPEGGIA ---
+sub procedure Delay_Safe_ms(dim n as word)
+    dim k as word
+    for k = 1 to n
+        delay_ms(1)
+        clrwdt
+    next k
+end sub
+
+sub procedure Segnale_Avvio()
+    for i = 1 to 3
+        GPIO.5 = 1
+        Delay_Safe_ms(250)
+        GPIO.5 = 0
+        Delay_Safe_ms(250)
+    next i
+end sub
+
+sub procedure Salva_EEPROM()
+    valore_adc = ADC_Read(1)
+    ' Taratura basata sul tuo Step-Up a 5.08V
+    batteria_mv = (LongWord(valore_adc) * 5080) >> 10
+
+    EEPROM_Write(0, Hi(valore_adc))
+    Delay_Safe_ms(20)
+    EEPROM_Write(1, Lo(valore_adc))
+    Delay_Safe_ms(20)
+    EEPROM_Write(2, 0xFF)
+    Delay_Safe_ms(20)
+    EEPROM_Write(3, Highest(batteria_mv))
+    Delay_Safe_ms(20)
+    EEPROM_Write(4, Higher(batteria_mv))
+    Delay_Safe_ms(20)
+    EEPROM_Write(5, Hi(batteria_mv))
+    Delay_Safe_ms(20)
+    EEPROM_Write(6, Lo(batteria_mv))
+    Delay_Safe_ms(20)
+end sub
+
+sub procedure Init_Hardware()
+    OSCCON = %01100111    ' 4MHz internal
+    CMCON0 = 7            ' Comparatori OFF
+    ANSEL  = %00010010    ' RA1 Analogico
+    TRISIO = %00001011    ' RA0, RA1, RA3 Input | RA2, RA5 Output
+
+    ' --- CONFIGURAZIONE PULL-UP E WDT ---
+    ' OPTION_REG.7 = 0 (Abilita Pull-ups globali)
+    ' OPTION_REG.3 = 1 (Prescaler assegnato al WDT)
+    ' OPTION_REG.0-2 = 111 (Divisore 1:128 -> ~2.3 secondi)
+    OPTION_REG = %00001111
+    WPU = %00000001       ' Pull-up attivo su GP0 (Pin 7)
+
+    ' --- CONFIGURAZIONE RISVEGLIO ISTANTANEO (IOC) ---
+    INTCON.GPIE = 1       ' Abilita interrupt su cambio stato GPIO
+    IOC.0 = 1             ' Sveglia il PIC se GP0 cambia (pressione tasto)
+
+    GPIO.2 = 1            ' Heltec SPENTO al boot
+    in_manutenzione = false
+    clrwdt
+    Segnale_Avvio()
+end sub
+
+main:
+    Init_Hardware()
+    sveglie_wdt = 15 ' Forza lettura immediata
+
+    while (TRUE)
+        ' --- GESTIONE RISVEGLIO DA INTERRUPT ---
+        if (INTCON.GPIF = 1) then
+            dummy = GPIO      ' Lettura necessaria per resettare il mismatch hardware
+            INTCON.GPIF = 0   ' Resetta il flag di interrupt
+        end if
+
+        ' --- GESTIONE TASTO (Ora istantanea grazie all'IOC) ---
+        if (GPIO.0 = 0) then
+            i = 0
+            while (GPIO.0 = 0) and (i < 50)
+                Delay_Safe_ms(100)
+                i = i + 1
+                if (i >= 10) then GPIO.5 = 1 end if
+            wend
+
+            if (i >= 10) and (i < 50) then
+                Salva_EEPROM()
+                GPIO.2 = 1
+                GPIO.5 = 0
+                Delay_Safe_ms(1000)
+                GPIO.2 = 0
+                sveglie_wdt = 0
+            end if
+
+            if (i >= 50) then
+                Salva_EEPROM()
+                GPIO.2 = 1
+                for i = 1 to 20
+                    GPIO.5 = not GPIO.5
+                    Delay_Safe_ms(100)
+                next i
+                GPIO.5 = 0
+                in_manutenzione = true
+
+                while (in_manutenzione = true)
+                    GPIO.5 = 1
+                    Delay_Safe_ms(500)
+                    GPIO.5 = 0
+                    if (GPIO.0 = 0) then
+                        i = 0
+                        while (GPIO.0 = 0) and (i < 50)
+                            Delay_Safe_ms(100)
+                            i = i + 1
+                        wend
+                        if (i >= 50) then
+                            Salva_EEPROM()
+                            in_manutenzione = false
+                            for i = 1 to 20
+                                GPIO.5 = not GPIO.5
+                                Delay_Safe_ms(100)
+                            next i
+                            GPIO.5 = 0
+                        end if
+                    else
+                        Delay_Safe_ms(500)
+                    end if
+                wend
+                Segnale_Avvio()
+                GPIO.2 = 0
+                sveglie_wdt = 0
+            end if
+        end if
+
+        ' --- LOGICA CONTROLLO BATTERIA (Ogni ~30 secondi) ---
+        if (in_manutenzione = false) then
+            if (sveglie_wdt >= 13) then
+                valore_adc = ADC_Read(1)
+                Delay_Safe_ms(5)
+                valore_adc = ADC_Read(1)
+                
+                'debug per verificare se effettivamente ogni 30 secondi la routine venisse eseguita
+                    'GPIO.5 = 1
+                    'Delay_Safe_ms(500)
+                    'GPIO.5 = 0
+                    
+                    
+                ' Calcolo millivolt (Tarato su 5.08V)
+                batteria_mv = (LongWord(valore_adc) * 5080) >> 10
+
+                if (batteria_mv <= 3300) then
+                    GPIO.2 = 1  ' SPEGNI Heltec
+                end if
+
+                if (batteria_mv >= 3700) then
+                    GPIO.2 = 0  ' ACCENDI Heltec
+                end if
+
+                sveglie_wdt = 0
+            end if
+        end if
+
+        ' --- IL COMANDO DI RISPARMIO ---
+        if (in_manutenzione = false) then
+            sveglie_wdt = sveglie_wdt + 1
+            clrwdt   ' Pulisce il Watchdog
+            sleep    ' Spegne il core. Si sveglia col Tasto o dopo ~2.3s
+            nop      ' Sicurezza post-risveglio
+        else
+            Delay_Safe_ms(100)
+        end if
+    wend
+end.
