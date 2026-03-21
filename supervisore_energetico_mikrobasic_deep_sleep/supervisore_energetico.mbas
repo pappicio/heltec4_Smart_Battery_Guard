@@ -55,9 +55,9 @@ sub procedure Init_Hardware()
     ' --- CONFIGURAZIONE SOGLIE E TARATURA ---
     
     'a questa soglia precisa, si spegne,  SOPRA questa soglia resta acceso!!!!!
-    soglia_off   = 3350   ' 10% Batteria
+    soglia_off   = 3330   '''03340 è il 10% Batteria stiamo sotto cosi sotto i 10% si spegne!!!!!
     soglia_on    = 3700   ' 50% Batteria
-    taratura_vcc = 5000   ' 5.08V
+    taratura_vcc = 5000   '5080 = 5.08V
 
     GPIO.2 = 1
     GPIO.2 = 0

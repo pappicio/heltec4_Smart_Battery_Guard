@@ -8,6 +8,6 @@ diagnostics: 0	139	All files Compiled in 16 ms
 hint: 0	1144	Used RAM (bytes): 28 (25%)  Free RAM (bytes): 84 (75%)	Used RAM (bytes): 28 (25%)  Free RAM (bytes): 84 (75%)
 hint: 0	1144	Used ROM (program words): 736 (36%)  Free ROM (program words): 1312 (64%)	Used ROM (program words): 736 (36%)  Free ROM (program words): 1312 (64%)
 diagnostics: 0	145	Project Linked Successfully	supervisore_energetico.mbppi
-diagnostics: 0	140	Linked in 15 ms	 
-diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 187 ms	 
-diagnostics: 0	103	Finished successfully: 21 mar 2026, 23:57:56	supervisore_energetico.mbppi
+diagnostics: 0	140	Linked in 16 ms	 
+diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 188 ms	 
+diagnostics: 0	103	Finished successfully: 22 mar 2026, 00:11:20	supervisore_energetico.mbppi

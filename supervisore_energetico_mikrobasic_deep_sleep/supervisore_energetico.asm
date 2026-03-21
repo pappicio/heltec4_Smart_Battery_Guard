@@ -171,8 +171,8 @@ _Init_Hardware:
 	BSF        INTCON+0, 3
 ;supervisore_energetico.mbas,53 :: 		IOC.0 = 1             ' Sveglia su GP0
 	BSF        IOC+0, 0
-;supervisore_energetico.mbas,58 :: 		soglia_off   = 3350   ' 10% Batteria
-	MOVLW      22
+;supervisore_energetico.mbas,58 :: 		soglia_off   = 3330   '''03340 è il 10% Batteria stiamo sotto cosi sotto i 10% si spegne!!!!!
+	MOVLW      2
 	MOVWF      _soglia_off+0
 	MOVLW      13
 	MOVWF      _soglia_off+1
@@ -185,7 +185,7 @@ _Init_Hardware:
 	MOVWF      _soglia_on+1
 	CLRF       _soglia_on+2
 	CLRF       _soglia_on+3
-;supervisore_energetico.mbas,60 :: 		taratura_vcc = 5000   ' 5.08V
+;supervisore_energetico.mbas,60 :: 		taratura_vcc = 5000   '5080 = 5.08V
 	MOVLW      136
 	MOVWF      _taratura_vcc+0
 	MOVLW      19
