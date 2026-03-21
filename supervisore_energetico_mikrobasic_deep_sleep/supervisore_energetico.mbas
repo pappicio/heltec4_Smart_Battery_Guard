@@ -150,7 +150,7 @@ main:
                     'GPIO.5 = 0
                     
                     
-                ' Calcolo millivolt (Tarato su 5.08V)
+                ' Calcolo millivolt (Tarato su 5.08V) misurati con multimetro tra VCC eGND del pic, PIN1 e PIN8, 5.08 V
                 batteria_mv = (LongWord(valore_adc) * 5080) >> 10
 
                 'qui (3340mv) siamo al 10% circa di batteria, a 3300 siamo sui 5%

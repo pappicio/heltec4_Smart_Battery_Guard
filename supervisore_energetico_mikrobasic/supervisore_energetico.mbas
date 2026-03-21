@@ -131,7 +131,7 @@ main:
                 valore_adc = ADC_Read(1)
 
                 ' Calcolo: (ADC * 5000) / 1024
-                ' Calcolo millivolt (Tarato su 5.08V)
+                ' Calcolo millivolt (Tarato su 5.08V) misurati su VCC e GND del pic (pin1 e pin8 con multimetro)
                 batteria_mv = (LongWord(valore_adc) * 5080) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
 
 
