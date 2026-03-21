@@ -604,7 +604,7 @@ L__main79:
 	MOVWF      _valore_adc+0
 	MOVF       R0+1, 0
 	MOVWF      _valore_adc+1
-;supervisore_energetico.mbas,134 :: 		batteria_mv = (LongWord(valore_adc) * 5080) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
+;supervisore_energetico.mbas,135 :: 		batteria_mv = (LongWord(valore_adc) * 5080) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
 	MOVLW      0
 	MOVWF      R0+2
 	MOVWF      R0+3
@@ -645,7 +645,7 @@ L__main101:
 	MOVWF      _batteria_mv+2
 	MOVF       R4+3, 0
 	MOVWF      _batteria_mv+3
-;supervisore_energetico.mbas,140 :: 		if (batteria_mv <= 3300) then
+;supervisore_energetico.mbas,143 :: 		if (batteria_mv <= 3340) then
 	MOVF       R4+3, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
@@ -655,18 +655,18 @@ L__main101:
 	BTFSS      STATUS+0, 2
 	GOTO       L__main102
 	MOVF       R4+1, 0
-	SUBLW      12
+	SUBLW      13
 	BTFSS      STATUS+0, 2
 	GOTO       L__main102
 	MOVF       R4+0, 0
-	SUBLW      228
+	SUBLW      12
 L__main102:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main81
-;supervisore_energetico.mbas,141 :: 		GPIO.2 = 1  ' SPEGNI (Logica Inversa)
+;supervisore_energetico.mbas,144 :: 		GPIO.2 = 1  ' SPEGNI (Logica Inversa)
 	BSF        GPIO+0, 2
 L__main81:
-;supervisore_energetico.mbas,144 :: 		if (batteria_mv >= 3700) then
+;supervisore_energetico.mbas,147 :: 		if (batteria_mv >= 3700) then
 	MOVLW      0
 	SUBWF      _batteria_mv+3, 0
 	BTFSS      STATUS+0, 2
@@ -684,16 +684,16 @@ L__main81:
 L__main103:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main84
-;supervisore_energetico.mbas,145 :: 		GPIO.2 = 0  ' ACCENDI
+;supervisore_energetico.mbas,148 :: 		GPIO.2 = 0  ' ACCENDI
 	BCF        GPIO+0, 2
 L__main84:
-;supervisore_energetico.mbas,148 :: 		secondi_contatore = 0
+;supervisore_energetico.mbas,151 :: 		secondi_contatore = 0
 	CLRF       _secondi_contatore+0
 	CLRF       _secondi_contatore+1
 L__main77:
-;supervisore_energetico.mbas,149 :: 		end if
+;supervisore_energetico.mbas,152 :: 		end if
 L__main74:
-;supervisore_energetico.mbas,152 :: 		delay_ms(100)
+;supervisore_energetico.mbas,155 :: 		delay_ms(100)
 	MOVLW      130
 	MOVWF      R12+0
 	MOVLW      221
@@ -705,7 +705,7 @@ L__main86:
 	GOTO       L__main86
 	NOP
 	NOP
-;supervisore_energetico.mbas,153 :: 		wend
+;supervisore_energetico.mbas,156 :: 		wend
 	GOTO       L__main19
 L_end_main:
 	GOTO       $+0

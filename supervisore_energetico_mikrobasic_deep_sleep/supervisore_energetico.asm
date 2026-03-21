@@ -524,11 +524,11 @@ L__main95:
 	MOVWF      _valore_adc+0
 	MOVF       R0+1, 0
 	MOVWF      _valore_adc+1
-;supervisore_energetico.mbas,154 :: 		batteria_mv = (LongWord(valore_adc) * 5080) >> 10
+;supervisore_energetico.mbas,154 :: 		batteria_mv = (LongWord(valore_adc) * 5010) >> 10
 	MOVLW      0
 	MOVWF      R0+2
 	MOVWF      R0+3
-	MOVLW      216
+	MOVLW      146
 	MOVWF      R4+0
 	MOVLW      19
 	MOVWF      R4+1
@@ -565,7 +565,7 @@ L__main97:
 	MOVWF      _batteria_mv+2
 	MOVF       R4+3, 0
 	MOVWF      _batteria_mv+3
-;supervisore_energetico.mbas,156 :: 		if (batteria_mv <= 3300) then
+;supervisore_energetico.mbas,157 :: 		if (batteria_mv <= 3340) then
 	MOVF       R4+3, 0
 	SUBLW      0
 	BTFSS      STATUS+0, 2
@@ -575,18 +575,18 @@ L__main97:
 	BTFSS      STATUS+0, 2
 	GOTO       L__main98
 	MOVF       R4+1, 0
-	SUBLW      12
+	SUBLW      13
 	BTFSS      STATUS+0, 2
 	GOTO       L__main98
 	MOVF       R4+0, 0
-	SUBLW      228
+	SUBLW      12
 L__main98:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main74
-;supervisore_energetico.mbas,157 :: 		GPIO.2 = 1  ' SPEGNI Heltec
+;supervisore_energetico.mbas,158 :: 		GPIO.2 = 1  ' SPEGNI Heltec
 	BSF        GPIO+0, 2
 L__main74:
-;supervisore_energetico.mbas,160 :: 		if (batteria_mv >= 3700) then
+;supervisore_energetico.mbas,161 :: 		if (batteria_mv >= 3700) then
 	MOVLW      0
 	SUBWF      _batteria_mv+3, 0
 	BTFSS      STATUS+0, 2
@@ -604,41 +604,41 @@ L__main74:
 L__main99:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main77
-;supervisore_energetico.mbas,161 :: 		GPIO.2 = 0  ' ACCENDI Heltec
+;supervisore_energetico.mbas,162 :: 		GPIO.2 = 0  ' ACCENDI Heltec
 	BCF        GPIO+0, 2
 L__main77:
-;supervisore_energetico.mbas,164 :: 		sveglie_wdt = 0
+;supervisore_energetico.mbas,165 :: 		sveglie_wdt = 0
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
 L__main71:
-;supervisore_energetico.mbas,165 :: 		end if
+;supervisore_energetico.mbas,166 :: 		end if
 L__main68:
-;supervisore_energetico.mbas,169 :: 		if (in_manutenzione = false) then
+;supervisore_energetico.mbas,170 :: 		if (in_manutenzione = false) then
 	MOVF       _in_manutenzione+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L__main80
-;supervisore_energetico.mbas,170 :: 		sveglie_wdt = sveglie_wdt + 1
+;supervisore_energetico.mbas,171 :: 		sveglie_wdt = sveglie_wdt + 1
 	INCF       _sveglie_wdt+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _sveglie_wdt+1, 1
-;supervisore_energetico.mbas,171 :: 		clrwdt   ' Pulisce il Watchdog
+;supervisore_energetico.mbas,172 :: 		clrwdt   ' Pulisce il Watchdog
 	CLRWDT
-;supervisore_energetico.mbas,172 :: 		sleep    ' Spegne il core. Si sveglia col Tasto o dopo ~2.3s
+;supervisore_energetico.mbas,173 :: 		sleep    ' Spegne il core. Si sveglia col Tasto o dopo ~2.3s
 	SLEEP
-;supervisore_energetico.mbas,173 :: 		nop      ' Sicurezza post-risveglio
+;supervisore_energetico.mbas,174 :: 		nop      ' Sicurezza post-risveglio
 	NOP
 	GOTO       L__main81
-;supervisore_energetico.mbas,174 :: 		else
+;supervisore_energetico.mbas,175 :: 		else
 L__main80:
-;supervisore_energetico.mbas,175 :: 		Delay_Safe_ms(100)
+;supervisore_energetico.mbas,176 :: 		Delay_Safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,176 :: 		end if
+;supervisore_energetico.mbas,177 :: 		end if
 L__main81:
-;supervisore_energetico.mbas,177 :: 		wend
+;supervisore_energetico.mbas,178 :: 		wend
 	GOTO       L__main17
 L_end_main:
 	GOTO       $+0

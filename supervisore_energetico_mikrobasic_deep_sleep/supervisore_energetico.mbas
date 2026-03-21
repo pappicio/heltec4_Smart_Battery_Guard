@@ -153,7 +153,8 @@ main:
                 ' Calcolo millivolt (Tarato su 5.08V)
                 batteria_mv = (LongWord(valore_adc) * 5080) >> 10
 
-                if (batteria_mv <= 3300) then
+                'qui (3340mv) siamo al 10% circa di batteria, a 3300 siamo sui 5%
+                if (batteria_mv <= 3340) then
                     GPIO.2 = 1  ' SPEGNI Heltec
                 end if
 

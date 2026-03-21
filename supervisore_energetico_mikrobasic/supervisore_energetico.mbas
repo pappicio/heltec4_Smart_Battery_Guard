@@ -131,13 +131,16 @@ main:
                 valore_adc = ADC_Read(1)
 
                 ' Calcolo: (ADC * 5000) / 1024
-                batteria_mv = (LongWord(valore_adc) * 5000) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
+                ' Calcolo millivolt (Tarato su 5.08V)
+                batteria_mv = (LongWord(valore_adc) * 5080) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
+
 
                 ' --- NUOVE SOGLIE IN MILLIVOLT ---
                 '''''' SOGLIA_OFF = 3300mv ->   ' 3.3V
                 '''''' SOGLIA_ON  = 3700mv ->   ' 3.7V
                 ' LOGICA ISTERESI
-                if (batteria_mv <= 3300) then
+                'qui (3340mv) siamo al 10% circa di batteria, a 3300 siamo sui 5%
+                if (batteria_mv <= 3340) then
                     GPIO.2 = 1  ' SPEGNI (Logica Inversa)
                 end if
 
