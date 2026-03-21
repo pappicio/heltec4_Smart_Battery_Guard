@@ -242,6 +242,7 @@ ircf2
 ircf2_bit
 irp
 irp_bit
+leggi_batteria_mv
 longint2double
 longword2double
 lts
@@ -332,6 +333,8 @@ setfdz32
 setfov32
 setfun32
 setiov3224
+soglia_off
+soglia_on
 status
 sub_32x32_fp
 sveglie_wdt
@@ -373,6 +376,7 @@ t2ie_bit
 t2if
 t2if_bit
 tadc_get_sample
+taratura_vcc
 tmr0
 tmr0ie
 tmr0ie_bit

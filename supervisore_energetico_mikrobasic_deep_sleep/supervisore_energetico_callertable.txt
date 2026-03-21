@@ -1,16 +1,25 @@
 main
 	Init_Hardware
+		Leggi_Batteria_mV
+			ADC_Read
+				Delay_22us
+			Delay_Safe_ms
+			Mul_32x32_U
 		Segnale_Avvio
 			Delay_Safe_ms
 	Delay_Safe_ms
 	Salva_EEPROM
-		ADC_Read
-			Delay_22us
-		Mul_32x32_U
+		Leggi_Batteria_mV
+			ADC_Read
+				Delay_22us
+			Delay_Safe_ms
+			Mul_32x32_U
 		EEPROM_Write
 		Delay_Safe_ms
 	Segnale_Avvio
 		Delay_Safe_ms
-	ADC_Read
-		Delay_22us
-	Mul_32x32_U
+	Leggi_Batteria_mV
+		ADC_Read
+			Delay_22us
+		Delay_Safe_ms
+		Mul_32x32_U
