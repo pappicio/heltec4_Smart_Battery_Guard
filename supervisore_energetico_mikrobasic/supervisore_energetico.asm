@@ -604,11 +604,11 @@ L__main79:
 	MOVWF      _valore_adc+0
 	MOVF       R0+1, 0
 	MOVWF      _valore_adc+1
-;supervisore_energetico.mbas,134 :: 		batteria_mv = (LongWord(valore_adc) * 5000) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
+;supervisore_energetico.mbas,134 :: 		batteria_mv = (LongWord(valore_adc) * 5080) >> 10 ' Lo shift >> 10 equivale a diviso 1024, più veloce!
 	MOVLW      0
 	MOVWF      R0+2
 	MOVWF      R0+3
-	MOVLW      136
+	MOVLW      216
 	MOVWF      R4+0
 	MOVLW      19
 	MOVWF      R4+1
