@@ -45,7 +45,7 @@ File0=ADC
 File1=EEPROM
 Count=2
 [EXPANDED_NODES]
-0=LedBlinking.mcppi
+0=heltec.mcppi
 Count=1
 [LIB_EXPANDED_NODES]
 0=mikroE Libraries

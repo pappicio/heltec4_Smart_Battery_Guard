@@ -55,6 +55,7 @@ b5
 b6
 b7
 batteria_mv
+boot16_delay_5ms
 byte2double
 c
 c_bit
@@ -122,6 +123,7 @@ delay_5ms
 delay_80us
 delay_8ms
 delay_cyc
+delay_safe_ms
 div_16x16_s
 div_16x16_s_l
 div_16x16_u
@@ -135,6 +137,7 @@ double2int
 double2longint
 double2longword
 double2word
+dummy
 eeadr
 eecon1
 eecon2
@@ -148,7 +151,6 @@ eeprom_read
 eeprom_write
 equals_double
 f
-false
 fixsign32
 fsr
 fsrptr
@@ -240,6 +242,7 @@ ircf2
 ircf2_bit
 irp
 irp_bit
+leggi_batteria_mv
 longint2double
 longword2double
 lts
@@ -252,7 +255,6 @@ mul_32x32_s
 mul_32x32_u
 mul_8x8_s
 mul_8x8_u
-nil
 not_bod
 not_bod_bit
 not_done
@@ -324,14 +326,16 @@ sboden_bit
 scs
 scs_bit
 sdiv3232l
-secondi_contatore
 segnale_avvio
 setfdz32
 setfov32
 setfun32
 setiov3224
+soglia_off
+soglia_on
 status
 sub_32x32_fp
+sveglie_wdt
 swap
 swdten
 swdten_bit
@@ -369,7 +373,7 @@ t2ie
 t2ie_bit
 t2if
 t2if_bit
-tadc_get_sample
+taratura_vcc
 tmr0
 tmr0ie
 tmr0ie_bit
@@ -415,7 +419,6 @@ trisio4
 trisio4_bit
 trisio5
 trisio5_bit
-true
 tun0
 tun0_bit
 tun1
@@ -442,6 +445,7 @@ vr2_bit
 vr3
 vr3_bit
 vrcon
+vref_mask
 vren
 vren_bit
 vrr
