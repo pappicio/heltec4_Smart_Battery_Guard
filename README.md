@@ -1,20 +1,22 @@
 # heltec4_Smart_Battery_Guard
 
-***AGGIUNTA VERSIONE MIKROBASIC/mikroc CON WATCHDOG E DEEP SLEEP, comsumo 10 v0lte di meno, essendo per lo piu in stato di deel sleep il pic micro e si sveflia solo ogni 30 secondi per verificare lo stato della batteria.***
+***AGGIUNTA VERSIONE MIKROBASIC/mikroc CON WATCHDOG E DEEP SLEEP, comsumo 10 v0lte di meno, essendo per lo piu in stato di deep sleep il pic micro e si sveglia solo ogni 30 secondi (ogni2.5 secondi fa un check veloce al suo contatore...) per verificare lo stato della batteria.***
 
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
 
 una breve spiegazione sulla funzione del tasto:
-pressione tra 1 e 5 secondi, accende led e lo lascia cceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01, mentre dall'iffset 3 al 7 scrive  su 4 bytes i dati relativi al voltaggio attuale in chiaro, cioe 00002222, tradotto in decimale darà oò voltaggio in millivolt letti al momento,
+pressione tra 1 e 5 secondi, accende led e lo lascia acceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01, mentre dall'iffset 3 al 7 scrive  su 4 bytes i dati relativi al voltaggio attuale in chiaro, cioe 00002222, tradotto in decimale darà oò voltaggio in millivolt letti al momento,
 cosi da poter verificare che siano coerenti con il voltaggio effettivo attualed ella batteria e riavvia heltec, 
-Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare manutenzione, esempio, cambio antenna senzxa far soffrire la componentistica della radio in assenza del finale (l'antenna appunto), il led inizia a lampeggiare per 500ms ogni secondo, per idicare l'ingresso nello stato menutentivo, per tornare al funzionamento normale, tenere premuto il tasto per altri 5 secondi almeno, il led fara i 3 lampeggi classsici dell'avvio e si spegne, heltec si riavvia e torna a funzionare in modo regolare.
+Tocca precisare che dopo il rilascio del tasto il led: nn si accende se la carica batteria è ok, fa tre lampeggi veloci se la carica è tra valore_on e valore_off, fa sei lampeggi velici se la carica è sotto il valore_off e nn accende heltec, ma lo lascia spento, visto che la carica è al di sotto del valore minimo!!!
+
+Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare manutenzione, esempio, cambio antenna senza far soffrire la componentistica della radio in assenza del finale (l'antenna appunto), il led inizia a lampeggiare per 500ms ogni secondo, per idicare l'ingresso nello stato menutentivo, per tornare al funzionamento normale, tenere premuto il tasto per almeno altri 5 secondi almeno, il led fara i 3 lampeggi classsici dell'avvio e si spegne, heltec si riavvia e torna a funzionare in modo regolare.
  
  
 Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.3V e lo riattiva se poi risale oltre i 3.7V, 
 
-lo stepup è un modulo che eroga 5V fissi al PIC MICRO, a prescindere dal voltaggio in ingresso, che sia 3V, che sia 4.3V.
+lo stepup è un modulo che eroga 5V fissi al PIC MICRO, a prescindere dal voltaggio in ingresso, che sia 3V, 2V o che sia 4.3V.
 
-cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo step up porta sempre alimentazione al pic da 5V  (per avere la costante del comparatore che misura il voltaggio della batteria)
+cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo stepup porta sempre alimentazione al pic da 5V  (per avere la costante del comparatore che misura il voltaggio della batteria)
 
 gli altri componenti sono pochi e molto comuni
 
@@ -32,21 +34,20 @@ PROGRAMMATORE UNIVERSALE PER PIC MICRO Amazon:
 
 https://www.amazon.it/Fasizi-Programmazione-Automatica-Sviluppare-Microcontroller/dp/B09Z2CTDTT/ref=sr_1_1?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3QKSL4BEFA1YO&dib=eyJ2IjoiMSJ9.ncfiYanZGVHfD30cY9TJVX20GOHlCkoljsRNEqQUaDgEnacLlefaaG5qibXrZ5OpQ0sx-7MXb4tdgXYdp5UAVjJwC3IiFX7PHX69azvp27de1wwzx2yAA3c8k7yU_IzL0kNnNX6BoE3XagAdtfcjT_TOYmDWxgsnWVAq-F5AgGYmRkPf9b6XofKtOH4q1_wW-TLtBVMAwlVgyTAHvNQSdHLkf8PKMqLzE-hu42-xlixdOT4j4_NGce53di1ScNzdu5ERz6MPrao9vEnFwvqC0GKwCNFClN54xpbzd47iR4w.3V76QG7ceCVjaGCpT_dxdQ8orbFK8K5KvA3oz8X1mBI&dib_tag=se&keywords=programmatore+universale+pic+micro&qid=1774180075&refinements=p_85%3A20930965031&rnid=20930964031&rps=1&sprefix=programmatore+universale+pi+c+micro%2Caps%2C265&sr=8-1
 
-PROGRAMMATORE Pic micro aliexpress:
+PROGRAMMATORE UNIVERSALE Pic micro aliexpress:
 
 https://it.aliexpress.com/item/1005007040116001.html?spm=a2g0o.productlist.main.16.7cc9E3P8E3P8WF&algo_pvid=cb95b140-ec96-4991-bb90-bb0f4bdae7dd&algo_exp_id=cb95b140-ec96-4991-bb90-bb0f4bdae7dd-15&pdp_ext_f=%7B%22order%22%3A%2246%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%218.71%218.71%21%21%2167.75%2167.75%21%402103856417741801591217437e2a95%2112000039183909561%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=4KNi9xiyAQu4&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005007040116001%7C_p_origin_prod%3A
-
 
 
 PER LA SIMULAZIONE scaricare SimulIDE: https://simulide.com/p/downloads/
 il file per la simulazione da caricare si chiama: smimulazione.sim1, ovviamente dovrete caricare il file hex compilato, nel PIC, per eseguirlo
 
 
-lo step up (come da link per visionare e poi prenderne eventualmente dove volete) consuma circa 4uA, in pratica anni con batteira gia scarica..... 
+lo stepup (come da link per visionare e poi prenderne eventualmente dove volete) consuma circa 4uA, in pratica anni con batteira gia scarica..... 
 
 Col nuovo condice mikroBasic/mikroC, ottimizzato per STEP UP, si ragiona in millivolt, cosi basta cambiare le soglie (3300, 3700 mv) ai %v fissi (5000, se fossero in uscuta 5.1 volt, basta scrivere 5100 anziche 5000) e ricompilare
  
-StepUP AMAZON 5V:
+StepUP 5V AMAZON:
 
 https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHCI4NL&psc=1
 
