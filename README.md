@@ -29,6 +29,7 @@ https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
 https://it.aliexpress.com/item/1005006303166795.html?spm=a2g0o.productlist.main.5.495f191a2PDQ6i&algo_pvid=013a3ce0-3dd7-438d-965c-3a9212c8e3d9&algo_exp_id=013a3ce0-3dd7-438d-965c-3a9212c8e3d9-4&pdp_ext_f=%7B%22order%22%3A%2221%22%2C%22spu_best_type%22%3A%22price%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%215.56%212.72%21%21%2143.24%2121.19%21%402103835e17741799554178201e5bc6%2112000036684741958%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=A6kHPwAkb3Wv&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005006303166795%7C_p_origin_prod%3A
 
 PROGRAMMATORE UNIVERSALE PER PIC MICRO Amazon:
+
 https://www.amazon.it/Fasizi-Programmazione-Automatica-Sviluppare-Microcontroller/dp/B09Z2CTDTT/ref=sr_1_1?__mk_it_IT=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3QKSL4BEFA1YO&dib=eyJ2IjoiMSJ9.ncfiYanZGVHfD30cY9TJVX20GOHlCkoljsRNEqQUaDgEnacLlefaaG5qibXrZ5OpQ0sx-7MXb4tdgXYdp5UAVjJwC3IiFX7PHX69azvp27de1wwzx2yAA3c8k7yU_IzL0kNnNX6BoE3XagAdtfcjT_TOYmDWxgsnWVAq-F5AgGYmRkPf9b6XofKtOH4q1_wW-TLtBVMAwlVgyTAHvNQSdHLkf8PKMqLzE-hu42-xlixdOT4j4_NGce53di1ScNzdu5ERz6MPrao9vEnFwvqC0GKwCNFClN54xpbzd47iR4w.3V76QG7ceCVjaGCpT_dxdQ8orbFK8K5KvA3oz8X1mBI&dib_tag=se&keywords=programmatore+universale+pic+micro&qid=1774180075&refinements=p_85%3A20930965031&rnid=20930964031&rps=1&sprefix=programmatore+universale+pi+c+micro%2Caps%2C265&sr=8-1
 
 PROGRAMMATORE Pic micro aliexpress:
