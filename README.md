@@ -50,6 +50,12 @@ StepUP AMAZON 5V:
 
 https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHCI4NL&psc=1
 
+
+STEPUP aliexpress:
+
+https://it.aliexpress.com/item/1005009255021446.html?spm=a2g0o.productlist.main.8.1f24qtVhqtVhq5&algo_pvid=5bd1cad7-bcc6-4baf-a986-672726cc3a0c&aem_p4p_detail=202603220452265597336666603120001140618&algo_exp_id=5bd1cad7-bcc6-4baf-a986-672726cc3a0c-7&pdp_ext_f=%7B%22order%22%3A%2231%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%213.07%213.07%21%21%2123.84%2123.84%21%402103917f17741803466073161e10ae%2112000048492400941%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=bmBaLl1n6PPl&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005009255021446%7C_p_origin_prod%3A&search_p4p_id=202603220452265597336666603120001140618_2
+
+
 video per meglio comprendere le funzioni del tasto
 https://github.com/pappicio/heltec4_Smart_Battery_Guard/blob/main/simulazione%20pic%20micro.mp4
 
