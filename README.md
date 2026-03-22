@@ -44,7 +44,7 @@ il file per la simulazione da caricare si chiama: smimulazione.sim1, ovviamente 
 lo step up (come da link per visionare e poi prenderne eventualmente dove volete) consuma circa 4uA, in pratica anni con batteira gia scarica..... 
 
 Col nuovo condice mikroBasic/mikroC, ottimizzato per STEP UP, si ragiona in millivolt, cosi basta cambiare le soglie (3300, 3700 mv) ai %v fissi (5000, se fossero in uscuta 5.1 volt, basta scrivere 5100 anziche 5000) e ricompilare
-
+ 
 StepUP AMAZON 5V:
 
 https://www.amazon.it/gp/product/B07ZDJPMPJ/ref=ox_sc_act_title_1?smid=AETO64PHCI4NL&psc=1
