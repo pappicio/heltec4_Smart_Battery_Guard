@@ -1,6 +1,6 @@
 # heltec4_Smart_Battery_Guard
 
-***AGGIUNTA VERSIONE MIKROBASIC/mikroc CON WATCHDOG E DEEP SLEEP, comsumo 10 v0lte di meno, essendo per lo piu in stato di deep sleep il pic micro e si sveglia solo ogni 30 secondi (ogni2.5 secondi fa un check veloce al suo contatore...) per verificare lo stato della batteria.***
+***AGGIUNTA VERSIONE MIKROBASIC/mikroc CON WATCHDOG E DEEP SLEEP, comsumo 10 volte di meno, essendo per lo piu in stato di deep sleep il pic micro e si sveglia solo ogni 30 secondi (ogni 2.5 secondi solo per fare un check veloce al suo contatore...) per verificare lo stato della batteria.***
 
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
 
