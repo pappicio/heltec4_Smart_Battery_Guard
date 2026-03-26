@@ -56,6 +56,7 @@ b5
 b6
 b7
 batteria_mv
+boot16_delay_5ms
 byte2double
 c
 c_bit
@@ -152,7 +153,6 @@ eeprom_read
 eeprom_write
 equals_double
 f
-false
 fixsign32
 fsr
 fsrptr
@@ -259,8 +259,6 @@ mul_32x32_s
 mul_32x32_u
 mul_8x8_s
 mul_8x8_u
-n
-nil
 not_bod
 not_bod_bit
 not_done
@@ -382,7 +380,6 @@ t2ie
 t2ie_bit
 t2if
 t2if_bit
-tadc_get_sample
 taratura_vcc
 tmr0
 tmr0ie
@@ -429,7 +426,6 @@ trisio4
 trisio4_bit
 trisio5
 trisio5_bit
-true
 tun0
 tun0_bit
 tun1
@@ -456,6 +452,7 @@ vr2_bit
 vr3
 vr3_bit
 vrcon
+vref_mask
 vren
 vren_bit
 vrr
