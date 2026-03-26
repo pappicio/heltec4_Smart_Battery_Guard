@@ -1,6 +1,8 @@
 # heltecX_Smart_Battery_Guard
 
-***AGGIUNTA VERSIONE MIKROBASIC/mikroc CON WATCHDOG E DEEP SLEEP, comsumo 10 volte di meno, essendo per lo piu in stato di deep sleep il pic micro e si sveglia solo ogni 30 secondi (ogni 2.5 secondi solo per fare un check veloce al suo contatore...) per verificare lo stato della batteria.***
+
+***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 7 Giorni di default, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
+
 
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
 
