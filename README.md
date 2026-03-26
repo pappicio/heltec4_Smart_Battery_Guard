@@ -1,7 +1,7 @@
 # heltecX_Smart_Battery_Guard
 
 
-***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 7 Giorni di default, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
+***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 7 Giorni di default la alimentazione verrà interrotta èer 10 secondi per poi essere riattivata, facendo riaccendere (carica batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
 
 
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
