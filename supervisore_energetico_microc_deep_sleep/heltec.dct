@@ -14,6 +14,7 @@ __savepclath
 __savestatus
 _adc_external_vrefh
 _adc_internal_vrefh
+acceso
 adc_get_sample
 adc_get_sample_ptr
 adc_init
@@ -101,6 +102,7 @@ cmsync
 cmsync_bit
 comfrem
 compare_double
+conteggio_giorni
 cout
 cout_bit
 dc
@@ -154,9 +156,11 @@ f
 fixsign32
 fsr
 fsrptr
+gestione_stato_sistema
 get_fosc_khz
 gie
 gie_bit
+giorni_per_reset
 go
 go_bit
 go_done
@@ -316,6 +320,7 @@ r9
 rd
 rd_bit
 res032
+risvegli_al_giorno
 rp0
 rp0_bit
 rp1
@@ -333,6 +338,8 @@ setfun32
 setiov3224
 soglia_off
 soglia_on
+soglia_reset_giorni
+spento
 status
 sub_32x32_fp
 sveglie_wdt
