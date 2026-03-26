@@ -1,7 +1,9 @@
 # heltecX_Smart_Battery_Guard
 
-
-***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 7 Giorni di default la alimentazione verrà interrotta per 10 secondi per poi essere riattivata, facendo riaccendere (carica batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
+***AGGIUNTA FUNZIONE Visualizzazione millivolt, se si pigia il pulsante da 2.5 secondi a 5 secondi (ve ne accoegete che il led id stato si spegne e resta spemto), il led inizia a lampeggiare:
+esempio, la batteria misura 3865mv, farà: 3 lampeggi veloci, pausa, 8 lampeggi veloci, pausa, 6 lsampeggi veloci, pausa, 5 lampeggi veloci, potrete leggere i mv della batteria visivamente senza leggere la EEPROM, per lo 0, invece 1 lampeggio velocissimo, se i mv fossero 3860, il 4 stadio di lampeggi, terminerebbe con 1 solo lampeggio piu breve degli altri, 0 = lampeggio brevissimo!***
+ 
+***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 3 Giorni di default la alimentazione verrà interrotta per 10 secondi per poi essere riattivata, facendo riaccendere (carica batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
 
 
 all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
