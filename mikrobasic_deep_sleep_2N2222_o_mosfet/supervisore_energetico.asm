@@ -295,22 +295,22 @@ _Init_Hardware:
 	BSF        INTCON+0, 3
 ;supervisore_energetico.mbas,94 :: 		IOC.0 = 1
 	BSF        IOC+0, 0
-;supervisore_energetico.mbas,100 :: 		soglia_off   = 3330
-	MOVLW      2
+;supervisore_energetico.mbas,100 :: 		soglia_off   = 3300  '300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
+	MOVLW      228
 	MOVWF      _soglia_off+0
-	MOVLW      13
+	MOVLW      12
 	MOVWF      _soglia_off+1
 	CLRF       _soglia_off+2
 	CLRF       _soglia_off+3
-;supervisore_energetico.mbas,101 :: 		soglia_on    = 3700
-	MOVLW      116
+;supervisore_energetico.mbas,101 :: 		soglia_on    = 3600 '(45%), va piu che bene
+	MOVLW      16
 	MOVWF      _soglia_on+0
 	MOVLW      14
 	MOVWF      _soglia_on+1
 	CLRF       _soglia_on+2
 	CLRF       _soglia_on+3
-;supervisore_energetico.mbas,102 :: 		taratura_vcc = 5030
-	MOVLW      166
+;supervisore_energetico.mbas,102 :: 		taratura_vcc = 5050 'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 2 mV
+	MOVLW      186
 	MOVWF      _taratura_vcc+0
 	MOVLW      19
 	MOVWF      _taratura_vcc+1
