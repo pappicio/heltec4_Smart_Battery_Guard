@@ -64,8 +64,4 @@ Per la versione con MOSFET AO3401, ecco un link aliexpress dove comprarne
 
 https://it.aliexpress.com/item/1005004617543846.html?spm=a2g0o.productlist.main.1.6c116d4fBYnexV&algo_pvid=19b502e1-456e-40da-8695-24b0417dce6d&algo_exp_id=19b502e1-456e-40da-8695-24b0417dce6d-0&pdp_ext_f=%7B%22order%22%3A%2297%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%211.90%211.90%21%21%2114.79%2114.79%21%402103919917745377270103884efef4%2112000029849827853%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=d0vViNrEpmAL&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005004617543846%7C_p_origin_prod%3A
 
-
-
-video per meglio comprendere le funzioni del tasto
-https://github.com/pappicio/heltec4_Smart_Battery_Guard/blob/main/simulazione%20pic%20micro.mp4
-
+ 
