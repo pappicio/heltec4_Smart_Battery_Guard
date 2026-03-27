@@ -1,7 +1,7 @@
 program Solar_Power_Manager_683_Final_V8
 
 ' --- VARIABILI GLOBALI ---
-dim valore_adc as word
+
 dim batteria_mv as LongWord
 dim i, j as byte
 dim sveglie_wdt as word
@@ -58,30 +58,29 @@ sub procedure Lampeggia_Cifra(dim c as byte)
     Delay_Safe_ms(1000)
 end sub
 
-' --- LETTURA ADC ---
+
 sub procedure Leggi_Batteria_mV()
-    valore_adc = ADC_Read(1)
-    Delay_Safe_ms(5)
-    valore_adc = ADC_Read(1)
+    dim i as byte
+    dim somma as word
+    dim media_pulita as word
 
-    batteria_mv = (LongWord(valore_adc) * taratura_vcc) >> 10
+    somma = 0
+
+    ' 1. Ciclo di 64 campioni (2ms l'uno = 128ms totali)
+    for i = 1 to 64
+        somma = somma + ADC_Read(1)
+        delay_ms(1)
+    next i
+
+    ' 2. Media per 64 campioni (Shift 6)
+    ' 64 letture da max 1023 l'una fanno 65.472 (ci sta a pelo in una Word!)
+    media_pulita = somma >> 6
+
+    ' 3. Conversione finale in Millivolt
+    ' Usiamo LongWord per gestire il calcolo (es. 768 * 5070)
+    batteria_mv = (LongWord(media_pulita) * taratura_vcc) >> 10
 end sub
 
-' --- SALVATAGGIO EEPROM ---
-sub procedure Salva_EEPROM()
-    EEPROM_Write(0, Hi(valore_adc))
-    Delay_Safe_ms(20)
-    EEPROM_Write(1, Lo(valore_adc))
-    Delay_Safe_ms(20)
-    EEPROM_Write(3, Highest(batteria_mv))
-    Delay_Safe_ms(20)
-    EEPROM_Write(4, Higher(batteria_mv))
-    Delay_Safe_ms(20)
-    EEPROM_Write(5, Hi(batteria_mv))
-    Delay_Safe_ms(20)
-    EEPROM_Write(6, Lo(batteria_mv))
-    Delay_Safe_ms(20)
-end sub
 
 ' --- INIZIALIZZAZIONE ---
 sub procedure Init_Hardware()
@@ -111,14 +110,45 @@ sub procedure Init_Hardware()
     cicli_per_giorno = 2880
 
     GPIO.2 = 1
+    GPIO.5 = 0
+    delay_safe_ms(500)
+    Segnale_Triplo()
+    delay_safe_ms(500)
     Leggi_Batteria_mV()
+
+    
     if (batteria_mv > soglia_off) then
         GPIO.2 = 0
     end if
 
     in_manutenzione = false
     clrwdt
-    Segnale_Triplo()
+
+    if (batteria_mv <= soglia_off) then
+       GPIO.5 = 0
+       delay_safe_ms(500)
+       ' Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
+       for j = 1 to 6
+           GPIO.5 = 1
+           delay_safe_ms(100)
+           GPIO.5 = 0
+           delay_safe_ms(100)
+           clrwdt
+       next j
+    else 
+         if (batteria_mv > soglia_off) and (batteria_mv <= soglia_on)  then
+            ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
+            delay_safe_ms(500)
+            for j = 1 to 3
+                GPIO.5 = 1
+                delay_safe_ms(100)
+                GPIO.5 = 0
+                delay_safe_ms(100)
+                clrwdt
+            next j
+         end if
+    end if
+
 end sub
 
 ' --- MAIN ---
@@ -153,10 +183,10 @@ main:
 
                 ' Controllo soglie per Feedback LED
                 if (batteria_mv >= soglia_on) then
-                    ' Batteria OK (Sopra 3.7V): 1 lampo lungo
-                    GPIO.5 = 1
-                    Delay_Safe_ms(1000)
-                    GPIO.5 = 0
+                    ' Batteria OK (Sopra 3.7V)
+                    '''GPIO.5 = 1
+                    '''Delay_Safe_ms(1000)
+                    '''GPIO.5 = 0
                 else
                     if (batteria_mv <= soglia_off) then
                        GPIO.5 = 0
@@ -199,7 +229,7 @@ main:
             if (i >= 25) and (i < 50) then
                 GPIO.5 = 0
                 Leggi_Batteria_mV()
-                Salva_EEPROM()
+
                 Delay_Safe_ms(1000)
 
                 temp_mv = batteria_mv
@@ -215,6 +245,8 @@ main:
                 Lampeggia_Cifra(cifra)
 
                 cifra = temp_mv mod 10
+                'forza sempre a 0 quarto valore
+                cifra=0
                 Lampeggia_Cifra(cifra)
 
                 Delay_Safe_ms(1000)

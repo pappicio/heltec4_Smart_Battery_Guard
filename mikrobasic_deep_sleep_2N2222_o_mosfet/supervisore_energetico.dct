@@ -188,6 +188,7 @@ gpio
 hts
 hts_bit
 i
+i
 ics_auto
 ics_off
 in_manutenzione
@@ -330,7 +331,6 @@ rp0
 rp0_bit
 rp1
 rp1_bit
-salva_eeprom
 sboden
 sboden_bit
 scs
@@ -343,6 +343,7 @@ setfun32
 setiov3224
 soglia_off
 soglia_on
+somma
 status
 sub_32x32_fp
 sveglie_wdt
@@ -444,7 +445,6 @@ tun4
 tun4_bit
 ulpwue
 ulpwue_bit
-valore_adc
 vcfg
 vcfg_bit
 vdelay_advanced_ms

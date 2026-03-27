@@ -326,7 +326,6 @@ rp0
 rp0_bit
 rp1
 rp1_bit
-salva_eeprom
 sboden
 sboden_bit
 scs
@@ -438,7 +437,6 @@ tun4
 tun4_bit
 ulpwue
 ulpwue_bit
-valore_adc
 vcfg
 vcfg_bit
 vdelay_advanced_ms
