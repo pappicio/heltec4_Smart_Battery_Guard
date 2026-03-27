@@ -85,12 +85,16 @@ void Init_Hardware() {
     INTCON.GPIE = 1;
     IOC.B0 = 1;
 
+
+/////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 // SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
-    soglia_off   = 3330;
-    soglia_on    = 3700;
-    taratura_vcc = 5030;
+    soglia_off   = 3300;  // 3300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
+    soglia_on    = 3600;  // (45%), va piu che bene
+    taratura_vcc = 5050;  // segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
     giorni_riavvio = 3;
+/////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
     conteggio_cicli = 0;

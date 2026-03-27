@@ -88,10 +88,14 @@ void Init_Hardware() {
 
 
 
- soglia_off = 3330;
- soglia_on = 3700;
- taratura_vcc = 5030;
+
+
+ soglia_off = 3300;
+ soglia_on = 3600;
+ taratura_vcc = 5050;
  giorni_riavvio = 3;
+
+
 
 
  conteggio_cicli = 0;

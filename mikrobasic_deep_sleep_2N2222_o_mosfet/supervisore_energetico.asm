@@ -309,7 +309,7 @@ _Init_Hardware:
 	MOVWF      _soglia_on+1
 	CLRF       _soglia_on+2
 	CLRF       _soglia_on+3
-;supervisore_energetico.mbas,102 :: 		taratura_vcc = 5050 'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 2 mV
+;supervisore_energetico.mbas,102 :: 		taratura_vcc = 5050 'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
 	MOVLW      186
 	MOVWF      _taratura_vcc+0
 	MOVLW      19

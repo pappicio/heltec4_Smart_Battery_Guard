@@ -5,10 +5,10 @@ hint: 1	1015	Hint: Compiling unit "C:\projects\accensione_heltec\mikrobasic_deep
 hint: 65	1011	Hint: Variable "media_pulita" has been eliminated by optimizer	supervisore_energetico.mbas
 hint: 320	1010	Hint: Unit "supervisore_energetico.mbas" has been recompiled	supervisore_energetico.mbas
 diagnostics: 0	134	Compiled Successfully	C:\projects\accensione_heltec\mikrobasic_deep_sleep_2N2222_o_mosfet\supervisore_energetico.mbas
-diagnostics: 0	139	All files Compiled in 15 ms	 
+diagnostics: 0	139	All files Compiled in 31 ms	 
 hint: 0	1144	Used RAM (bytes): 45 (40%)  Free RAM (bytes): 67 (60%)	Used RAM (bytes): 45 (40%)  Free RAM (bytes): 67 (60%)
 hint: 0	1144	Used ROM (program words): 1433 (70%)  Free ROM (program words): 615 (30%)	Used ROM (program words): 1433 (70%)  Free ROM (program words): 615 (30%)
 diagnostics: 0	145	Project Linked Successfully	supervisore_energetico.mbppi
-diagnostics: 0	140	Linked in 16 ms	 
-diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 188 ms	 
-diagnostics: 0	103	Finished successfully: 27 mar 2026, 17:44:39	supervisore_energetico.mbppi
+diagnostics: 0	140	Linked in 15 ms	 
+diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 203 ms	 
+diagnostics: 0	103	Finished successfully: 27 mar 2026, 18:16:30	supervisore_energetico.mbppi
