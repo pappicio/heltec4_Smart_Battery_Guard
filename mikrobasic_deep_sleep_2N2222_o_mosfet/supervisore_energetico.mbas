@@ -274,7 +274,10 @@ main:
                         wend
                         if (i >= 50) then
                             in_manutenzione = false
-                            Segnale_Triplo()
+                            for j = 1 to 20
+                                GPIO.5 = not GPIO.5
+                                Delay_Safe_ms(100)
+                            next j
                         end if
                     else
                         Delay_Safe_ms(500)

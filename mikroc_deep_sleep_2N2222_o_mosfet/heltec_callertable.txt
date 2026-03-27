@@ -15,6 +15,4 @@ main
 	Div_32x32_U
 	Lampeggia_Cifra
 		Delay_Safe_ms
-	Segnale_Triplo
-		Delay_Safe_ms
 	Mul_32x32_U

@@ -240,7 +240,10 @@ void main() {
  }
  if (i >= 50) {
  in_manutenzione = 0;
- Segnale_Triplo();
+ for (j = 1; j <= 20; j++) {
+ GPIO.F5 = ~GPIO.F5;
+ Delay_Safe_ms(100);
+ }
  }
  } else {
  Delay_Safe_ms(500);
