@@ -118,7 +118,8 @@ void Init_Hardware() {
     soglia_on    = 3600;  // (45%)
     taratura_vcc = 5050;  // 5050 mV
     giorni_riavvio = 3;
-
+    
+    //////////////////////////////////////////////////////////////////
     conteggio_cicli = 0;
     cicli_per_giorno = 2883;
 

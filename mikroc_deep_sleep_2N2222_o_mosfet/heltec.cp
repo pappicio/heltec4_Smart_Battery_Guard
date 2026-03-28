@@ -120,6 +120,7 @@ void Init_Hardware() {
  taratura_vcc = 5050;
  giorni_riavvio = 3;
 
+
  conteggio_cicli = 0;
  cicli_per_giorno = 2883;
 
