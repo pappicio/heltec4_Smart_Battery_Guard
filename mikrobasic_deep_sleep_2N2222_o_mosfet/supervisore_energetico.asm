@@ -469,8 +469,8 @@ _Init_Hardware:
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;supervisore_energetico.mbas,137 :: 		cicli_per_giorno = 2880
-	MOVLW      64
+;supervisore_energetico.mbas,137 :: 		cicli_per_giorno = 2883
+	MOVLW      67
 	MOVWF      _cicli_per_giorno+0
 	MOVLW      11
 	MOVWF      _cicli_per_giorno+1

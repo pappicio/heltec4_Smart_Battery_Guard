@@ -134,7 +134,7 @@ sub procedure Init_Hardware()
 
     
     conteggio_cicli = 0
-    cicli_per_giorno = 2880
+    cicli_per_giorno = 2883
 
     GPIO.2 = 1
     GPIO.5 = 0
