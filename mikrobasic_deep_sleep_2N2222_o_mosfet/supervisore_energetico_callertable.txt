@@ -7,11 +7,15 @@ main
 			ADC_Read
 				Delay_22us
 			Mul_32x32_U
+		soglia_batteria
+			Delay_Safe_ms
 	Delay_Safe_ms
 	Leggi_Batteria_mV
 		ADC_Read
 			Delay_22us
 		Mul_32x32_U
+	soglia_batteria
+		Delay_Safe_ms
 	Div_32x32_U
 	Lampeggia_Cifra
 		Delay_Safe_ms

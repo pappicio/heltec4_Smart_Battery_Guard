@@ -81,6 +81,33 @@ sub procedure Leggi_Batteria_mV()
     batteria_mv = (LongWord(media_pulita) * taratura_vcc) >> 10
 end sub
 
+sub procedure soglia_batteria
+    if (batteria_mv <= soglia_off) then
+       GPIO.5 = 0
+       delay_safe_ms(500)
+       ' Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
+       for j = 1 to 6
+           GPIO.5 = 1
+           delay_safe_ms(100)
+           GPIO.5 = 0
+           delay_safe_ms(100)
+           clrwdt
+       next j
+    else
+         if (batteria_mv > soglia_off) and (batteria_mv <= soglia_on)  then
+            ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
+            delay_safe_ms(500)
+            for j = 1 to 3
+                GPIO.5 = 1
+                delay_safe_ms(100)
+                GPIO.5 = 0
+                delay_safe_ms(100)
+                clrwdt
+            next j
+         end if
+    end if
+
+end sub
 
 ' --- INIZIALIZZAZIONE ---
 sub procedure Init_Hardware()
@@ -124,31 +151,7 @@ sub procedure Init_Hardware()
     in_manutenzione = false
     clrwdt
 
-    if (batteria_mv <= soglia_off) then
-       GPIO.5 = 0
-       delay_safe_ms(500)
-       ' Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
-       for j = 1 to 6
-           GPIO.5 = 1
-           delay_safe_ms(100)
-           GPIO.5 = 0
-           delay_safe_ms(100)
-           clrwdt
-       next j
-    else 
-         if (batteria_mv > soglia_off) and (batteria_mv <= soglia_on)  then
-            ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
-            delay_safe_ms(500)
-            for j = 1 to 3
-                GPIO.5 = 1
-                delay_safe_ms(100)
-                GPIO.5 = 0
-                delay_safe_ms(100)
-                clrwdt
-            next j
-         end if
-    end if
-
+    soglia_batteria
 end sub
 
 ' --- MAIN ---
@@ -182,34 +185,8 @@ main:
                 Leggi_Batteria_mV()
 
                 ' Controllo soglie per Feedback LED
-                if (batteria_mv >= soglia_on) then
-                    ' Batteria OK (Sopra 3.7V)
-                    '''GPIO.5 = 1
-                    '''Delay_Safe_ms(1000)
-                    '''GPIO.5 = 0
-                else
-                    if (batteria_mv <= soglia_off) then
-                       GPIO.5 = 0
-                       delay_safe_ms(500)
-                        ' Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
-                        for j = 1 to 6
-                            GPIO.5 = 1
-                            delay_safe_ms(100)
-                            GPIO.5 = 0
-                            delay_safe_ms(100)
-                            clrwdt
-                        next j
-                    else
-                        ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
-                        delay_safe_ms(500)
-                        for j = 1 to 3
-                            GPIO.5 = 1
-                            delay_safe_ms(100)
-                            GPIO.5 = 0
-                            delay_safe_ms(100)
-                            clrwdt
-                        next j
-                    end if
+                if (batteria_mv < soglia_on) then
+                    soglia_batteria
                 end if
 
                 ' Esecuzione Reset Fisico Heltec
