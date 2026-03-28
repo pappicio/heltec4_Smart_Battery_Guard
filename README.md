@@ -6,7 +6,7 @@ esempio, la batteria misura 3865mv, farà: 3 lampeggi veloci, pausa, 8 lampeggi 
 ***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 3 Giorni di default la alimentazione verrà interrotta per 10 secondi per poi essere riattivata, facendo riaccendere (livello batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
 
 
-all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
+all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato. ***(seguiti da: nessun lampeggio se batteria carica, 3 lampeggi veloci se batteria in zona gialla (tra valore_OFF e valore_ON), 6 lasmpeggi veloci, batteria scarica, oltre il valore_OFF, e heltec resta spento, non si accende, livello batteria critico)***
 
 una breve spiegazione sulla funzione del tasto:
 pressione tra 1 e 5 secondi, accende led e lo lascia acceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01, mentre dall'iffset 3 al 7 scrive  su 4 bytes i dati relativi al voltaggio attuale in chiaro, cioe 00002222, tradotto in decimale darà oò voltaggio in millivolt letti al momento,
