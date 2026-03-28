@@ -1,12 +1,12 @@
-# heltecX_Smart_Battery_Guard
+# lora (meshtastic) modules Smart_Battery_Guard
 
 ***AGGIUNTA FUNZIONE Visualizzazione millivolt, se si pigia il pulsante da 2.5 secondi a 5 secondi (ve ne accorgete perchè il led di stato si spegne e resta spento), il led inizia a lampeggiare:
-esempio, la batteria misura 3865mv, farà: 3 lampeggi veloci, pausa, 8 lampeggi veloci, pausa, 6 lsampeggi veloci, pausa, 5 lampeggi veloci, potrete leggere i mv della batteria visivamente senza leggere la EEPROM, per lo 0, invece 1 lampeggio velocissimo, se i mv fossero 3860, il 4 stadio di lampeggi, terminerebbe con 1 solo lampeggio piu breve degli altri, 0 = lampeggio brevissimo!***
+esempio, la batteria misura 3865mv, farà: 3 lampeggi veloci, pausa, 8 lampeggi veloci, pausa, 6 lsampeggi veloci, pausa, 1 lampeggi veloce, piu degli altri, indica 0 (arrotonda ultimo valore sempre a 0, essendo per lo piu irrilevante!), potrete leggere i mv della batteria visivamente senza leggere la EEPROM, per lo 0, invece (come gia detto) 1 lampeggio velocissimo, se i mv fossero 3860, il 4 stadio di lampeggi, terminerebbe con 1 solo lampeggio piu breve degli altri, 0 = lampeggio brevissimo!***
  
-***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 3 Giorni di default la alimentazione verrà interrotta per 10 secondi per poi essere riattivata, facendo riaccendere (carica batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
+***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 3 Giorni di default la alimentazione verrà interrotta per 10 secondi per poi essere riattivata, facendo riaccendere (livello batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
 
 
-all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato.
+all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato. ***(seguiti da: nessun lampeggio se batteria carica, 3 lampeggi veloci se batteria in zona gialla (tra valore_OFF e valore_ON), 6 lampeggi veloci, batteria scarica, oltre il valore_OFF, e heltec resta spento, non si accende, livello batteria critico)***
 
 una breve spiegazione sulla funzione del tasto:
 pressione tra 1 e 5 secondi, accende led e lo lascia acceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01, mentre dall'iffset 3 al 7 scrive  su 4 bytes i dati relativi al voltaggio attuale in chiaro, cioe 00002222, tradotto in decimale darà oò voltaggio in millivolt letti al momento,
@@ -30,7 +30,7 @@ datasheet del pic micro (12F683)
 
 https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
 
-12F693 su aliexpress:
+12F683 su aliexpress:
 
 https://it.aliexpress.com/item/1005006303166795.html?spm=a2g0o.productlist.main.5.495f191a2PDQ6i&algo_pvid=013a3ce0-3dd7-438d-965c-3a9212c8e3d9&algo_exp_id=013a3ce0-3dd7-438d-965c-3a9212c8e3d9-4&pdp_ext_f=%7B%22order%22%3A%2221%22%2C%22spu_best_type%22%3A%22price%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%215.56%212.72%21%21%2143.24%2121.19%21%402103835e17741799554178201e5bc6%2112000036684741958%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=A6kHPwAkb3Wv&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005006303166795%7C_p_origin_prod%3A
 
@@ -64,8 +64,6 @@ Per la versione con MOSFET AO3401, ecco un link aliexpress dove comprarne
 
 https://it.aliexpress.com/item/1005004617543846.html?spm=a2g0o.productlist.main.1.6c116d4fBYnexV&algo_pvid=19b502e1-456e-40da-8695-24b0417dce6d&algo_exp_id=19b502e1-456e-40da-8695-24b0417dce6d-0&pdp_ext_f=%7B%22order%22%3A%2297%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%211.90%211.90%21%21%2114.79%2114.79%21%402103919917745377270103884efef4%2112000029849827853%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=d0vViNrEpmAL&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005004617543846%7C_p_origin_prod%3A
 
+ADATTATORE mosfet SMD (SOT23-3) per millefori (SIP3)
 
-
-video per meglio comprendere le funzioni del tasto
-https://github.com/pappicio/heltec4_Smart_Battery_Guard/blob/main/simulazione%20pic%20micro.mp4
-
+https://it.aliexpress.com/item/1005006626188055.html?spm=a2g0o.productlist.main.10.1f94Te9qTe9qfL&algo_pvid=a7fdd15a-6daa-4bc9-b32e-30f053d9a163&algo_exp_id=a7fdd15a-6daa-4bc9-b32e-30f053d9a163-9&pdp_ext_f=%7B%22order%22%3A%221297%22%2C%22spu_best_type%22%3A%22price%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%211.93%211.93%21%21%212.18%212.18%21%40211b819117747092144196460e3172%2112000037858523309%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=uQJpqORxMooQ&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005006626188055%7C_p_origin_prod%3A
