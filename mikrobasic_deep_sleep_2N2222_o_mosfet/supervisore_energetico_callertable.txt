@@ -6,6 +6,7 @@ main
 		Leggi_Batteria_mV
 			ADC_Read
 				Delay_22us
+			Delay_Safe_ms
 			Mul_32x32_U
 		soglia_batteria
 			Delay_Safe_ms
@@ -13,6 +14,7 @@ main
 	Leggi_Batteria_mV
 		ADC_Read
 			Delay_22us
+		Delay_Safe_ms
 		Mul_32x32_U
 	soglia_batteria
 		Delay_Safe_ms
