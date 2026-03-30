@@ -43,48 +43,6 @@ sub procedure Delay_Safe_ms(dim n as word)
     next k
 end sub
 
-' --- SUB DI CONVERSIONE ---
-sub procedure Conv_Dec_To_BCD()
-    dim d as byte
-    d = dec_val div 10
-    bcd_val = (d << 4) or (dec_val mod 10)
-end sub
-
-sub procedure Conv_BCD_To_Dec()
-    dim d as byte
-    d = bcd_val >> 4
-    dec_val = (d * 10) + (bcd_val and 0x0F)
-end sub
-
-' --- LETTURA ORA RTC ---
-sub procedure Leggi_Ora_RTC()
-    Soft_I2C_Start()
-    Delay_Safe_ms(100)
-    Soft_I2C_Write(0xD0)
-    Soft_I2C_Write(0x01)            ' Punta ai Minuti
-    Soft_I2C_Start()
-    Soft_I2C_Write(0xD1)
-    bcd_val = Soft_I2C_Read(1)
-    Conv_BCD_To_Dec()
-    minuti = dec_val
-    bcd_val = Soft_I2C_Read(0)
-    Conv_BCD_To_Dec()
-    ore = dec_val
-' LEGGIAMO IL GIORNO DELLA SETTIMANA (1-7)
-    bcd_val = Soft_I2C_Read(0) ' Leggiamo l'ultimo registro che ci serve e chiudiamo (0)
-    giorno = bcd_val and 0x07  ' Maschera per prendere solo il valore 1-7
-    Soft_I2C_Stop()
-end sub
-
-' --- SEGNALE LED ---
-sub procedure Segnale_Triplo()
-    for j = 1 to 3
-        GPIO.2 = 1                 ' Accende LED (Nuovo PIN)
-        Delay_Safe_ms(250)         ' Attesa 250ms
-        GPIO.2 = 0                 ' Spegne LED
-        Delay_Safe_ms(250)         ' Attesa 250ms
-    next j
-end sub
 
 ' --- SUBROUTINE LAMPEGGIO CIFRA (Traduce numeri in impulsi luminosi) ---
 sub procedure Lampeggia_Cifra(dim c as byte)
@@ -104,6 +62,46 @@ sub procedure Lampeggia_Cifra(dim c as byte)
         next l
     end if
     Delay_Safe_ms(1000)            ' Pausa lunga tra una cifra e l'altra
+end sub
+
+
+' --- LETTURA ORA RTC ---
+sub procedure Leggi_Ora_RTC()
+
+    gpio.2=1
+    Delay_Safe_ms(100)
+    Soft_I2C_Start()
+
+    Soft_I2C_Write(0xD0)       ' Indirizzo RTC in Scrittura
+    Soft_I2C_Write(0x01)       ' Punta ai Minuti (0x01)
+
+    Soft_I2C_Start()           ' <--- SOSTITUITO RESTART CON START
+    Soft_I2C_Write(0xD1)       ' Indirizzo RTC in Lettura
+
+    ' Lettura sequenziale (Minuti -> Ore -> Giorno)
+    bcd_val = Soft_I2C_Read(1)
+    minuti = ((bcd_val >> 4) * 10) + (bcd_val and 0x0F)
+
+    bcd_val = Soft_I2C_Read(1)
+    ore = ((bcd_val >> 4) * 10) + (bcd_val and 0x0F)
+
+    bcd_val = Soft_I2C_Read(0) ' Ultima lettura manda NACK (0)
+    giorno = bcd_val and 0x07
+
+    Soft_I2C_Stop()
+    Delay_Safe_ms(100)
+    GPIO.2 = 0
+
+end sub
+
+' --- SEGNALE LED ---
+sub procedure Segnale_Triplo()
+    for j = 1 to 3
+        GPIO.2 = 1                 ' Accende LED (Nuovo PIN)
+        Delay_Safe_ms(250)         ' Attesa 250ms
+        GPIO.2 = 0                 ' Spegne LED
+        Delay_Safe_ms(250)         ' Attesa 250ms
+    next j
 end sub
 
 ' --- LETTURA ANALOGICA E MEDIA ---
@@ -154,6 +152,32 @@ sub procedure soglia_batteria
     end if
 end sub
 
+
+
+sub procedure scrivi_ora_RTC
+
+        gpio.2=1
+        Delay_Safe_ms(100)
+        Soft_I2C_Init()     ' Inizializza
+        Delay_Safe_ms(100)
+        Soft_I2C_Start()
+        Soft_I2C_Write(0xD0) ' Indirizzo DS3231 (Scrittura)
+        Soft_I2C_Write(0x00) ' Inizia dal registro 0 (Secondi)
+
+        ' --- SCRIVI QUI L'ORA DI ADESSO (Formato 0x..) ---
+        Soft_I2C_Write(0x00) ' Secondi (00)
+        Soft_I2C_Write(0x05) ' Minuti (metti 54 se sono le 10:54)
+        Soft_I2C_Write(0x04) ' Ore (metti 10 se sono le 10)
+        Soft_I2C_Write(0x01) ' Giorno Settimana (1=Lun, 2=Mar...)
+        Soft_I2C_Write(0x30) ' Giorno Mese (30)
+        Soft_I2C_Write(0x03) ' Mese (03 = Marzo)
+        Soft_I2C_Write(0x26) ' Anno (26 = 2026)
+
+        Soft_I2C_Stop()
+
+        EEPROM_Write(0x00, 1) ' Segna che abbiamo già sincronizzato
+        GPIO.2 = 0
+end sub
 ' --- INIZIALIZZAZIONE ---
 sub procedure Init_Hardware()
     ' Imposta l'oscillatore interno a 4MHz e lo stabilizza
@@ -186,7 +210,13 @@ sub procedure Init_Hardware()
 
     ' Imposta il numero di cicli per coprire 24h reali (correzione 29.9s)
     cicli_per_giorno = 2883
-
+        
+        
+        
+        TRISIO.4 = 0
+        GPIO.4 = 1 ' SDA Alto
+        TRISIO.5 = 0
+        GPIO.5 = 1 ' SCL Alto
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -216,42 +246,14 @@ sub procedure Init_Hardware()
        giorni_riavvio = 0
     end if
 
-    EEPROM_Write(0x00, 0xFF) ' Decommenta per forzare nuova sincronizzazione RTC
+    ''''''''''''''EEPROM_Write(0x00, 0xFF) ' Decommenta per forzare nuova sincronizzazione RTC
     Delay_Safe_ms(50)
 
-    minuti_count = 0
+    minuti_count = 20
 
     stato_eeprom = EEPROM_Read(0x00)
     if ((stato_eeprom <> 1) and (RTC_presente = 1)) then
-
-       TRISIO.4 = 0
-       GPIO.4 = 1 ' SDA Alto
-       TRISIO.5 = 0
-       GPIO.5 = 1 ' SCL Alto
-
-        gpio.2=1
-        Delay_Safe_ms(100)
-
-        Soft_I2C_Init()     ' Inizializza
-        Delay_Safe_ms(100)
-        Soft_I2C_Start()
-        Soft_I2C_Write(0xD0) ' Indirizzo DS3231 (Scrittura)
-        Soft_I2C_Write(0x00) ' Inizia dal registro 0 (Secondi)
-
-        ' --- SCRIVI QUI L'ORA DI ADESSO (Formato 0x..) ---
-        Soft_I2C_Write(0x00) ' Secondi (00)
-        Soft_I2C_Write(0x54) ' Minuti (metti 54 se sono le 10:54)
-        Soft_I2C_Write(0x10) ' Ore (metti 10 se sono le 10)
-        Soft_I2C_Write(0x01) ' Giorno Settimana (1=Lun, 2=Mar...)
-        Soft_I2C_Write(0x30) ' Giorno Mese (30)
-        Soft_I2C_Write(0x03) ' Mese (03 = Marzo)
-        Soft_I2C_Write(0x26) ' Anno (26 = 2026)
-
-        Soft_I2C_Stop()
-
-        EEPROM_Write(0x00, 1) ' Segna che abbiamo già sincronizzato
-        GPIO.2 = 0
-        ''''''minuti_count = 20 ' Forza lettura RTC al primo giro          ' Spegni RTC/LED
+       Scrivi_ora_RTC
     end if
     ' Attesa di mezzo secondo per stabilizzare le tensioni
     delay_safe_ms(500)
@@ -273,7 +275,7 @@ sub procedure Init_Hardware()
     ' Inizializza la variabile di stato manutenzione come falsa
     in_manutenzione = false
     reset_fatto = 0
-    sveglie_wdt = 13  ' Forza lettura batteria al primo giro
+    sveglie_wdt = 0  ' Forza lettura batteria al primo giro
     ' Resetta il timer del Watchdog prima di entrare nel loop
     clrwdt
 
@@ -440,10 +442,7 @@ main:
 
                 ' --- CONTROLLO RTC OGNI 10 MINUTI (20 * 30s) ---
                 if (minuti_count >= 20) then
-                    GPIO.2 = 1
-                    Delay_Safe_ms(150)
                     Leggi_Ora_RTC()
-                    GPIO.2 = 0
 
 'RIAVVIAMO OGNI NOTTE ALLE 4 CON CON RTC PRESENTE!
                     if (ore = 4) and (minuti < 11) then

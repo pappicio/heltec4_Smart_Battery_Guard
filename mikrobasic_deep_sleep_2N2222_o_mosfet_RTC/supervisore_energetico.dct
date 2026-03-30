@@ -105,8 +105,6 @@ cmsync_bit
 comfrem
 compare_double
 conteggio_cicli
-conv_bcd_to_dec
-conv_dec_to_bcd
 cout
 cout_bit
 dc
@@ -344,6 +342,7 @@ rp1_bit
 rtc_presente
 sboden
 sboden_bit
+scrivi_ora_rtc
 scs
 scs_bit
 sdiv3232l
