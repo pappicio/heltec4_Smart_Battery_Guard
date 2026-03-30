@@ -1,0 +1,476 @@
+program Solar_Power_Manager_683_Final_V12_RTC
+
+' --- CONFIGURAZIONE PIN I2C SOFTWARE ---
+dim Soft_I2C_Scl as sbit at GP5_bit
+dim Soft_I2C_Sda as sbit at GP4_bit
+dim Soft_I2C_Scl_Direction as sbit at TRISIO5_bit  ' <--- DEVE ESSERE 5
+dim Soft_I2C_Sda_Direction as sbit at TRISIO4_bit  ' <--- DEVE ESSERE 4
+dim RTC_presente as byte  ' 0 = Assente, 1 = Funzionante
+' --- VARIABILI GLOBALI ---
+dim batteria_mv as LongWord         ' Memorizza la tensione batteria in millivolt
+dim i, j as byte                    ' Variabili di utilità per cicli e conteggi                                                     d
+dim sveglie_wdt as word             ' Conta quante volte il Watchdog ha svegliato il chip
+dim in_manutenzione as boolean      ' Flag per lo stato di blocco manutenzione
+dim dummy as byte                   ' Variabile di appoggio per lettura GPIO
+dim soglia_off, soglia_on as LongWord ' Limiti di tensione per distacco/riattacco
+dim taratura_vcc as LongWord        ' Valore di riferimento per calibrazione ADC
+
+
+' --- VARIABILI RTC E CONVERSIONE ---
+dim ore, minuti, giorno as byte ' AGGIUNTO giorno_mese
+dim bcd_val, dec_val as byte
+dim reset_fatto as byte
+dim stato_eeprom as byte
+
+dim minuti_count as byte           ' Contatore per arrivare a 10 minuti
+
+
+' --- VARIABILI PER LETTURA CIFRE ---
+dim temp_mv as LongWord             ' Variabile temporanea per calcolo cifre LED
+dim cifra as byte                   ' Singola cifra da visualizzare con i lampi
+
+' --- VARIABILI TIMER RIAVVIO ---
+dim giorni_riavvio as byte          ' Impostazione giorni tra un reset e l'altro
+dim conteggio_cicli as LongWord     ' Contatore cicli WDT trascorsi
+dim cicli_per_giorno as LongWord    ' Numero di cicli WDT calcolati per 24 ore
+
+' --- RITARDO SICURO (Mantiene il Watchdog pulito durante le pause) ---
+sub procedure Delay_Safe_ms(dim n as word)
+    dim k as word
+    for k = 1 to n
+        delay_us(980)                ' Pausa di 1ms calcolando i tempi della esecuzione altre uistruzioni in sub, si arriva ad arrotondare a 1ms circa...
+        clrwdt                       ' Reset del Watchdog ad ogni millisecondo
+    next k
+end sub
+
+' --- SUB DI CONVERSIONE ---
+sub procedure Conv_Dec_To_BCD()
+    dim d as byte
+    d = dec_val div 10
+    bcd_val = (d << 4) or (dec_val mod 10)
+end sub
+
+sub procedure Conv_BCD_To_Dec()
+    dim d as byte
+    d = bcd_val >> 4
+    dec_val = (d * 10) + (bcd_val and 0x0F)
+end sub
+
+' --- LETTURA ORA RTC ---
+sub procedure Leggi_Ora_RTC()
+    Soft_I2C_Start()
+    Delay_Safe_ms(100)
+    Soft_I2C_Write(0xD0)
+    Soft_I2C_Write(0x01)            ' Punta ai Minuti
+    Soft_I2C_Start()
+    Soft_I2C_Write(0xD1)
+    bcd_val = Soft_I2C_Read(1)
+    Conv_BCD_To_Dec()
+    minuti = dec_val
+    bcd_val = Soft_I2C_Read(0)
+    Conv_BCD_To_Dec()
+    ore = dec_val
+' LEGGIAMO IL GIORNO DELLA SETTIMANA (1-7)
+    bcd_val = Soft_I2C_Read(0) ' Leggiamo l'ultimo registro che ci serve e chiudiamo (0)
+    giorno = bcd_val and 0x07  ' Maschera per prendere solo il valore 1-7
+    Soft_I2C_Stop()
+end sub
+
+' --- SEGNALE LED ---
+sub procedure Segnale_Triplo()
+    for j = 1 to 3
+        GPIO.2 = 1                 ' Accende LED (Nuovo PIN)
+        Delay_Safe_ms(250)         ' Attesa 250ms
+        GPIO.2 = 0                 ' Spegne LED
+        Delay_Safe_ms(250)         ' Attesa 250ms
+    next j
+end sub
+
+' --- SUBROUTINE LAMPEGGIO CIFRA (Traduce numeri in impulsi luminosi) ---
+sub procedure Lampeggia_Cifra(dim c as byte)
+    dim l as byte
+    if (c = 0) then
+        ' Zero: lampeggio brevissimo per distinguerlo
+        GPIO.2 = 1
+        delay_safe_ms(50)
+        GPIO.2 = 0
+    else
+        for l = 1 to c
+            GPIO.2 = 1             ' Accende LED
+            delay_safe_ms(250)          ' Pausa accensione
+            GPIO.2 = 0             ' Spegne LED
+            delay_safe_ms(250)          ' Pausa tra lampi
+            clrwdt                 ' Mantiene il sistema attivo
+        next l
+    end if
+    Delay_Safe_ms(1000)            ' Pausa lunga tra una cifra e l'altra
+end sub
+
+' --- LETTURA ANALOGICA E MEDIA ---
+sub procedure Leggi_Batteria_mV()
+    dim i as byte
+    dim somma as word
+    dim media_pulita as word
+
+    somma = 0
+    ' 1. Ciclo di 64 campioni (2ms l'uno = 128ms totali)
+    for i = 1 to 64
+        somma = somma + ADC_Read(1) ' Legge il valore analogico su AN1
+        delay_safe_ms(1)                 ' Pausa tra letture
+    next i
+
+    ' 2. Media per 64 campioni (Shift 6 equivale a dividere per 64)
+    media_pulita = somma >> 6
+
+    ' 3. Conversione finale in Millivolt (Normalizzazione a 10 bit)
+    batteria_mv = (LongWord(media_pulita) * taratura_vcc) >> 10
+end sub
+
+' --- FEEDBACK VISIVO STATO BATTERIA ---
+sub procedure soglia_batteria
+    if (batteria_mv <= soglia_off) then
+       GPIO.2 = 0                  ' Spegne LED
+       delay_safe_ms(500)
+       ' Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
+       for j = 1 to 6
+           GPIO.2 = 1
+           delay_safe_ms(100)
+           GPIO.2 = 0
+           delay_safe_ms(100)
+           clrwdt
+       next j
+    else
+         if (batteria_mv > soglia_off) and (batteria_mv <= soglia_on)  then
+            ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
+            delay_safe_ms(500)
+            for j = 1 to 3
+                GPIO.2 = 1
+                delay_safe_ms(100)
+                GPIO.2 = 0
+                delay_safe_ms(100)
+                clrwdt
+            next j
+         end if
+    end if
+end sub
+
+' --- INIZIALIZZAZIONE ---
+sub procedure Init_Hardware()
+    ' Imposta l'oscillatore interno a 4MHz e lo stabilizza
+    RTC_presente = 0
+    OSCCON = %01100111
+
+    ' Disabilita i comparatori analogici per usare i pin come I/O digitali
+    CMCON0 = 7
+
+    ' Configura GP1 come ingresso analogico (AN1) e imposta il clock ADC
+    ANSEL  = %00010010
+
+    ' Configura la direzione: GP1, GP3 Input; GP0, GP2, GP4, GP5 Output
+    TRISIO = %00001010
+
+    ' Abilita Pull-up e assegna il Prescaler 1:128 al Watchdog (~2.3s)
+    OPTION_REG = %00001111
+
+    ' Pull-up interna non disponibile su GP3 (MCLR), ma necessaria su GP0 se usato
+    WPU = %00000000
+
+    ' Abilita l'interrupt generale per il cambiamento di stato dei pin
+    INTCON.GPIE = 1
+
+    ' Specifica il pin GP3 come sorgente dell'interrupt on change
+    IOC.3 = 1
+
+    ' Azzera il contatore dei cicli all'avvio
+    conteggio_cicli = 0
+
+    ' Imposta il numero di cicli per coprire 24h reali (correzione 29.9s)
+    cicli_per_giorno = 2883
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
+    soglia_off   = 3300  '300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
+    soglia_on    = 3600  '(45%), va piu che bene
+    taratura_vcc = 5050  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
+    giorni_riavvio = 0
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+    ' Forza GP0 alto: spegne il carico (Mosfet P-channel) all'accensione (Nuovo PIN)
+    GPIO.0 = 1
+
+    ' Assicura che il LED (GP2) sia spento
+    GPIO.2 = 0
+
+    ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
+    'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
+
+    RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+    giorni_riavvio = 3
+
+    if (RTC_presente=1) and  (giorni_riavvio > 0) then
+       giorni_riavvio = 0
+    end if
+
+    EEPROM_Write(0x00, 0xFF) ' Decommenta per forzare nuova sincronizzazione RTC
+    Delay_Safe_ms(50)
+
+    minuti_count = 0
+
+    stato_eeprom = EEPROM_Read(0x00)
+    if ((stato_eeprom <> 1) and (RTC_presente = 1)) then
+
+       TRISIO.4 = 0
+       GPIO.4 = 1 ' SDA Alto
+       TRISIO.5 = 0
+       GPIO.5 = 1 ' SCL Alto
+
+        gpio.2=1
+        Delay_Safe_ms(100)
+
+        Soft_I2C_Init()     ' Inizializza
+        Delay_Safe_ms(100)
+        Soft_I2C_Start()
+        Soft_I2C_Write(0xD0) ' Indirizzo DS3231 (Scrittura)
+        Soft_I2C_Write(0x00) ' Inizia dal registro 0 (Secondi)
+
+        ' --- SCRIVI QUI L'ORA DI ADESSO (Formato 0x..) ---
+        Soft_I2C_Write(0x00) ' Secondi (00)
+        Soft_I2C_Write(0x54) ' Minuti (metti 54 se sono le 10:54)
+        Soft_I2C_Write(0x10) ' Ore (metti 10 se sono le 10)
+        Soft_I2C_Write(0x01) ' Giorno Settimana (1=Lun, 2=Mar...)
+        Soft_I2C_Write(0x30) ' Giorno Mese (30)
+        Soft_I2C_Write(0x03) ' Mese (03 = Marzo)
+        Soft_I2C_Write(0x26) ' Anno (26 = 2026)
+
+        Soft_I2C_Stop()
+
+        EEPROM_Write(0x00, 1) ' Segna che abbiamo già sincronizzato
+        GPIO.2 = 0
+        ''''''minuti_count = 20 ' Forza lettura RTC al primo giro          ' Spegni RTC/LED
+    end if
+    ' Attesa di mezzo secondo per stabilizzare le tensioni
+    delay_safe_ms(500)
+
+    ' Esegue tre lampeggi per confermare l'avvio del firmware
+    Segnale_Triplo()
+
+    ' Altra piccola pausa di sicurezza prima della lettura ADC
+    delay_safe_ms(500)
+
+    ' Esegue la prima scansione della tensione batteria
+    Leggi_Batteria_mV()
+
+    ' Se la tensione letta è sicura, porta GP0 a massa per alimentare l'Heltec
+    if (batteria_mv > soglia_off) then
+        GPIO.0 = 0
+    end if
+
+    ' Inizializza la variabile di stato manutenzione come falsa
+    in_manutenzione = false
+    reset_fatto = 0
+    sveglie_wdt = 13  ' Forza lettura batteria al primo giro
+    ' Resetta il timer del Watchdog prima di entrare nel loop
+    clrwdt
+
+    ' Esegue il feedback LED basato sul voltaggio appena letto
+    soglia_batteria
+end sub
+
+' --- MAIN ---
+main:
+    Init_Hardware()                ' Configura il chip
+
+
+    while (TRUE)
+        ' Gestione del flag interrupt: pulisce il cambio stato pin
+        if (INTCON.GPIF = 1) then
+            dummy = GPIO
+            INTCON.GPIF = 0
+        end if
+
+        ' --- GESTIONE PRESSIONE PULSANTE (GP3) ---
+        if (GPIO.3 = 0) then
+            i = 0
+            while (GPIO.3 = 0) and (i < 50)
+                Delay_Safe_ms(100) ' Campionamento pressione (100ms * 50 = 5s max)
+                i = i + 1
+                if (i = 10) then
+                    GPIO.2 = 1     ' Accende LED dopo 1 secondo di pressione
+                end if
+                if (i = 25) then
+                    GPIO.2 = 0     ' Spegne LED dopo 2.5 secondi (cambio modalità)
+                end if
+            wend
+
+            ' --- 1. RESET RAPIDO CON DIAGNOSTICA (1-2s) ---
+            if (i >= 10) and (i < 25) then
+                GPIO.2 = 0
+                Leggi_Batteria_mV()
+
+                ' Controllo soglie per Feedback LED
+                if (batteria_mv < soglia_on) then
+                    soglia_batteria
+                end if
+
+                ' Esecuzione Reset Fisico Heltec (Spegne/Pausa/Riaccende)
+                GPIO.0 = 1
+                Delay_Safe_ms(2000)
+
+                ' Riaccende solo se non siamo sotto soglia critica
+                if (batteria_mv > soglia_off) then
+                    GPIO.0 = 0
+                end if
+                gpio.2=0
+                sveglie_wdt = 0
+                conteggio_cicli = 0
+            end if
+
+            ' --- 2. VISUALIZZAZIONE VOLT (2-5s) ---
+            if (i >= 25) and (i < 50) then
+                GPIO.2 = 0
+                Leggi_Batteria_mV() ' Legge voltaggio attuale
+
+                Delay_Safe_ms(1000)
+
+                ' Calcolo e invio sequenza lampi per ogni cifra
+                temp_mv = batteria_mv
+                cifra = temp_mv div 1000
+                Lampeggia_Cifra(cifra)
+                temp_mv = temp_mv mod 1000
+                cifra = temp_mv div 100
+                Lampeggia_Cifra(cifra)
+                temp_mv = temp_mv mod 100
+                cifra = temp_mv div 10
+                Lampeggia_Cifra(cifra)
+                Lampeggia_Cifra(0)
+            end if
+
+' CASO 3: Manutenzione (SOPRA i 5 secondi)
+            ' --- 3. MANUTENZIONE (>5s) ---
+            if (i >= 50) then
+                GPIO.0 = 1                      ' Distacca il carico (Heltec OFF)
+                ' Lampeggio veloce di conferma ingresso (10 cicli ON/OFF = 20 passaggi)
+                for j = 1 to 20
+                    GPIO.2 = not GPIO.2         ' Lampeggio veloce di conferma
+                    Delay_Safe_ms(100)
+                    clrwdt
+                next j
+                GPIO.2 = 0
+                in_manutenzione = true          ' Entra nel loop di blocco
+                while (in_manutenzione = true)
+                    ' Segnale visivo di stato: LED acceso 500ms / spento 500ms
+                    GPIO.2 = 1
+                    Delay_Safe_ms(500)
+                    GPIO.2 = 0
+                    if (GPIO.3 = 0) then        ' Controlla se si preme di nuovo per uscire
+                        i = 0
+                        while (GPIO.3 = 0) and (i < 50)
+                            Delay_Safe_ms(100)
+                            i = i + 1
+                            clrwdt
+                        wend
+                        if (i >= 50) then       ' Uscita dopo altri 5 secondi
+                            in_manutenzione = false
+                            ' Lampeggio veloce di conferma uscita
+                            for j = 1 to 20
+                                GPIO.2 = not GPIO.2
+                                Delay_Safe_ms(100)
+                                clrwdt
+                            next j
+                            GPIO.2 = 0
+                        end if
+                    else
+                        ' Se il tasto non è premuto, completa il secondo di delay
+                        ' per rendere il lampeggio di stato simmetrico
+                        Delay_Safe_ms(500)
+                    end if
+                    clrwdt
+                wend
+                ' Uscita dalla manutenzione: reset contatori e riaccensione
+                Leggi_Batteria_mV()
+                if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+                if (batteria_mv < soglia_on) then
+                    soglia_batteria
+                end if
+                sveglie_wdt = 13 ' Forza controllo batteria subito
+                conteggio_cicli = 0
+                minuti_count = 0
+                clrwdt
+            end if
+        end if
+
+        ' --- GESTIONE RISPARMIO ENERGETICO E CONTROLLI ---
+        if (in_manutenzione = false) then
+            ' Controllo batteria ogni ~30 secondi (13 risvegli WDT)
+            if (sveglie_wdt >= 13) then
+                Leggi_Batteria_mV()
+                ' Protezione batteria scarica
+                if (batteria_mv <= soglia_off) then
+                    GPIO.0 = 1 ' Spegne Heltec
+                end if
+                ' Isteresi: riaccende solo se carica
+                if (batteria_mv >= soglia_on) then
+                    GPIO.0 = 0 ' Accende Heltec
+                end if
+
+                sveglie_wdt = 0 ' Reset qui dopo il controllo batteria
+
+                if (RTC_presente = 1) then
+                   minuti_count = minuti_count + 1
+                end if
+
+                ' Gestione Timer Riavvio Automatico
+                if (giorni_riavvio > 0) then
+                    conteggio_cicli = conteggio_cicli + 1
+                    ' Verifica se sono passati i giorni impostati
+                    if (conteggio_cicli >= (cicli_per_giorno * giorni_riavvio)) then
+                        GPIO.0 = 1           ' Ciclo di spegnimento
+                        Delay_Safe_ms(2000)
+                        if (batteria_mv > soglia_off) then
+                            GPIO.0 = 0       ' Riaccensione
+                        end if
+                        conteggio_cicli = 0  ' Reset timer
+                    end if
+                end if
+
+                ' --- CONTROLLO RTC OGNI 10 MINUTI (20 * 30s) ---
+                if (minuti_count >= 20) then
+                    GPIO.2 = 1
+                    Delay_Safe_ms(150)
+                    Leggi_Ora_RTC()
+                    GPIO.2 = 0
+
+'RIAVVIAMO OGNI NOTTE ALLE 4 CON CON RTC PRESENTE!
+                    if (ore = 4) and (minuti < 11) then
+                        if (reset_fatto = 0) then
+                           if (giorno = 1) or (giorno = 4) then
+                              GPIO.0 = 1
+                              Delay_Safe_ms(10000)
+                              if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+                              reset_fatto = 1
+                           end if
+                        end if
+                    else
+                        reset_fatto = 0
+                    end if
+                    minuti_count = 0
+                end if
+            end if
+
+            ' --- Queste istruzioni devono stare fuori dall'if del conteggio batteria ---
+            sveglie_wdt = sveglie_wdt + 1    ' Incrementa conteggio risvegli
+            clrwdt                            ' Pulizia watchdog
+            sleep                             ' Il chip dorme (Risparmio Max)
+            nop                              ' Istruzione necessaria dopo lo sleep
+
+        else
+            ' Se in manutenzione, resta sveglio e attendi
+            Delay_Safe_ms(100)
+        end if
+    wend
+end.
