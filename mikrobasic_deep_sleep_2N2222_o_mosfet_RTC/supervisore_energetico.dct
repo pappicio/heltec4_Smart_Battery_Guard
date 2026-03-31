@@ -83,7 +83,6 @@ chs1_bit
 chs2
 chs2_bit
 cicli_per_giorno
-cifra
 cinv
 cinv_bit
 cis
@@ -104,6 +103,7 @@ cmsync
 cmsync_bit
 comfrem
 compare_double
+contatore
 conteggio_cicli
 cout
 cout_bit
@@ -137,6 +137,7 @@ div_32x32_s
 div_32x32_u
 div_8x8_s
 div_8x8_u
+divisore
 double2byte
 double2int
 double2longint
@@ -155,6 +156,7 @@ eeif_bit
 eeprom_read
 eeprom_write
 equals_double
+estrai_e_lampeggia
 f
 false
 fixsign32
@@ -408,7 +410,6 @@ t2if
 t2if_bit
 tadc_get_sample
 taratura_vcc
-temp_mv
 tmr0
 tmr0ie
 tmr0ie_bit
@@ -467,10 +468,12 @@ tun4
 tun4_bit
 ulpwue
 ulpwue_bit
+val_da_lampeggiare
 vcfg
 vcfg_bit
 vdelay_advanced_ms
 vdelay_ms
+visualizza_ora_rtc
 vr0
 vr0_bit
 vr1

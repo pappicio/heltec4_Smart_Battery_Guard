@@ -1,5 +1,6 @@
 main
 	Init_Hardware
+		EEPROM_Write
 		Delay_Safe_ms
 		EEPROM_Read
 		scrivi_ora_RTC
@@ -34,16 +35,20 @@ main
 		Mul_32x32_U
 	soglia_batteria
 		Delay_Safe_ms
-	Div_32x32_U
+	Estrai_e_Lampeggia
+		Lampeggia_Cifra
+			Delay_Safe_ms
 	Lampeggia_Cifra
 		Delay_Safe_ms
-	Mul_32x32_U
 	Leggi_Ora_RTC
-		Delay_Safe_ms
 		Soft_I2C_Start
 			Delay_1us
 			PutZerosToLATSda
 			PutZerosToLATScl
+		Soft_I2C_Stop
+			PutZerosToLATSda
+			Delay_1us
+		Delay_Safe_ms
 		Soft_I2C_Write
 			Delay_1us
 			PutZerosToLATScl
@@ -53,6 +58,4 @@ main
 			PutZerosToLATScl
 			PutZerosToLATSda
 		Mul_8x8_U
-		Soft_I2C_Stop
-			PutZerosToLATSda
-			Delay_1us
+	Mul_32x32_U
