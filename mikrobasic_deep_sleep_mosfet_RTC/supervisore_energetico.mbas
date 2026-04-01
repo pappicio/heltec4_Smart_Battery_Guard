@@ -308,6 +308,9 @@ end sub
       ' Se la tensione letta è sicura, porta GP0 a massa per alimentare l'Heltec
       if (batteria_mv > soglia_off) then
           GPIO.0 = 0
+          spento = 0
+      else
+         spento = 1
       end if
 
       ' Inizializza la variabile di stato manutenzione come falsa
@@ -359,6 +362,9 @@ end sub
                 ' Riaccende solo se non siamo sotto soglia critica
                 if (batteria_mv > soglia_off) then
                     GPIO.0 = 0
+                    spento = 0
+                else
+                    spento = 1
                 end if
                 gpio.2=0
                 if (batteria_mv < soglia_on) then
@@ -447,7 +453,13 @@ end sub
                 wend
                 ' Uscita dalla manutenzione: reset contatori e riaccensione
                 Leggi_Batteria_mV()
-                if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+                if (batteria_mv > soglia_off) then 
+                   GPIO.0 = 0
+                   spento = 0
+                else
+                    GPIO.0 = 1
+                    spento = 1
+                end if
                 if (batteria_mv < soglia_on) then
                     soglia_batteria
                 end if
