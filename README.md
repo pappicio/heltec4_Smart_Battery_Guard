@@ -27,24 +27,25 @@ Interroga lo stato del sistema tramite una pressione prolungata. Al rilascio del
 ### 🔄 **3. ***Reset Programmato e Smart Battery Guard*****
 * ***Reset Ciclico:*** Di default, ogni ***3 giorni*** l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa (personalizzabile da 1 a X giorni; 0 disabilita).
 * ***Smart Battery Guard:*** Protezione totale della batteria. Spegne il carico sotto i ***3,3V*** e lo riattiva solo sopra i ***3,7V*** (isteresi di sicurezza).
-* ***Stato all'Avvio:*** Il sistema esegue ***3 lampeggi rapidi*** iniziali. Se la batteria è scarica (<3.3V), seguiranno ***6 lampeggi*** e il modulo Heltec rimarrà spento.
+* ***Stato all'Avvio:*** Il sistema esegue ***3 lampeggi iniziali***; se la batteria in zona gialla (tra i 3.3 e i 3.7 V) eseguira dopo una breve pausa, ***3 lampeggi veloci***: Se la batteria è scarica (<3.3V), seguiranno invece ***6 lampeggi veloci*** e il modulo Heltec rimarrà spento. 
+Se invece la batteria è carica, nn ci saranno feedback visivi dal led ma solo i ***3 lampeggi iniziali***.
 
 ---
 
 ### 🔘 **4. ***Funzioni del Pulsante di Controllo*****
-* ***Reset Rapido (1.0 - 2.5 sec):*** Il LED rimane acceso fisso fino al rilascio. Esegue il riavvio forzato del modulo Heltec. 
+* ***Reset Rapido (1.0 - 2.5 sec):*** Il LED rimane acceso fisso fino al rilascio. Esegue il riavvio forzato del modulo Heltec.
     * Se voltaggio OK: ***Nessun lampeggio extra***.
     * Se zona gialla (3.7V - 3.3V): ***3 lampeggi veloci***.
     * Se batteria critica (<3.3V): ***6 lampeggi veloci*** e Heltec resta spento.
 * ***Diagnostica Volt + Ora (2.5 - 5 sec):*** Visualizza in sequenza i millivolt della batteria e l'orario attuale dell'RTC (vedi punto 2).
 * ***Modalità Manutenzione (> 5 sec):*** Al raggiungimento dei 5 secondi, il LED emette ***10 lampeggi veloci***. Il sistema spegne il carico e il LED lampeggia lentamente (500ms ON / 500ms OFF). 
-    * ***Per uscire:*** Premere nuovamente per almeno ***5 secondi*** fino ai 3 lampi classici di riavvio.
+    * ***Per uscire dalla modalità manutenzione:*** Premere nuovamente per almeno ***5 secondi*** fino ai ***10 lampeggi veloci*** seguiti dai ***3 lampi*** classici di riavvio.
 
 ---
 
 ### ⚡ **5. ***Hardware e Alimentazione*****
 * ***Step-Up 5V:*** Componente fondamentale. Eroga ***5V fissi al PIC12F683*** indipendentemente dal calo della batteria (da 2V a 4.5V). Questo garantisce una ***tensione di riferimento costante*** per letture ADC precise al millivolt.
-* ***Componenti Chiave:*** PIC12F683, Modulo RTC DS3231 (ZS-042), Step-Up 5V, Mosfet P-Channel per il controllo del carico.
+* ***Componenti Chiave:*** PIC12F683, Modulo RTC DS3231 (ZS-042), Step-Up 5V, Mosfet P-Channel ***AO3401*** (il piu adatto e il meno energivoro) per il controllo del carico.
 
 ---
 
