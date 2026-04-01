@@ -32,7 +32,7 @@ Interroga lo stato del sistema tramite una pressione prolungata. Al rilascio del
 ---
 
 ### 🔘 **4. ***Funzioni del Pulsante di Controllo*****
-* ***Reset Rapido (0.1 - 2.5 sec):*** Il LED rimane acceso fisso fino al rilascio. Esegue il riavvio forzato del modulo Heltec. 
+* ***Reset Rapido (1.0 - 2.5 sec):*** Il LED rimane acceso fisso fino al rilascio. Esegue il riavvio forzato del modulo Heltec. 
     * Se voltaggio OK: ***Nessun lampeggio extra***.
     * Se zona gialla (3.7V - 3.3V): ***3 lampeggi veloci***.
     * Se batteria critica (<3.3V): ***6 lampeggi veloci*** e Heltec resta spento.
