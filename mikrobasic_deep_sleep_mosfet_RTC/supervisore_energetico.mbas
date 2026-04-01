@@ -457,7 +457,6 @@ end sub
                    GPIO.0 = 0
                    spento = 0
                 else
-                    GPIO.0 = 1
                     spento = 1
                 end if
                 if (batteria_mv < soglia_on) then
@@ -505,6 +504,9 @@ end sub
                         Delay_Safe_ms(2000)
                         if (batteria_mv > soglia_off) then
                             GPIO.0 = 0       ' Riaccensione
+                            spento = 0
+                        else
+                           spento = 1
                         end if
                         conteggio_cicli = 0  ' Reset timer
                     end if
