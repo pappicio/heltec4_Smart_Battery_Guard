@@ -255,7 +255,7 @@ end sub
       ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
       'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
-      RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+      RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
       finestra_oraria = 0
       giorni_riavvio = 3
 
