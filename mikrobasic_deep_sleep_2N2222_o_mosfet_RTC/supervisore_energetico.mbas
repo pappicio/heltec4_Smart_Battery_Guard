@@ -78,32 +78,41 @@ end sub
 
 ' --- LETTURA ORA RTC ---
 sub procedure Leggi_Ora_RTC()
+    ' --- SEGNALE VISIVO E RESET BUS ---
+    gpio.2 = 1           ' Accende il LED (Segnale di attività I2C)
 
-    gpio.2=1
-
+    ' Reset del Bus: se l'RTC era rimasto "appeso", questo lo sblocca
     Soft_I2C_Start()
     Soft_I2C_Stop()
-    Delay_Safe_ms(1)
+    delay_safe_ms(1)        ' Piccola pausa di assestamento
+
+    ' --- FASE 1: PUNTAMENTO (Scrittura) ---
     Soft_I2C_Start()
-    Soft_I2C_Write(0xD0)       ' Indirizzo RTC in Scrittura
-    Soft_I2C_Write(0x01)       ' Punta ai Minuti (0x01)
+    Soft_I2C_Write(0xD0) ' Indirizzo RTC (Scrittura)
+    Soft_I2C_Write(0x01) ' Punta al registro 0x01 (Minuti)
 
-    Soft_I2C_Start()           ' <--- SOSTITUITO RESTART CON START
-    Soft_I2C_Write(0xD1)       ' Indirizzo RTC in Lettura
+    ' --- FASE 2: LETTURA (Restart) ---
+    Soft_I2C_Start()     ' Segnale di Restart
+    Soft_I2C_Write(0xD1) ' Indirizzo RTC (Lettura)
 
-    ' Lettura sequenziale (Minuti -> Ore -> Giorno)
-    bcd_val = Soft_I2C_Read(1)
+    ' 1. Legge i MINUTI (0x01)
+    bcd_val = Soft_I2C_Read(1) ' Manda ACK (1) per continuare a leggere
     minuti = ((bcd_val >> 4) * 10) + (bcd_val and 0x0F)
 
-    bcd_val = Soft_I2C_Read(1)
+    ' 2. Legge le ORE (0x02)
+    bcd_val = Soft_I2C_Read(1) ' Manda ACK (1) per continuare
+    ' --- CRITICAL FIX: PULIZIA DEI BIT 6 E 7 (Formato 12/24h) ---
+    bcd_val = bcd_val and 0x3F ' <--- Questo garantisce che 04 sia 04 e non 68!
     ore = ((bcd_val >> 4) * 10) + (bcd_val and 0x0F)
 
-    bcd_val = Soft_I2C_Read(0) ' Ultima lettura manda NACK (0)
-    giorno = bcd_val and 0x07
-    Soft_I2C_Stop()
-    Delay_Safe_ms(1)
-    GPIO.2 = 0
+    ' 3. Legge il GIORNO DELLA SETTIMANA (0x03)
+    bcd_val = Soft_I2C_Read(0) ' Manda NACK (0) per chiudere la lettura
+    giorno = bcd_val and 0x07 ' Isola solo i primi 3 bit (1-7)
 
+    ' --- CHIUSURA ---
+    Soft_I2C_Stop()
+    delay_safe_ms(1)
+    gpio.2 = 0           ' Spegne il LED (Lettura completata)
 end sub
 
 ' --- SEGNALE LED ---
@@ -297,7 +306,7 @@ sub procedure Init_Hardware()
        giorni_riavvio = 0
     end if
 
-    EEPROM_Write(0x00, 0xFF) ' Decommenta per forzare nuova sincronizzazione RTC
+    ''''''''''''''''''''''''''''''EEPROM_Write(0x00, 0xFF) ' Decommenta per forzare nuova sincronizzazione RTC
     Delay_Safe_ms(50)
 
     minuti_count = 20
@@ -403,7 +412,16 @@ if (i >= 25) and (i < 50) then
     ' --- VISUALIZZAZIONE ORA (Se vuoi tentare di farcela stare) ---
     if (RTC_presente = 1) then
         Delay_Safe_ms(1000)
+        for j = 1 to 2
+            GPIO.2 = 1
+            delay_safe_ms(100)
+            GPIO.2 = 0
+            delay_safe_ms(100)
+        next j
         Leggi_Ora_RTC()
+        gpio.2=1
+        delay_safe_ms(100)
+        gpio.2=0
         Delay_Safe_ms(1000)
         ' Ore
         val_da_lampeggiare = word(ore)

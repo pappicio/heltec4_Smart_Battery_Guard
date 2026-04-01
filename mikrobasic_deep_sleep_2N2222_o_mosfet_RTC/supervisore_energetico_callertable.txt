@@ -1,6 +1,5 @@
 main
 	Init_Hardware
-		EEPROM_Write
 		Delay_Safe_ms
 		EEPROM_Read
 		scrivi_ora_RTC
