@@ -168,7 +168,8 @@ end sub
 
 
 
-sub procedure scrivi_ora_RTC
+' Parametri attesi in formato BCD (es. per il giorno 30 scrivi 0x30)
+sub procedure Scrivi_Ora_RTC(dim s_g_sett, s_g, s_m, s_a, s_ore, s_min as byte)
 
         gpio.2=1
         Delay_Safe_ms(100)
@@ -177,20 +178,20 @@ sub procedure scrivi_ora_RTC
         Soft_I2C_Start()
         Soft_I2C_Write(0xD0) ' Indirizzo DS3231 (Scrittura)
         Soft_I2C_Write(0x00) ' Inizia dal registro 0 (Secondi)
+    
 
-        ' --- SCRIVI QUI L'ORA DI ADESSO (Formato 0x..) ---
-        Soft_I2C_Write(0x00) ' Secondi (00)
-        Soft_I2C_Write(0x05) ' Minuti (metti 54 se sono le 10:54)
-        Soft_I2C_Write(0x04) ' Ore (metti 10 se sono le 10)
-        Soft_I2C_Write(0x01) ' Giorno Settimana (1=Lun, 2=Mar...)
-        Soft_I2C_Write(0x30) ' Giorno Mese (30)
-        Soft_I2C_Write(0x03) ' Mese (03 = Marzo)
-        Soft_I2C_Write(0x26) ' Anno (26 = 2026)
 
-        Soft_I2C_Stop()
-
-        EEPROM_Write(0x00, 1) ' Segna che abbiamo già sincronizzato
-        GPIO.2 = 0
+    Soft_I2C_Write(0x00)  ' Secondi (sempre 00)
+    Soft_I2C_Write(s_min) ' Minuti (es. 0x05)
+    Soft_I2C_Write(s_ore) ' Ore (es. 0x04)
+    Soft_I2C_Write(s_g_sett) ' Giorno Settimana (1=Lun, 2=Mar... 7=Dom)
+    Soft_I2C_Write(s_g)   ' Giorno Mese (es. 0x30)
+    Soft_I2C_Write(s_m)   ' Mese (es. 0x03)
+    Soft_I2C_Write(s_a)   ' Anno (es. 0x26)
+    Soft_I2C_Stop()
+    Delay_Safe_ms(800)
+    gpio.2=0
+    Delay_Safe_ms(500)
 end sub
 
 
@@ -257,22 +258,44 @@ sub procedure Init_Hardware()
     ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
     'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
-    RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+    RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
     giorni_riavvio = 3
 
     if (RTC_presente=1) and  (giorni_riavvio > 0) then
        giorni_riavvio = 0
     end if
 
-    ''''''''''''''''''''''''''''''EEPROM_Write(0x00, 0xFF) ' Decommenta per forzare nuova sincronizzazione RTC
-    Delay_Safe_ms(50)
+    ' --- LOGICA DI SINCRONIZZAZIONE MANUALE RTC ---
+    ' Controlliamo se il tasto (GP3) è premuto all'avvio
+    ' Aspettiamo circa 1 secondo per confermare l'intenzione
+    if (RTC_presente = 1) then
+        minuti_count = 20
 
-    minuti_count = 20
+       i = 0
+       while (GPIO.3 = 0) and (i < 15)
+            delay_safe_ms(100)
+            i = i + 1
+       wend
 
-    stato_eeprom = EEPROM_Read(0x00)
-    if ((stato_eeprom <> 1) and (RTC_presente = 1)) then
-       Scrivi_ora_RTC
+       ' Se il tasto è stato tenuto premuto per 1.5 secondi (15 * 100ms)
+       if (i = 15) then
+        ' COMMENTO DATI PER RTC (Formato BCD):
+        ' Giorno: 30 Marzo 2026 -> 0x30, 0x03, 0x26
+        ' Ora:   04:05:00       -> 0x04, 0x05
+        ' Giorno Settimana: 1   -> 0x01 (Lunedì)
+
+        ' Chiamata: GiornoSettimana, Giorno, Mese, Anno, Ore, Minuti
+          Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
+          delay_safe_ms(500)
+          ' Feedback: 5 lampeggi rapidi (100ms) come richiesto
+          Lampi(10, 100)
+          delay_safe_ms(500)
+       end if
     end if
+    
+
+
+
     ' Attesa di mezzo secondo per stabilizzare le tensioni
     delay_safe_ms(500)
 

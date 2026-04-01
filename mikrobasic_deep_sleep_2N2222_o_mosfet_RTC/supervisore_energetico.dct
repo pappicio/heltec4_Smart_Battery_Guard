@@ -344,6 +344,12 @@ rp0_bit
 rp1
 rp1_bit
 rtc_presente
+s_a
+s_g
+s_g_sett
+s_m
+s_min
+s_ore
 sboden
 sboden_bit
 scrivi_ora_rtc

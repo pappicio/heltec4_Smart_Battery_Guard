@@ -43,7 +43,8 @@ Count=0
 [Useses]
 File0=ADC
 File1=EEPROM
-Count=2
+File2=Software_I2C
+Count=3
 [EXPANDED_NODES]
 0=heltec.mcppi
 Count=1
