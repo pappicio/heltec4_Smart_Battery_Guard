@@ -5,7 +5,7 @@ dim Soft_I2C_Scl as sbit at GP5_bit
 dim Soft_I2C_Sda as sbit at GP4_bit
 dim Soft_I2C_Scl_Direction as sbit at TRISIO5_bit  ' <--- DEVE ESSERE 5
 dim Soft_I2C_Sda_Direction as sbit at TRISIO4_bit  ' <--- DEVE ESSERE 4
-dim RTC_presente as byte  ' 0 = Assente, 1 = Funzionante
+dim RTC_presente, finestra_oraria as byte  ' 0 = Assente, 1 = Funzionante
 ' --- VARIABILI GLOBALI ---
 dim batteria_mv as LongWord         ' Memorizza la tensione batteria in millivolt
 dim i, j as byte                    ' Variabili di utilità per cicli e conteggi                                                     d
@@ -256,18 +256,16 @@ end sub
       'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
       RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+      finestra_oraria = 0
       giorni_riavvio = 3
 
-      if (RTC_presente=1) and  (giorni_riavvio > 0) then
-         giorni_riavvio = 0
-      end if
 
       ' --- LOGICA DI SINCRONIZZAZIONE MANUALE RTC ---
       ' Controlliamo se il tasto (GP3) è premuto all'avvio
       ' Aspettiamo circa 1 secondo per confermare l'intenzione
       if (RTC_presente = 1) then
           minuti_count = 20
-
+          giorni_riavvio = 0
          i = 0
          while (GPIO.3 = 0) and (i < 15)
               delay_safe_ms(100)
@@ -322,10 +320,9 @@ end sub
       soglia_batteria
   end sub
 
-  ' --- MAIN ---
-  main:
-      Init_Hardware()                ' Configura il chip
-
+ ' --- MAIN ---
+ main:
+    Init_Hardware()                ' Configura il chip
 
     while (TRUE)
         ' Gestione del flag interrupt: pulisce il cambio stato pin
@@ -353,12 +350,10 @@ end sub
                 GPIO.2 = 0
                 Leggi_Batteria_mV()
 
-
-
                 ' Esecuzione Reset Fisico Heltec (Spegne/Pausa/Riaccende)
                 GPIO.0 = 1
                 Delay_Safe_ms(2000)
-                  ' Controllo soglie per Feedback LED
+                ' Controllo soglie per Feedback LED
 
                 ' Riaccende solo se non siamo sotto soglia critica
                 if (batteria_mv > soglia_off) then
@@ -373,7 +368,7 @@ end sub
             end if
 
             ' --- 2. VISUALIZZAZIONE VOLT (2-5s) ---
-             ' --- VISUALIZZAZIONE VOLT (Senza variabili d'appoggio) ---
+            ' --- VISUALIZZAZIONE VOLT (Senza variabili d'appoggio) ---
             ' --- MODIFICA NEL MAIN (VISUALIZZAZIONE VOLT) ---
             if (i >= 25) and (i < 50) then
                 GPIO.2 = 0
@@ -411,7 +406,7 @@ end sub
                 end if
             end if
 
-' CASO 3: Manutenzione (SOPRA i 5 secondi)
+            ' CASO 3: Manutenzione (SOPRA i 5 secondi)
             ' --- 3. MANUTENZIONE (>5s) ---
             if (i >= 50) then
                 GPIO.0 = 1                      ' Distacca il carico (Heltec OFF)
@@ -419,7 +414,6 @@ end sub
                 for j = 1 to 20
                     GPIO.2 = not GPIO.2         ' Lampeggio veloce di conferma
                     Delay_Safe_ms(100)
-
                 next j
                 GPIO.2 = 0
                 in_manutenzione = true          ' Entra nel loop di blocco
@@ -433,7 +427,6 @@ end sub
                         while (GPIO.3 = 0) and (i < 50)
                             Delay_Safe_ms(100)
                             i = i + 1
-
                         wend
                         if (i >= 50) then       ' Uscita dopo altri 5 secondi
                             in_manutenzione = false
@@ -441,7 +434,6 @@ end sub
                             for j = 1 to 20
                                 GPIO.2 = not GPIO.2
                                 Delay_Safe_ms(100)
-
                             next j
                             GPIO.2 = 0
                         end if
@@ -482,7 +474,11 @@ end sub
                 sveglie_wdt = 0 ' Reset qui dopo il controllo batteria
 
                 if (RTC_presente = 1) then
+                   giorni_riavvio=0
                    minuti_count = minuti_count + 1
+                else
+                    minuti_count = 0
+                    finestra_oraria=0
                 end if
 
                 ' Gestione Timer Riavvio Automatico
@@ -501,20 +497,42 @@ end sub
 
                 ' --- CONTROLLO RTC OGNI 10 MINUTI (20 * 30s) ---
                 if (minuti_count >= 20) then
+
                     Leggi_Ora_RTC()
 
-'RIAVVIAMO OGNI NOTTE ALLE 4 CON CON RTC PRESENTE!
-                    if (ore = 4) and (minuti < 11) then
-                        if (reset_fatto = 0) then
-                           if (giorno = 1) or (giorno = 4) then
-                              GPIO.0 = 1
-                              Delay_Safe_ms(10000)
-                              if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
-                              reset_fatto = 1
-                           end if
+                    'RIAVVIAMO OGNI NOTTE ALLE 4 CON CON RTC PRESENTE!
+                    if finestra_oraria = 0 then
+                        'riavviaomo alle 4 di mattina......
+                        if (ore = 4) and (minuti < 11) then
+                            if (reset_fatto = 0) then
+                               if (giorno = 1) or (giorno = 4) then
+                                 GPIO.0 = 1
+                                 Delay_Safe_ms(10000)
+                                 if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+                                 reset_fatto = 1
+                               end if
+                            end if
+                        else
+                            reset_fatto = 0
                         end if
+
                     else
-                        reset_fatto = 0
+
+                        'ACCENDIAMO IN FINESTRA_ORARIA dalle 7 alle 13
+                        if (ore >= 7) and (ore < 13) then 'dalle 7 alle 13 accendiamo
+                            'ogni giorno oppure......
+                            if (giorno = 1) or (giorno = 2) or (giorno = 3) or (giorno = 4) or (giorno = 5) or (giorno = 6) or (giorno = 7)   then
+                               if (batteria_mv > soglia_off) then
+                                  'accendiamo.....
+                                  GPIO.0 = 0
+                               else
+                                  GPIO.0 = 1
+                               end if
+                            end if
+                        else
+                            'fuori orario, spegniamo
+                            GPIO.0 = 1
+                        end if
                     end if
                     minuti_count = 0
                 end if
@@ -524,11 +542,13 @@ end sub
             sveglie_wdt = sveglie_wdt + 1    ' Incrementa conteggio risvegli
             clrwdt                            ' Pulizia watchdog
             sleep                             ' Il chip dorme (Risparmio Max)
-            nop                              ' Istruzione necessaria dopo lo sleep
+            nop                               ' Istruzione necessaria dopo lo sleep
 
         else
             ' Se in manutenzione, resta sveglio e attendi
             Delay_Safe_ms(100)
+            clrwdt
         end if
     wend
+end.
 end.
