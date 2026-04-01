@@ -526,145 +526,146 @@ _Scrivi_Ora_RTC:
 ;supervisore_energetico.mbas,180 :: 		Soft_I2C_Write(0x00) ' Inizia dal registro 0 (Secondi)
 	CLRF       FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,184 :: 		Soft_I2C_Write(0x00)  ' Secondi (sempre 00)
+;supervisore_energetico.mbas,181 :: 		Soft_I2C_Write(0x00)  ' Secondi (sempre 00)
 	CLRF       FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,185 :: 		Soft_I2C_Write(s_min) ' Minuti (es. 0x05)
+;supervisore_energetico.mbas,182 :: 		Soft_I2C_Write(s_min) ' Minuti (es. 0x05)
 	MOVF       FARG_Scrivi_Ora_RTC_s_min+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,186 :: 		Soft_I2C_Write(s_ore) ' Ore (es. 0x04)
+;supervisore_energetico.mbas,183 :: 		Soft_I2C_Write(s_ore) ' Ore (es. 0x04)
 	MOVF       FARG_Scrivi_Ora_RTC_s_ore+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,187 :: 		Soft_I2C_Write(s_g_sett) ' Giorno Settimana (1=Lun, 2=Mar... 7=Dom)
+;supervisore_energetico.mbas,184 :: 		Soft_I2C_Write(s_g_sett) ' Giorno Settimana (1=Lun, 2=Mar... 7=Dom)
 	MOVF       FARG_Scrivi_Ora_RTC_s_g_sett+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,188 :: 		Soft_I2C_Write(s_g)   ' Giorno Mese (es. 0x30)
+;supervisore_energetico.mbas,185 :: 		Soft_I2C_Write(s_g)   ' Giorno Mese (es. 0x30)
 	MOVF       FARG_Scrivi_Ora_RTC_s_g+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,189 :: 		Soft_I2C_Write(s_m)   ' Mese (es. 0x03)
+;supervisore_energetico.mbas,186 :: 		Soft_I2C_Write(s_m)   ' Mese (es. 0x03)
 	MOVF       FARG_Scrivi_Ora_RTC_s_m+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,190 :: 		Soft_I2C_Write(s_a)   ' Anno (es. 0x26)
+;supervisore_energetico.mbas,187 :: 		Soft_I2C_Write(s_a)   ' Anno (es. 0x26)
 	MOVF       FARG_Scrivi_Ora_RTC_s_a+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;supervisore_energetico.mbas,191 :: 		Soft_I2C_Stop()
+;supervisore_energetico.mbas,188 :: 		Soft_I2C_Stop()
 	CALL       _Soft_I2C_Stop+0
-;supervisore_energetico.mbas,192 :: 		Delay_Safe_ms(800)
+;supervisore_energetico.mbas,189 :: 		Delay_Safe_ms(800)
 	MOVLW      32
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,193 :: 		gpio.2=0
+;supervisore_energetico.mbas,190 :: 		gpio.2=0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,194 :: 		Delay_Safe_ms(500)
+;supervisore_energetico.mbas,191 :: 		Delay_Safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,195 :: 		end sub
+;supervisore_energetico.mbas,192 :: 		end sub
 L_end_Scrivi_Ora_RTC:
 	RETURN
 ; end of _Scrivi_Ora_RTC
 
 _Init_Hardware:
 
-;supervisore_energetico.mbas,201 :: 		sub procedure Init_Hardware()
-;supervisore_energetico.mbas,203 :: 		RTC_presente = 0
+;supervisore_energetico.mbas,198 :: 		sub procedure Init_Hardware()
+;supervisore_energetico.mbas,200 :: 		RTC_presente = 0
 	CLRF       _RTC_presente+0
-;supervisore_energetico.mbas,204 :: 		OSCCON = %01100111
+;supervisore_energetico.mbas,201 :: 		OSCCON = %01100111
 	MOVLW      103
 	MOVWF      OSCCON+0
-;supervisore_energetico.mbas,207 :: 		CMCON0 = 7
+;supervisore_energetico.mbas,204 :: 		CMCON0 = 7
 	MOVLW      7
 	MOVWF      CMCON0+0
-;supervisore_energetico.mbas,210 :: 		ANSEL  = %00010010
+;supervisore_energetico.mbas,207 :: 		ANSEL  = %00010010
 	MOVLW      18
 	MOVWF      ANSEL+0
-;supervisore_energetico.mbas,213 :: 		TRISIO = %00001010
+;supervisore_energetico.mbas,210 :: 		TRISIO = %00001010
 	MOVLW      10
 	MOVWF      TRISIO+0
-;supervisore_energetico.mbas,216 :: 		OPTION_REG = %00001111
+;supervisore_energetico.mbas,213 :: 		OPTION_REG = %00001111
 	MOVLW      15
 	MOVWF      OPTION_REG+0
-;supervisore_energetico.mbas,219 :: 		WPU = %00000000
+;supervisore_energetico.mbas,216 :: 		WPU = %00000000
 	CLRF       WPU+0
-;supervisore_energetico.mbas,222 :: 		INTCON.GPIE = 1
+;supervisore_energetico.mbas,219 :: 		INTCON.GPIE = 1
 	BSF        INTCON+0, 3
-;supervisore_energetico.mbas,225 :: 		IOC.3 = 1
+;supervisore_energetico.mbas,222 :: 		IOC.3 = 1
 	BSF        IOC+0, 3
-;supervisore_energetico.mbas,228 :: 		conteggio_cicli = 0
+;supervisore_energetico.mbas,225 :: 		conteggio_cicli = 0
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;supervisore_energetico.mbas,231 :: 		cicli_per_giorno = 2883
+;supervisore_energetico.mbas,228 :: 		cicli_per_giorno = 2883
 	MOVLW      67
 	MOVWF      _cicli_per_giorno+0
 	MOVLW      11
 	MOVWF      _cicli_per_giorno+1
 	CLRF       _cicli_per_giorno+2
 	CLRF       _cicli_per_giorno+3
-;supervisore_energetico.mbas,235 :: 		TRISIO.4 = 0
+;supervisore_energetico.mbas,232 :: 		TRISIO.4 = 0
 	BCF        TRISIO+0, 4
-;supervisore_energetico.mbas,236 :: 		GPIO.4 = 1 ' SDA Alto
+;supervisore_energetico.mbas,233 :: 		GPIO.4 = 1 ' SDA Alto
 	BSF        GPIO+0, 4
-;supervisore_energetico.mbas,237 :: 		TRISIO.5 = 0
+;supervisore_energetico.mbas,234 :: 		TRISIO.5 = 0
 	BCF        TRISIO+0, 5
-;supervisore_energetico.mbas,238 :: 		GPIO.5 = 1 ' SCL Alto
+;supervisore_energetico.mbas,235 :: 		GPIO.5 = 1 ' SCL Alto
 	BSF        GPIO+0, 5
-;supervisore_energetico.mbas,244 :: 		soglia_off   = 3300  '300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
+;supervisore_energetico.mbas,241 :: 		soglia_off   = 3300  '300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
 	MOVLW      228
 	MOVWF      _soglia_off+0
 	MOVLW      12
 	MOVWF      _soglia_off+1
 	CLRF       _soglia_off+2
 	CLRF       _soglia_off+3
-;supervisore_energetico.mbas,245 :: 		soglia_on    = 3600  '(45%), va piu che bene
+;supervisore_energetico.mbas,242 :: 		soglia_on    = 3600  '(45%), va piu che bene
 	MOVLW      16
 	MOVWF      _soglia_on+0
 	MOVLW      14
 	MOVWF      _soglia_on+1
 	CLRF       _soglia_on+2
 	CLRF       _soglia_on+3
-;supervisore_energetico.mbas,246 :: 		taratura_vcc = 5050  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
+;supervisore_energetico.mbas,243 :: 		taratura_vcc = 5050  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
 	MOVLW      186
 	MOVWF      _taratura_vcc+0
 	MOVLW      19
 	MOVWF      _taratura_vcc+1
 	CLRF       _taratura_vcc+2
 	CLRF       _taratura_vcc+3
-;supervisore_energetico.mbas,247 :: 		giorni_riavvio = 0
+;supervisore_energetico.mbas,244 :: 		giorni_riavvio = 0
 	CLRF       _giorni_riavvio+0
-;supervisore_energetico.mbas,253 :: 		GPIO.0 = 1
+;supervisore_energetico.mbas,250 :: 		GPIO.0 = 1
 	BSF        GPIO+0, 0
-;supervisore_energetico.mbas,256 :: 		GPIO.2 = 0
+;supervisore_energetico.mbas,253 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,261 :: 		RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
-	CLRF       _RTC_presente+0
-;supervisore_energetico.mbas,262 :: 		giorni_riavvio = 3
+;supervisore_energetico.mbas,258 :: 		RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+	MOVLW      1
+	MOVWF      _RTC_presente+0
+;supervisore_energetico.mbas,259 :: 		giorni_riavvio = 3
 	MOVLW      3
 	MOVWF      _giorni_riavvio+0
-;supervisore_energetico.mbas,265 :: 		giorni_riavvio = 0
-L__Init_Hardware45:
-;supervisore_energetico.mbas,271 :: 		if (RTC_presente = 1) then
+;supervisore_energetico.mbas,262 :: 		giorni_riavvio = 0
+	CLRF       _giorni_riavvio+0
+;supervisore_energetico.mbas,268 :: 		if (RTC_presente = 1) then
 	MOVF       _RTC_presente+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
 	GOTO       L__Init_Hardware48
-;supervisore_energetico.mbas,272 :: 		minuti_count = 20
+;supervisore_energetico.mbas,269 :: 		minuti_count = 20
 	MOVLW      20
 	MOVWF      _minuti_count+0
-;supervisore_energetico.mbas,274 :: 		i = 0
+;supervisore_energetico.mbas,271 :: 		i = 0
 	CLRF       _i+0
-;supervisore_energetico.mbas,275 :: 		while (GPIO.3 = 0) and (i < 15)
+;supervisore_energetico.mbas,272 :: 		while (GPIO.3 = 0) and (i < 15)
 L__Init_Hardware51:
 	BTFSC      GPIO+0, 3
 	GOTO       L__Init_Hardware192
@@ -686,22 +687,22 @@ L__Init_Hardware193:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__Init_Hardware52
-;supervisore_energetico.mbas,276 :: 		delay_safe_ms(100)
+;supervisore_energetico.mbas,273 :: 		delay_safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,277 :: 		i = i + 1
+;supervisore_energetico.mbas,274 :: 		i = i + 1
 	INCF       _i+0, 1
-;supervisore_energetico.mbas,278 :: 		wend
+;supervisore_energetico.mbas,275 :: 		wend
 	GOTO       L__Init_Hardware51
 L__Init_Hardware52:
-;supervisore_energetico.mbas,281 :: 		if (i = 15) then
+;supervisore_energetico.mbas,278 :: 		if (i = 15) then
 	MOVF       _i+0, 0
 	XORLW      15
 	BTFSS      STATUS+0, 2
 	GOTO       L__Init_Hardware56
-;supervisore_energetico.mbas,288 :: 		Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
+;supervisore_energetico.mbas,285 :: 		Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
 	MOVLW      1
 	MOVWF      FARG_Scrivi_Ora_RTC_s_g_sett+0
 	MOVLW      48
@@ -715,50 +716,50 @@ L__Init_Hardware52:
 	MOVLW      5
 	MOVWF      FARG_Scrivi_Ora_RTC_s_min+0
 	CALL       _Scrivi_Ora_RTC+0
-;supervisore_energetico.mbas,289 :: 		delay_safe_ms(500)
+;supervisore_energetico.mbas,286 :: 		delay_safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,291 :: 		Lampi(10, 100)
+;supervisore_energetico.mbas,288 :: 		Lampi(10, 100)
 	MOVLW      10
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      100
 	MOVWF      FARG_Lampi_t_on+0
 	CLRF       FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;supervisore_energetico.mbas,292 :: 		delay_safe_ms(500)
+;supervisore_energetico.mbas,289 :: 		delay_safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
 L__Init_Hardware56:
-;supervisore_energetico.mbas,293 :: 		end if
+;supervisore_energetico.mbas,290 :: 		end if
 L__Init_Hardware48:
-;supervisore_energetico.mbas,300 :: 		delay_safe_ms(500)
+;supervisore_energetico.mbas,297 :: 		delay_safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,303 :: 		Lampi(3, 250)
+;supervisore_energetico.mbas,300 :: 		Lampi(3, 250)
 	MOVLW      3
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      250
 	MOVWF      FARG_Lampi_t_on+0
 	CLRF       FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;supervisore_energetico.mbas,306 :: 		delay_safe_ms(500)
+;supervisore_energetico.mbas,303 :: 		delay_safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,309 :: 		Leggi_Batteria_mV()
+;supervisore_energetico.mbas,306 :: 		Leggi_Batteria_mV()
 	CALL       _Leggi_Batteria_mV+0
-;supervisore_energetico.mbas,312 :: 		if (batteria_mv > soglia_off) then
+;supervisore_energetico.mbas,309 :: 		if (batteria_mv > soglia_off) then
 	MOVF       _batteria_mv+3, 0
 	SUBWF      _soglia_off+3, 0
 	BTFSS      STATUS+0, 2
@@ -776,45 +777,45 @@ L__Init_Hardware48:
 L__Init_Hardware194:
 	BTFSC      STATUS+0, 0
 	GOTO       L__Init_Hardware59
-;supervisore_energetico.mbas,313 :: 		GPIO.0 = 0
+;supervisore_energetico.mbas,310 :: 		GPIO.0 = 0
 	BCF        GPIO+0, 0
 L__Init_Hardware59:
-;supervisore_energetico.mbas,317 :: 		in_manutenzione = false
+;supervisore_energetico.mbas,314 :: 		in_manutenzione = false
 	CLRF       _in_manutenzione+0
-;supervisore_energetico.mbas,318 :: 		reset_fatto = 0
+;supervisore_energetico.mbas,315 :: 		reset_fatto = 0
 	CLRF       _reset_fatto+0
-;supervisore_energetico.mbas,319 :: 		sveglie_wdt = 0  ' Forza lettura batteria al primo giro
+;supervisore_energetico.mbas,316 :: 		sveglie_wdt = 0  ' Forza lettura batteria al primo giro
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;supervisore_energetico.mbas,324 :: 		soglia_batteria
+;supervisore_energetico.mbas,321 :: 		soglia_batteria
 	CALL       _soglia_batteria+0
-;supervisore_energetico.mbas,325 :: 		end sub
+;supervisore_energetico.mbas,322 :: 		end sub
 L_end_Init_Hardware:
 	RETURN
 ; end of _Init_Hardware
 
 _main:
 
-;supervisore_energetico.mbas,328 :: 		main:
-;supervisore_energetico.mbas,329 :: 		Init_Hardware()                ' Configura il chip
+;supervisore_energetico.mbas,325 :: 		main:
+;supervisore_energetico.mbas,326 :: 		Init_Hardware()                ' Configura il chip
 	CALL       _Init_Hardware+0
-;supervisore_energetico.mbas,332 :: 		while (TRUE)
+;supervisore_energetico.mbas,329 :: 		while (TRUE)
 L__main63:
-;supervisore_energetico.mbas,334 :: 		if (INTCON.GPIF = 1) then
+;supervisore_energetico.mbas,331 :: 		if (INTCON.GPIF = 1) then
 	BTFSS      INTCON+0, 0
 	GOTO       L__main68
-;supervisore_energetico.mbas,335 :: 		dummy = GPIO
+;supervisore_energetico.mbas,332 :: 		dummy = GPIO
 	MOVF       GPIO+0, 0
 	MOVWF      _dummy+0
-;supervisore_energetico.mbas,336 :: 		INTCON.GPIF = 0
+;supervisore_energetico.mbas,333 :: 		INTCON.GPIF = 0
 	BCF        INTCON+0, 0
 L__main68:
-;supervisore_energetico.mbas,340 :: 		if (GPIO.3 = 0) then
+;supervisore_energetico.mbas,337 :: 		if (GPIO.3 = 0) then
 	BTFSC      GPIO+0, 3
 	GOTO       L__main71
-;supervisore_energetico.mbas,341 :: 		i = 0
+;supervisore_energetico.mbas,338 :: 		i = 0
 	CLRF       _i+0
-;supervisore_energetico.mbas,342 :: 		while (GPIO.3 = 0) and (i < 50)
+;supervisore_energetico.mbas,339 :: 		while (GPIO.3 = 0) and (i < 50)
 L__main74:
 	BTFSC      GPIO+0, 3
 	GOTO       L__main196
@@ -836,33 +837,33 @@ L__main197:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main75
-;supervisore_energetico.mbas,343 :: 		Delay_Safe_ms(100) ' Campionamento pressione (100ms * 50 = 5s max)
+;supervisore_energetico.mbas,340 :: 		Delay_Safe_ms(100) ' Campionamento pressione (100ms * 50 = 5s max)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,344 :: 		i = i + 1
+;supervisore_energetico.mbas,341 :: 		i = i + 1
 	INCF       _i+0, 1
-;supervisore_energetico.mbas,345 :: 		if (i = 10) then
+;supervisore_energetico.mbas,342 :: 		if (i = 10) then
 	MOVF       _i+0, 0
 	XORLW      10
 	BTFSS      STATUS+0, 2
 	GOTO       L__main79
-;supervisore_energetico.mbas,346 :: 		GPIO.2 = 1     ' Accende LED dopo 1 secondo di pressione
+;supervisore_energetico.mbas,343 :: 		GPIO.2 = 1     ' Accende LED dopo 1 secondo di pressione
 	BSF        GPIO+0, 2
 L__main79:
-;supervisore_energetico.mbas,348 :: 		if (i = 25) then
+;supervisore_energetico.mbas,345 :: 		if (i = 25) then
 	MOVF       _i+0, 0
 	XORLW      25
 	BTFSS      STATUS+0, 2
 	GOTO       L__main82
-;supervisore_energetico.mbas,349 :: 		GPIO.2 = 0     ' Spegne LED dopo 2.5 secondi (cambio modalità)
+;supervisore_energetico.mbas,346 :: 		GPIO.2 = 0     ' Spegne LED dopo 2.5 secondi (cambio modalità)
 	BCF        GPIO+0, 2
 L__main82:
-;supervisore_energetico.mbas,351 :: 		wend
+;supervisore_energetico.mbas,348 :: 		wend
 	GOTO       L__main74
 L__main75:
-;supervisore_energetico.mbas,354 :: 		if (i >= 10) and (i < 25) then
+;supervisore_energetico.mbas,351 :: 		if (i >= 10) and (i < 25) then
 	MOVLW      10
 	SUBWF      _i+0, 0
 	MOVLW      255
@@ -879,19 +880,19 @@ L__main75:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main85
-;supervisore_energetico.mbas,355 :: 		GPIO.2 = 0
+;supervisore_energetico.mbas,352 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,356 :: 		Leggi_Batteria_mV()
+;supervisore_energetico.mbas,353 :: 		Leggi_Batteria_mV()
 	CALL       _Leggi_Batteria_mV+0
-;supervisore_energetico.mbas,361 :: 		GPIO.0 = 1
+;supervisore_energetico.mbas,358 :: 		GPIO.0 = 1
 	BSF        GPIO+0, 0
-;supervisore_energetico.mbas,362 :: 		Delay_Safe_ms(2000)
+;supervisore_energetico.mbas,359 :: 		Delay_Safe_ms(2000)
 	MOVLW      208
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      7
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,366 :: 		if (batteria_mv > soglia_off) then
+;supervisore_energetico.mbas,363 :: 		if (batteria_mv > soglia_off) then
 	MOVF       _batteria_mv+3, 0
 	SUBWF      _soglia_off+3, 0
 	BTFSS      STATUS+0, 2
@@ -909,12 +910,12 @@ L__main75:
 L__main198:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main88
-;supervisore_energetico.mbas,367 :: 		GPIO.0 = 0
+;supervisore_energetico.mbas,364 :: 		GPIO.0 = 0
 	BCF        GPIO+0, 0
 L__main88:
-;supervisore_energetico.mbas,369 :: 		gpio.2=0
+;supervisore_energetico.mbas,366 :: 		gpio.2=0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,370 :: 		if (batteria_mv < soglia_on) then
+;supervisore_energetico.mbas,367 :: 		if (batteria_mv < soglia_on) then
 	MOVF       _soglia_on+3, 0
 	SUBWF      _batteria_mv+3, 0
 	BTFSS      STATUS+0, 2
@@ -932,19 +933,19 @@ L__main88:
 L__main199:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main91
-;supervisore_energetico.mbas,371 :: 		soglia_batteria
+;supervisore_energetico.mbas,368 :: 		soglia_batteria
 	CALL       _soglia_batteria+0
 L__main91:
-;supervisore_energetico.mbas,373 :: 		sveglie_wdt = 0
+;supervisore_energetico.mbas,370 :: 		sveglie_wdt = 0
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;supervisore_energetico.mbas,374 :: 		conteggio_cicli = 0
+;supervisore_energetico.mbas,371 :: 		conteggio_cicli = 0
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
 L__main85:
-;supervisore_energetico.mbas,380 :: 		if (i >= 25) and (i < 50) then
+;supervisore_energetico.mbas,377 :: 		if (i >= 25) and (i < 50) then
 	MOVLW      25
 	SUBWF      _i+0, 0
 	MOVLW      255
@@ -961,130 +962,130 @@ L__main85:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main94
-;supervisore_energetico.mbas,381 :: 		GPIO.2 = 0
+;supervisore_energetico.mbas,378 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,382 :: 		Leggi_Batteria_mV()
+;supervisore_energetico.mbas,379 :: 		Leggi_Batteria_mV()
 	CALL       _Leggi_Batteria_mV+0
-;supervisore_energetico.mbas,383 :: 		Delay_Safe_ms(1000)
+;supervisore_energetico.mbas,380 :: 		Delay_Safe_ms(1000)
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,386 :: 		val_da_lampeggiare = word(batteria_mv)
+;supervisore_energetico.mbas,383 :: 		val_da_lampeggiare = word(batteria_mv)
 	MOVF       _batteria_mv+0, 0
 	MOVWF      _val_da_lampeggiare+0
 	MOVF       _batteria_mv+1, 0
 	MOVWF      _val_da_lampeggiare+1
-;supervisore_energetico.mbas,388 :: 		Estrai_e_Lampeggia(1000) ' Migliaia
+;supervisore_energetico.mbas,385 :: 		Estrai_e_Lampeggia(1000) ' Migliaia
 	MOVLW      232
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	MOVLW      3
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;supervisore_energetico.mbas,389 :: 		Estrai_e_Lampeggia(100)  ' Centinaia
+;supervisore_energetico.mbas,386 :: 		Estrai_e_Lampeggia(100)  ' Centinaia
 	MOVLW      100
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	CLRF       FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;supervisore_energetico.mbas,390 :: 		Estrai_e_Lampeggia(10)   ' Decine
+;supervisore_energetico.mbas,387 :: 		Estrai_e_Lampeggia(10)   ' Decine
 	MOVLW      10
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	CLRF       FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;supervisore_energetico.mbas,391 :: 		Lampeggia_Cifra(0)       ' Unità fisse
+;supervisore_energetico.mbas,388 :: 		Lampeggia_Cifra(0)       ' Unità fisse
 	CLRF       FARG_Lampeggia_Cifra_c+0
 	CALL       _Lampeggia_Cifra+0
-;supervisore_energetico.mbas,394 :: 		if (RTC_presente = 1) then
+;supervisore_energetico.mbas,391 :: 		if (RTC_presente = 1) then
 	MOVF       _RTC_presente+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
 	GOTO       L__main97
-;supervisore_energetico.mbas,395 :: 		Delay_Safe_ms(1000)
+;supervisore_energetico.mbas,392 :: 		Delay_Safe_ms(1000)
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,396 :: 		lampi (2,100)
+;supervisore_energetico.mbas,393 :: 		lampi (2,100)
 	MOVLW      2
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      100
 	MOVWF      FARG_Lampi_t_on+0
 	CLRF       FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;supervisore_energetico.mbas,397 :: 		Leggi_Ora_RTC()
+;supervisore_energetico.mbas,394 :: 		Leggi_Ora_RTC()
 	CALL       _Leggi_Ora_RTC+0
-;supervisore_energetico.mbas,398 :: 		gpio.2=1
+;supervisore_energetico.mbas,395 :: 		gpio.2=1
 	BSF        GPIO+0, 2
-;supervisore_energetico.mbas,399 :: 		delay_safe_ms(100)
+;supervisore_energetico.mbas,396 :: 		delay_safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,400 :: 		gpio.2=0
+;supervisore_energetico.mbas,397 :: 		gpio.2=0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,401 :: 		Delay_Safe_ms(1000)
+;supervisore_energetico.mbas,398 :: 		Delay_Safe_ms(1000)
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,403 :: 		val_da_lampeggiare = word(ore)
+;supervisore_energetico.mbas,400 :: 		val_da_lampeggiare = word(ore)
 	MOVF       _ore+0, 0
 	MOVWF      _val_da_lampeggiare+0
 	CLRF       _val_da_lampeggiare+1
-;supervisore_energetico.mbas,404 :: 		Estrai_e_Lampeggia(10)
+;supervisore_energetico.mbas,401 :: 		Estrai_e_Lampeggia(10)
 	MOVLW      10
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	CLRF       FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;supervisore_energetico.mbas,405 :: 		Lampeggia_Cifra(byte(val_da_lampeggiare)) ' Il resto sono le unità
+;supervisore_energetico.mbas,402 :: 		Lampeggia_Cifra(byte(val_da_lampeggiare)) ' Il resto sono le unità
 	MOVF       _val_da_lampeggiare+0, 0
 	MOVWF      FARG_Lampeggia_Cifra_c+0
 	CALL       _Lampeggia_Cifra+0
-;supervisore_energetico.mbas,407 :: 		Delay_Safe_ms(1000)
+;supervisore_energetico.mbas,404 :: 		Delay_Safe_ms(1000)
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,410 :: 		val_da_lampeggiare = word(minuti)
+;supervisore_energetico.mbas,407 :: 		val_da_lampeggiare = word(minuti)
 	MOVF       _minuti+0, 0
 	MOVWF      _val_da_lampeggiare+0
 	CLRF       _val_da_lampeggiare+1
-;supervisore_energetico.mbas,411 :: 		Estrai_e_Lampeggia(10)
+;supervisore_energetico.mbas,408 :: 		Estrai_e_Lampeggia(10)
 	MOVLW      10
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	CLRF       FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;supervisore_energetico.mbas,412 :: 		Lampeggia_Cifra(byte(val_da_lampeggiare))
+;supervisore_energetico.mbas,409 :: 		Lampeggia_Cifra(byte(val_da_lampeggiare))
 	MOVF       _val_da_lampeggiare+0, 0
 	MOVWF      FARG_Lampeggia_Cifra_c+0
 	CALL       _Lampeggia_Cifra+0
 L__main97:
-;supervisore_energetico.mbas,413 :: 		end if
+;supervisore_energetico.mbas,410 :: 		end if
 L__main94:
-;supervisore_energetico.mbas,418 :: 		if (i >= 50) then
+;supervisore_energetico.mbas,415 :: 		if (i >= 50) then
 	MOVLW      50
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
 	GOTO       L__main100
-;supervisore_energetico.mbas,419 :: 		GPIO.0 = 1                      ' Distacca il carico (Heltec OFF)
+;supervisore_energetico.mbas,416 :: 		GPIO.0 = 1                      ' Distacca il carico (Heltec OFF)
 	BSF        GPIO+0, 0
-;supervisore_energetico.mbas,421 :: 		for j = 1 to 20
+;supervisore_energetico.mbas,418 :: 		for j = 1 to 20
 	MOVLW      1
 	MOVWF      _j+0
 L__main103:
-;supervisore_energetico.mbas,422 :: 		GPIO.2 = not GPIO.2         ' Lampeggio veloce di conferma
+;supervisore_energetico.mbas,419 :: 		GPIO.2 = not GPIO.2         ' Lampeggio veloce di conferma
 	MOVLW      4
 	XORWF      GPIO+0, 1
-;supervisore_energetico.mbas,423 :: 		Delay_Safe_ms(100)
+;supervisore_energetico.mbas,420 :: 		Delay_Safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,425 :: 		next j
+;supervisore_energetico.mbas,422 :: 		next j
 	MOVF       _j+0, 0
 	XORLW      20
 	BTFSC      STATUS+0, 2
@@ -1092,33 +1093,33 @@ L__main103:
 	INCF       _j+0, 1
 	GOTO       L__main103
 L__main106:
-;supervisore_energetico.mbas,426 :: 		GPIO.2 = 0
+;supervisore_energetico.mbas,423 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,427 :: 		in_manutenzione = true          ' Entra nel loop di blocco
+;supervisore_energetico.mbas,424 :: 		in_manutenzione = true          ' Entra nel loop di blocco
 	MOVLW      255
 	MOVWF      _in_manutenzione+0
-;supervisore_energetico.mbas,428 :: 		while (in_manutenzione = true)
+;supervisore_energetico.mbas,425 :: 		while (in_manutenzione = true)
 L__main108:
 	MOVF       _in_manutenzione+0, 0
 	XORLW      255
 	BTFSS      STATUS+0, 2
 	GOTO       L__main109
-;supervisore_energetico.mbas,430 :: 		GPIO.2 = 1
+;supervisore_energetico.mbas,427 :: 		GPIO.2 = 1
 	BSF        GPIO+0, 2
-;supervisore_energetico.mbas,431 :: 		Delay_Safe_ms(500)
+;supervisore_energetico.mbas,428 :: 		Delay_Safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,432 :: 		GPIO.2 = 0
+;supervisore_energetico.mbas,429 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,433 :: 		if (GPIO.3 = 0) then        ' Controlla se si preme di nuovo per uscire
+;supervisore_energetico.mbas,430 :: 		if (GPIO.3 = 0) then        ' Controlla se si preme di nuovo per uscire
 	BTFSC      GPIO+0, 3
 	GOTO       L__main113
-;supervisore_energetico.mbas,434 :: 		i = 0
+;supervisore_energetico.mbas,431 :: 		i = 0
 	CLRF       _i+0
-;supervisore_energetico.mbas,435 :: 		while (GPIO.3 = 0) and (i < 50)
+;supervisore_energetico.mbas,432 :: 		while (GPIO.3 = 0) and (i < 50)
 L__main116:
 	BTFSC      GPIO+0, 3
 	GOTO       L__main200
@@ -1140,36 +1141,36 @@ L__main201:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main117
-;supervisore_energetico.mbas,436 :: 		Delay_Safe_ms(100)
+;supervisore_energetico.mbas,433 :: 		Delay_Safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,437 :: 		i = i + 1
+;supervisore_energetico.mbas,434 :: 		i = i + 1
 	INCF       _i+0, 1
-;supervisore_energetico.mbas,439 :: 		wend
+;supervisore_energetico.mbas,436 :: 		wend
 	GOTO       L__main116
 L__main117:
-;supervisore_energetico.mbas,440 :: 		if (i >= 50) then       ' Uscita dopo altri 5 secondi
+;supervisore_energetico.mbas,437 :: 		if (i >= 50) then       ' Uscita dopo altri 5 secondi
 	MOVLW      50
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
 	GOTO       L__main121
-;supervisore_energetico.mbas,441 :: 		in_manutenzione = false
+;supervisore_energetico.mbas,438 :: 		in_manutenzione = false
 	CLRF       _in_manutenzione+0
-;supervisore_energetico.mbas,443 :: 		for j = 1 to 20
+;supervisore_energetico.mbas,440 :: 		for j = 1 to 20
 	MOVLW      1
 	MOVWF      _j+0
 L__main124:
-;supervisore_energetico.mbas,444 :: 		GPIO.2 = not GPIO.2
+;supervisore_energetico.mbas,441 :: 		GPIO.2 = not GPIO.2
 	MOVLW      4
 	XORWF      GPIO+0, 1
-;supervisore_energetico.mbas,445 :: 		Delay_Safe_ms(100)
+;supervisore_energetico.mbas,442 :: 		Delay_Safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,447 :: 		next j
+;supervisore_energetico.mbas,444 :: 		next j
 	MOVF       _j+0, 0
 	XORLW      20
 	BTFSC      STATUS+0, 2
@@ -1177,29 +1178,29 @@ L__main124:
 	INCF       _j+0, 1
 	GOTO       L__main124
 L__main127:
-;supervisore_energetico.mbas,448 :: 		GPIO.2 = 0
+;supervisore_energetico.mbas,445 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
 L__main121:
-;supervisore_energetico.mbas,449 :: 		end if
+;supervisore_energetico.mbas,446 :: 		end if
 	GOTO       L__main114
-;supervisore_energetico.mbas,450 :: 		else
+;supervisore_energetico.mbas,447 :: 		else
 L__main113:
-;supervisore_energetico.mbas,453 :: 		Delay_Safe_ms(500)
+;supervisore_energetico.mbas,450 :: 		Delay_Safe_ms(500)
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,454 :: 		end if
+;supervisore_energetico.mbas,451 :: 		end if
 L__main114:
-;supervisore_energetico.mbas,455 :: 		clrwdt
+;supervisore_energetico.mbas,452 :: 		clrwdt
 	CLRWDT
-;supervisore_energetico.mbas,456 :: 		wend
+;supervisore_energetico.mbas,453 :: 		wend
 	GOTO       L__main108
 L__main109:
-;supervisore_energetico.mbas,458 :: 		Leggi_Batteria_mV()
+;supervisore_energetico.mbas,455 :: 		Leggi_Batteria_mV()
 	CALL       _Leggi_Batteria_mV+0
-;supervisore_energetico.mbas,459 :: 		if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+;supervisore_energetico.mbas,456 :: 		if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
 	MOVF       _batteria_mv+3, 0
 	SUBWF      _soglia_off+3, 0
 	BTFSS      STATUS+0, 2
@@ -1219,7 +1220,7 @@ L__main202:
 	GOTO       L__main129
 	BCF        GPIO+0, 0
 L__main129:
-;supervisore_energetico.mbas,460 :: 		if (batteria_mv < soglia_on) then
+;supervisore_energetico.mbas,457 :: 		if (batteria_mv < soglia_on) then
 	MOVF       _soglia_on+3, 0
 	SUBWF      _batteria_mv+3, 0
 	BTFSS      STATUS+0, 2
@@ -1237,31 +1238,31 @@ L__main129:
 L__main203:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main132
-;supervisore_energetico.mbas,461 :: 		soglia_batteria
+;supervisore_energetico.mbas,458 :: 		soglia_batteria
 	CALL       _soglia_batteria+0
 L__main132:
-;supervisore_energetico.mbas,463 :: 		sveglie_wdt = 13 ' Forza controllo batteria subito
+;supervisore_energetico.mbas,460 :: 		sveglie_wdt = 13 ' Forza controllo batteria subito
 	MOVLW      13
 	MOVWF      _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;supervisore_energetico.mbas,464 :: 		conteggio_cicli = 0
+;supervisore_energetico.mbas,461 :: 		conteggio_cicli = 0
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;supervisore_energetico.mbas,465 :: 		minuti_count = 0
+;supervisore_energetico.mbas,462 :: 		minuti_count = 0
 	CLRF       _minuti_count+0
-;supervisore_energetico.mbas,466 :: 		clrwdt
+;supervisore_energetico.mbas,463 :: 		clrwdt
 	CLRWDT
 L__main100:
-;supervisore_energetico.mbas,467 :: 		end if
+;supervisore_energetico.mbas,464 :: 		end if
 L__main71:
-;supervisore_energetico.mbas,471 :: 		if (in_manutenzione = false) then
+;supervisore_energetico.mbas,468 :: 		if (in_manutenzione = false) then
 	MOVF       _in_manutenzione+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L__main135
-;supervisore_energetico.mbas,473 :: 		if (sveglie_wdt >= 13) then
+;supervisore_energetico.mbas,470 :: 		if (sveglie_wdt >= 13) then
 	MOVLW      0
 	SUBWF      _sveglie_wdt+1, 0
 	BTFSS      STATUS+0, 2
@@ -1271,9 +1272,9 @@ L__main71:
 L__main204:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main138
-;supervisore_energetico.mbas,474 :: 		Leggi_Batteria_mV()
+;supervisore_energetico.mbas,471 :: 		Leggi_Batteria_mV()
 	CALL       _Leggi_Batteria_mV+0
-;supervisore_energetico.mbas,476 :: 		if (batteria_mv <= soglia_off) then
+;supervisore_energetico.mbas,473 :: 		if (batteria_mv <= soglia_off) then
 	MOVF       _batteria_mv+3, 0
 	SUBWF      _soglia_off+3, 0
 	BTFSS      STATUS+0, 2
@@ -1291,10 +1292,10 @@ L__main204:
 L__main205:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main141
-;supervisore_energetico.mbas,477 :: 		GPIO.0 = 1 ' Spegne Heltec
+;supervisore_energetico.mbas,474 :: 		GPIO.0 = 1 ' Spegne Heltec
 	BSF        GPIO+0, 0
 L__main141:
-;supervisore_energetico.mbas,480 :: 		if (batteria_mv >= soglia_on) then
+;supervisore_energetico.mbas,477 :: 		if (batteria_mv >= soglia_on) then
 	MOVF       _soglia_on+3, 0
 	SUBWF      _batteria_mv+3, 0
 	BTFSS      STATUS+0, 2
@@ -1312,26 +1313,26 @@ L__main141:
 L__main206:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main144
-;supervisore_energetico.mbas,481 :: 		GPIO.0 = 0 ' Accende Heltec
+;supervisore_energetico.mbas,478 :: 		GPIO.0 = 0 ' Accende Heltec
 	BCF        GPIO+0, 0
 L__main144:
-;supervisore_energetico.mbas,484 :: 		sveglie_wdt = 0 ' Reset qui dopo il controllo batteria
+;supervisore_energetico.mbas,481 :: 		sveglie_wdt = 0 ' Reset qui dopo il controllo batteria
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;supervisore_energetico.mbas,486 :: 		if (RTC_presente = 1) then
+;supervisore_energetico.mbas,483 :: 		if (RTC_presente = 1) then
 	MOVF       _RTC_presente+0, 0
 	XORLW      1
 	BTFSS      STATUS+0, 2
 	GOTO       L__main147
-;supervisore_energetico.mbas,487 :: 		minuti_count = minuti_count + 1
+;supervisore_energetico.mbas,484 :: 		minuti_count = minuti_count + 1
 	INCF       _minuti_count+0, 1
 L__main147:
-;supervisore_energetico.mbas,491 :: 		if (giorni_riavvio > 0) then
+;supervisore_energetico.mbas,488 :: 		if (giorni_riavvio > 0) then
 	MOVF       _giorni_riavvio+0, 0
 	SUBLW      0
 	BTFSC      STATUS+0, 0
 	GOTO       L__main150
-;supervisore_energetico.mbas,492 :: 		conteggio_cicli = conteggio_cicli + 1
+;supervisore_energetico.mbas,489 :: 		conteggio_cicli = conteggio_cicli + 1
 	MOVF       _conteggio_cicli+0, 0
 	MOVWF      R0+0
 	MOVF       _conteggio_cicli+1, 0
@@ -1355,7 +1356,7 @@ L__main147:
 	MOVWF      _conteggio_cicli+2
 	MOVF       R0+3, 0
 	MOVWF      _conteggio_cicli+3
-;supervisore_energetico.mbas,494 :: 		if (conteggio_cicli >= (cicli_per_giorno * giorni_riavvio)) then
+;supervisore_energetico.mbas,491 :: 		if (conteggio_cicli >= (cicli_per_giorno * giorni_riavvio)) then
 	MOVF       _cicli_per_giorno+0, 0
 	MOVWF      R0+0
 	MOVF       _cicli_per_giorno+1, 0
@@ -1387,15 +1388,15 @@ L__main147:
 L__main207:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main153
-;supervisore_energetico.mbas,495 :: 		GPIO.0 = 1           ' Ciclo di spegnimento
+;supervisore_energetico.mbas,492 :: 		GPIO.0 = 1           ' Ciclo di spegnimento
 	BSF        GPIO+0, 0
-;supervisore_energetico.mbas,496 :: 		Delay_Safe_ms(2000)
+;supervisore_energetico.mbas,493 :: 		Delay_Safe_ms(2000)
 	MOVLW      208
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      7
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,497 :: 		if (batteria_mv > soglia_off) then
+;supervisore_energetico.mbas,494 :: 		if (batteria_mv > soglia_off) then
 	MOVF       _batteria_mv+3, 0
 	SUBWF      _soglia_off+3, 0
 	BTFSS      STATUS+0, 2
@@ -1413,25 +1414,25 @@ L__main207:
 L__main208:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main156
-;supervisore_energetico.mbas,498 :: 		GPIO.0 = 0       ' Riaccensione
+;supervisore_energetico.mbas,495 :: 		GPIO.0 = 0       ' Riaccensione
 	BCF        GPIO+0, 0
 L__main156:
-;supervisore_energetico.mbas,500 :: 		conteggio_cicli = 0  ' Reset timer
+;supervisore_energetico.mbas,497 :: 		conteggio_cicli = 0  ' Reset timer
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
 L__main153:
-;supervisore_energetico.mbas,501 :: 		end if
+;supervisore_energetico.mbas,498 :: 		end if
 L__main150:
-;supervisore_energetico.mbas,505 :: 		if (minuti_count >= 20) then
+;supervisore_energetico.mbas,502 :: 		if (minuti_count >= 20) then
 	MOVLW      20
 	SUBWF      _minuti_count+0, 0
 	BTFSS      STATUS+0, 0
 	GOTO       L__main159
-;supervisore_energetico.mbas,506 :: 		Leggi_Ora_RTC()
+;supervisore_energetico.mbas,503 :: 		Leggi_Ora_RTC()
 	CALL       _Leggi_Ora_RTC+0
-;supervisore_energetico.mbas,509 :: 		if (ore = 4) and (minuti < 11) then
+;supervisore_energetico.mbas,506 :: 		if (ore = 4) and (minuti < 11) then
 	MOVF       _ore+0, 0
 	XORLW      4
 	MOVLW      255
@@ -1448,12 +1449,12 @@ L__main150:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main162
-;supervisore_energetico.mbas,510 :: 		if (reset_fatto = 0) then
+;supervisore_energetico.mbas,507 :: 		if (reset_fatto = 0) then
 	MOVF       _reset_fatto+0, 0
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L__main165
-;supervisore_energetico.mbas,511 :: 		if (giorno = 1) or (giorno = 4) then
+;supervisore_energetico.mbas,508 :: 		if (giorno = 1) or (giorno = 4) then
 	MOVF       _giorno+0, 0
 	XORLW      1
 	MOVLW      255
@@ -1470,15 +1471,15 @@ L__main150:
 	IORWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main168
-;supervisore_energetico.mbas,512 :: 		GPIO.0 = 1
+;supervisore_energetico.mbas,509 :: 		GPIO.0 = 1
 	BSF        GPIO+0, 0
-;supervisore_energetico.mbas,513 :: 		Delay_Safe_ms(10000)
+;supervisore_energetico.mbas,510 :: 		Delay_Safe_ms(10000)
 	MOVLW      16
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      39
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,514 :: 		if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+;supervisore_energetico.mbas,511 :: 		if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
 	MOVF       _batteria_mv+3, 0
 	SUBWF      _soglia_off+3, 0
 	BTFSS      STATUS+0, 2
@@ -1498,46 +1499,46 @@ L__main209:
 	GOTO       L__main171
 	BCF        GPIO+0, 0
 L__main171:
-;supervisore_energetico.mbas,515 :: 		reset_fatto = 1
+;supervisore_energetico.mbas,512 :: 		reset_fatto = 1
 	MOVLW      1
 	MOVWF      _reset_fatto+0
 L__main168:
-;supervisore_energetico.mbas,516 :: 		end if
+;supervisore_energetico.mbas,513 :: 		end if
 L__main165:
-;supervisore_energetico.mbas,517 :: 		end if
+;supervisore_energetico.mbas,514 :: 		end if
 	GOTO       L__main163
-;supervisore_energetico.mbas,518 :: 		else
+;supervisore_energetico.mbas,515 :: 		else
 L__main162:
-;supervisore_energetico.mbas,519 :: 		reset_fatto = 0
+;supervisore_energetico.mbas,516 :: 		reset_fatto = 0
 	CLRF       _reset_fatto+0
-;supervisore_energetico.mbas,520 :: 		end if
+;supervisore_energetico.mbas,517 :: 		end if
 L__main163:
-;supervisore_energetico.mbas,521 :: 		minuti_count = 0
+;supervisore_energetico.mbas,518 :: 		minuti_count = 0
 	CLRF       _minuti_count+0
 L__main159:
-;supervisore_energetico.mbas,522 :: 		end if
+;supervisore_energetico.mbas,519 :: 		end if
 L__main138:
-;supervisore_energetico.mbas,526 :: 		sveglie_wdt = sveglie_wdt + 1    ' Incrementa conteggio risvegli
+;supervisore_energetico.mbas,523 :: 		sveglie_wdt = sveglie_wdt + 1    ' Incrementa conteggio risvegli
 	INCF       _sveglie_wdt+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _sveglie_wdt+1, 1
-;supervisore_energetico.mbas,527 :: 		clrwdt                            ' Pulizia watchdog
+;supervisore_energetico.mbas,524 :: 		clrwdt                            ' Pulizia watchdog
 	CLRWDT
-;supervisore_energetico.mbas,528 :: 		sleep                             ' Il chip dorme (Risparmio Max)
+;supervisore_energetico.mbas,525 :: 		sleep                             ' Il chip dorme (Risparmio Max)
 	SLEEP
-;supervisore_energetico.mbas,529 :: 		nop                              ' Istruzione necessaria dopo lo sleep
+;supervisore_energetico.mbas,526 :: 		nop                              ' Istruzione necessaria dopo lo sleep
 	NOP
 	GOTO       L__main136
-;supervisore_energetico.mbas,531 :: 		else
+;supervisore_energetico.mbas,528 :: 		else
 L__main135:
-;supervisore_energetico.mbas,533 :: 		Delay_Safe_ms(100)
+;supervisore_energetico.mbas,530 :: 		Delay_Safe_ms(100)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,534 :: 		end if
+;supervisore_energetico.mbas,531 :: 		end if
 L__main136:
-;supervisore_energetico.mbas,535 :: 		wend
+;supervisore_energetico.mbas,532 :: 		wend
 	GOTO       L__main63
 L_end_main:
 	GOTO       $+0
