@@ -5,24 +5,26 @@ dim Soft_I2C_Scl as sbit at GP5_bit
 dim Soft_I2C_Sda as sbit at GP4_bit
 dim Soft_I2C_Scl_Direction as sbit at TRISIO5_bit  ' <--- DEVE ESSERE 5
 dim Soft_I2C_Sda_Direction as sbit at TRISIO4_bit  ' <--- DEVE ESSERE 4
-dim RTC_presente, finestra_oraria, spento  as byte  ' 0 = Assente, 1 = Funzionante
+
+dim RTC_presente as bit
+dim finestra_oraria as bit
+dim spento as bit
+
 ' --- VARIABILI GLOBALI ---
-dim batteria_mv as LongWord         ' Memorizza la tensione batteria in millivolt
+dim batteria_mv as word         ' Memorizza la tensione batteria in millivolt
 dim i, j as byte                    ' Variabili di utilità per cicli e conteggi                                                     d
 dim sveglie_wdt as word             ' Conta quante volte il Watchdog ha svegliato il chip
 dim in_manutenzione as boolean      ' Flag per lo stato di blocco manutenzione
 dim dummy as byte                   ' Variabile di appoggio per lettura GPIO
-dim soglia_off, soglia_on as LongWord ' Limiti di tensione per distacco/riattacco
-dim taratura_vcc as LongWord        ' Valore di riferimento per calibrazione ADC
+dim soglia_off, soglia_on as word ' Limiti di tensione per distacco/riattacco
+dim taratura_vcc as word        ' Valore di riferimento per calibrazione ADC
 
 dim val_da_lampeggiare as word
 
 ' --- VARIABILI RTC E CONVERSIONE ---
 dim ore, minuti, giorno as byte ' AGGIUNTO giorno_mese
 dim bcd_val, dec_val as byte
-dim reset_fatto as byte
-dim stato_eeprom as byte
-
+dim reset_fatto as bit
 dim minuti_count as byte           ' Contatore per arrivare a 10 minuti
 
 
@@ -33,7 +35,7 @@ dim minuti_count as byte           ' Contatore per arrivare a 10 minuti
 ' --- VARIABILI TIMER RIAVVIO ---
 dim giorni_riavvio as byte          ' Impostazione giorni tra un reset e l'altro
 dim conteggio_cicli as LongWord     ' Contatore cicli WDT trascorsi
-dim cicli_per_giorno as LongWord    ' Numero di cicli WDT calcolati per 24 ore
+dim cicli_per_giorno as Word    ' Numero di cicli WDT calcolati per 24 ore
 
 ' --- RITARDO SICURO (Mantiene il Watchdog pulito durante le pause) ---
 sub procedure Delay_Safe_ms(dim n as word)
