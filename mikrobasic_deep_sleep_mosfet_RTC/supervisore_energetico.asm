@@ -1442,22 +1442,10 @@ L__main147:
 	XORLW      0
 	BTFSS      STATUS+0, 2
 	GOTO       L__main159
-;supervisore_energetico.mbas,506 :: 		if (ore = 4) and (minuti < 11) then
+;supervisore_energetico.mbas,506 :: 		if (ore = 4)  then
 	MOVF       _ore+0, 0
 	XORLW      4
-	MOVLW      255
 	BTFSS      STATUS+0, 2
-	MOVLW      0
-	MOVWF      R1+0
-	MOVLW      11
-	SUBWF      _minuti+0, 0
-	MOVLW      255
-	BTFSC      STATUS+0, 0
-	MOVLW      0
-	MOVWF      R0+0
-	MOVF       R1+0, 0
-	ANDWF      R0+0, 1
-	BTFSC      STATUS+0, 2
 	GOTO       L__main162
 ;supervisore_energetico.mbas,507 :: 		if (reset_fatto = 0) then
 	MOVF       _reset_fatto+0, 0

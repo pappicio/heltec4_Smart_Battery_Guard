@@ -500,10 +500,10 @@ end sub
 
                     Leggi_Ora_RTC()
 
-                    'RIAVVIAMO OGNI NOTTE ALLE 4 CON CON RTC PRESENTE!
+                    'RIAVVIAMO ogni 3 GG ALLE 4 CON CON RTC PRESENTE!
                     if finestra_oraria = 0 then
                         'riavviaomo alle 4 di mattina......
-                        if (ore = 4) and (minuti < 11) then
+                        if (ore = 4)  then
                             if (reset_fatto = 0) then
                                if (giorno = 1) or (giorno = 4) then
                                  GPIO.0 = 1
@@ -550,5 +550,4 @@ end sub
             clrwdt
         end if
     wend
-end.
 end.

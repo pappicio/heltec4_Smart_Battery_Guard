@@ -7,8 +7,8 @@ hint: 553	1010	Hint: Unit "supervisore_energetico.mbas" has been recompiled	supe
 diagnostics: 0	134	Compiled Successfully	C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC\supervisore_energetico.mbas
 diagnostics: 0	139	All files Compiled in 32 ms	 
 hint: 0	1144	Used RAM (bytes): 56 (50%)  Free RAM (bytes): 56 (50%)	Used RAM (bytes): 56 (50%)  Free RAM (bytes): 56 (50%)
-hint: 0	1144	Used ROM (program words): 1658 (81%)  Free ROM (program words): 390 (19%)	Used ROM (program words): 1658 (81%)  Free ROM (program words): 390 (19%)
+hint: 0	1144	Used ROM (program words): 1646 (80%)  Free ROM (program words): 402 (20%)	Used ROM (program words): 1646 (80%)  Free ROM (program words): 402 (20%)
 diagnostics: 0	145	Project Linked Successfully	supervisore_energetico.mbppi
 diagnostics: 0	140	Linked in 15 ms	 
 diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 203 ms	 
-diagnostics: 0	103	Finished successfully: 01 apr 2026, 18:57:41	supervisore_energetico.mbppi
+diagnostics: 0	103	Finished successfully: 01 apr 2026, 19:01:31	supervisore_energetico.mbppi
