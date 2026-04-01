@@ -49,6 +49,8 @@ Interroga lo stato del sistema tramite una pressione prolungata. Al rilascio del
 ---
 
 ***Nota tecnica:*** *Il modulo DS3231 è stato scelto per la sua stabilità termica, garantendo che i riavvii programmati avvengano sempre all'orario stabilito senza derive stagionali.*
+
+---
 datasheet del pic micro (12F683)
 
 https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
