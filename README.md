@@ -1,47 +1,54 @@
-☀️ Solar Power Manager - PIC12F683 & DS3231
-Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.
+# ☀️ ***Solar Power Manager - PIC12F683 & DS3231***
 
-🕒 1. Gestione RTC (Real Time Clock) - Modello DS3231
-Il sistema utilizza il modulo DS3231, un orologio ad alta precisione con compensazione termica. Consente di definire cicli di riavvio o fasce orarie di funzionamento.
+***Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.***
 
-Sincronizzazione Manuale: Per impostare l'orario (es. le 12:00), caricare il codice e, allo scoccare dell'ora esatta, alimentare il circuito tenendo premuto il pulsante per almeno 1,5 secondi.
+---
 
-Feedback di conferma: Il LED eseguirà 10 lampeggi veloci per confermare l'avvenuta scrittura.
+### 🕒 **1. ***Gestione RTC (Real Time Clock) - Modello DS3231*****
+Il sistema utilizza il modulo ***DS3231***, un orologio ad alta precisione con compensazione termica. Consente di definire cicli di riavvio o fasce orarie di funzionamento.
 
-Durata: Grazie alla batteria tampone, l'orario rimarrà in memoria per circa 10 anni con uno scarto di pochi secondi annui.
+* ***Sincronizzazione Manuale:*** Per impostare l'orario (es. le 12:00), caricare il codice e, allo scoccare dell'ora esatta, alimentare il circuito tenendo premuto il pulsante all'avvio per almeno ***1,5 secondi***.
+* ***Feedback di conferma:*** Il LED eseguirà ***10 lampeggi veloci*** per confermare l'avvenuta scrittura nell'orologio.
+* ***Durata:*** Grazie alla batteria tampone, l'orario rimarrà in memoria per circa ***10 anni*** con uno scarto di pochi secondi annui.
 
-📊 2. Visualizzazione Diagnostica (Volt e Ora)
-È possibile interrogare lo stato del sistema tramite il pulsante:
+---
 
-Pressione tra 2,5 e 5 secondi: Al rilascio (quando il LED si spegne), inizierà la sequenza di lampeggi.
+### 📊 **2. ***Visualizzazione Diagnostica (Volt e Ora)*** [Pressione 2.5s - 5s]**
+Interroga lo stato del sistema tramite una pressione prolungata. Al rilascio del tasto (dopo che il LED si è spento), inizierà la sequenza:
 
-Lettura Millivolt: Se la batteria è a 3860mV, il LED farà:
+1.  ***Lettura Millivolt:*** Se la batteria è a 3860mV, il LED farà:
+    * *3 lampi (migliaia)* -> pausa -> *8 lampi (centinaia)* -> pausa -> *6 lampi (decine)* -> pausa -> ***1 lampo brevissimo*** (indica lo **0**).
+2.  ***Separazione:*** Pausa seguita da ***3 lampeggi veloci***.
+3.  ***Lettura Ora RTC:*** Il LED indicherà l'ora corrente (es. 12:32):
+    * *1 lampo, pausa, 2 lampi (ore 12)* -> pausa lunga -> *3 lampi, pausa, 2 lampi (minuti 32)*.
 
-3 lampi (migliaia) -> pausa -> 8 lampi (centinaia) -> pausa -> 6 lampi (decine) -> pausa -> 1 lampo brevissimo (indica lo 0).
+---
 
-Lettura Ora: Dopo i Volt e 2 lampi rapidi di separazione, il LED indicherà l'ora (es. 12:32):
+### 🔄 **3. ***Reset Programmato e Smart Battery Guard*****
+* ***Reset Ciclico:*** Di default, ogni ***3 giorni*** l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa (personalizzabile da 1 a X giorni; 0 disabilita).
+* ***Smart Battery Guard:*** Protezione totale della batteria. Spegne il carico sotto i ***3,3V*** e lo riattiva solo sopra i ***3,7V*** (isteresi di sicurezza).
+* ***Stato all'Avvio:*** Il sistema esegue ***3 lampeggi rapidi*** iniziali. Se la batteria è scarica (<3.3V), seguiranno ***6 lampeggi*** e il modulo Heltec rimarrà spento.
 
-1 lampo, pausa, 2 lampi (ore 12) -> pausa lunga -> 3 lampi, pausa, 2 lampi (minuti 32).
+---
 
-🔄 3. Reset Programmato e Smart Battery Guard
-Reset Ciclico: Di default, ogni 3 giorni l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa (personalizzabile da 1 a X giorni; 0 disabilita).
+### 🔘 **4. ***Funzioni del Pulsante di Controllo*****
+* ***Reset Rapido (0.1 - 2.5 sec):*** Il LED rimane acceso fisso fino al rilascio. Esegue il riavvio forzato del modulo Heltec. 
+    * Se voltaggio OK: ***Nessun lampeggio extra***.
+    * Se zona gialla (3.7V - 3.3V): ***3 lampeggi veloci***.
+    * Se batteria critica (<3.3V): ***6 lampeggi veloci*** e Heltec resta spento.
+* ***Diagnostica Volt + Ora (2.5 - 5 sec):*** Visualizza in sequenza i millivolt della batteria e l'orario attuale dell'RTC (vedi punto 2).
+* ***Modalità Manutenzione (> 5 sec):*** Al raggiungimento dei 5 secondi, il LED emette ***10 lampeggi veloci***. Il sistema spegne il carico e il LED lampeggia lentamente (500ms ON / 500ms OFF). 
+    * ***Per uscire:*** Premere nuovamente per almeno ***5 secondi*** fino ai 3 lampi classici di riavvio.
 
-Smart Battery Guard: Protezione totale della batteria. Spegne il carico sotto i 3,3V e lo riattiva solo sopra i 3,7V (isteresi di sicurezza).
+---
 
-Stato all'Avvio: Il sistema esegue sempre 3 lampeggi rapidi iniziali. Se la batteria è scarica, seguiranno 6 lampeggi e il modulo Heltec rimarrà spento.
+### ⚡ **5. ***Hardware e Alimentazione*****
+* ***Step-Up 5V:*** Componente fondamentale. Eroga ***5V fissi al PIC12F683*** indipendentemente dal calo della batteria (da 2V a 4.5V). Questo garantisce una ***tensione di riferimento costante*** per letture ADC precise al millivolt.
+* ***Componenti Chiave:*** PIC12F683, Modulo RTC DS3231 (ZS-042), Step-Up 5V, Mosfet P-Channel per il controllo del carico.
 
-🔘 4. Funzioni Avanzate del Pulsante
-Reset Rapido (1-5 sec): LED acceso fisso fino al rilascio. Salva la tensione attuale negli offset EEPROM (0x00, 0x01 e in chiaro dai 0x03 al 0x07) e riavvia forzatamente l'Heltec.
+---
 
-Modalità Manutenzione (>5 sec): Ideale per cambio antenna o test. Il sistema spegne il carico e il LED lampeggia (500ms ON / 500ms OFF). Per uscire, premere nuovamente per 5 secondi fino ai 3 lampi classici di riavvio.
-
-⚡ 5. Hardware e Alimentazione
-Step-Up 5V: Fondamentale per il progetto. Eroga 5V fissi al PIC12F683 indipendentemente dal calo della batteria (da 2V a 4.5V). Questo garantisce una tensione di riferimento costante per letture ADC precise al millivolt.
-
-Componenti Chiave: PIC12F683, Modulo RTC DS3231 (ZS-042), Step-Up 5V, Mosfet P-Channel (distacco carico).
-
-Nota tecnica sul DS3231: Si è scelto il modello DS3231 rispetto al DS1307 perché integra un sensore di temperatura per correggere la deriva del quarzo, garantendo precisione assoluta anche in ambienti esterni soggetti a sbalzi termici.
-
+***Nota tecnica:*** *Il modulo DS3231 è stato scelto per la sua stabilità termica, garantendo che i riavvii programmati avvengano sempre all'orario stabilito senza derive stagionali.*
 datasheet del pic micro (12F683)
 
 https://ww1.microchip.com/downloads/en/devicedoc/41211d_.pdf
