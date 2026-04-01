@@ -1,70 +1,46 @@
-# lora (meshtastic) modules Smart_Battery_Guard
-Documentazione Tecnica: Solar Power Manager (PIC12F683)
-1. Gestione RTC (Real Time Clock) - Modello DS3231
-Il sistema utilizza il modulo DS3231, un orologio in tempo reale estremamente preciso grazie al suo oscillatore con compensazione termica. Consente di programmare cicli di riavvio del modulo LoRa o di definire fasce orarie di accensione/spegnimento per il risparmio energetico.
+☀️ Solar Power Manager - PIC12F683 & DS3231
+Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.
 
-Programmazione orario: Da codice, impostare Giorno della settimana (1=Lunedì... 7=Domenica), Giorno, Mese, Anno, Ore e Minuti.
+🕒 1. Gestione RTC (Real Time Clock) - Modello DS3231
+Il sistema utilizza il modulo DS3231, un orologio ad alta precisione con compensazione termica. Consente di definire cicli di riavvio o fasce orarie di funzionamento.
 
-Procedura di sincronizzazione: Se desiderate impostare, ad esempio, le ore 12:00 precise, caricate il codice e, allo scoccare delle 12:00, alimentate il circuito tenendo premuto il pulsante per almeno 1,5 secondi.
+Sincronizzazione Manuale: Per impostare l'orario (es. le 12:00), caricare il codice e, allo scoccare dell'ora esatta, alimentare il circuito tenendo premuto il pulsante per almeno 1,5 secondi.
 
-Conferma: 10 lampeggi veloci del LED confermeranno l'avvenuta scrittura nell'RTC. Grazie alla batteria tampone integrata, il modulo manterrà l'orario per circa 10 anni con uno scarto minimo di pochi secondi l'anno.
+Feedback di conferma: Il LED eseguirà 10 lampeggi veloci per confermare l'avvenuta scrittura.
 
-2. Visualizzazione Diagnostica (Volt e Ora)
-Durante il normale funzionamento, è possibile interrogare il sistema:
+Durata: Grazie alla batteria tampone, l'orario rimarrà in memoria per circa 10 anni con uno scarto di pochi secondi annui.
 
-Pressione tra 2,5 e 5 secondi: Al rilascio del tasto (il LED si spegne per indicare il superamento della soglia temporale), il sistema comunica i dati tramite lampeggi.
+📊 2. Visualizzazione Diagnostica (Volt e Ora)
+È possibile interrogare lo stato del sistema tramite il pulsante:
 
-Lettura Millivolt: Se la batteria misura 3860mV, il LED eseguirà:
+Pressione tra 2,5 e 5 secondi: Al rilascio (quando il LED si spegne), inizierà la sequenza di lampeggi.
 
-3 lampeggi (migliaia) -> pausa;
+Lettura Millivolt: Se la batteria è a 3860mV, il LED farà:
 
-8 lampeggi (centinaia) -> pausa;
+3 lampi (migliaia) -> pausa -> 8 lampi (centinaia) -> pausa -> 6 lampi (decine) -> pausa -> 1 lampo brevissimo (indica lo 0).
 
-6 lampeggi (decine) -> pausa;
+Lettura Ora: Dopo i Volt e 2 lampi rapidi di separazione, il LED indicherà l'ora (es. 12:32):
 
-1 lampeggio brevissimo (indica lo 0 per le unità).
+1 lampo, pausa, 2 lampi (ore 12) -> pausa lunga -> 3 lampi, pausa, 2 lampi (minuti 32).
 
-Lettura Ora (dopo i Volt): Dopo una breve pausa e 2 lampeggi rapidi di separazione, il LED indicherà l'ora corrente (es. 12:32) con la stessa logica (1 lampo, pausa, 2 lampi per le ore 12; pausa lunga; 3 lampi, pausa, 2 lampi per i minuti 32).
+🔄 3. Reset Programmato e Smart Battery Guard
+Reset Ciclico: Di default, ogni 3 giorni l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa (personalizzabile da 1 a X giorni; 0 disabilita).
 
-3. Reset Programmato e Smart Battery Guard
-Reset Ciclico: Di default, ogni 3 giorni l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa. Questa funzione è personalizzabile da 1 a X giorni (impostando 0 si disabilita).
+Smart Battery Guard: Protezione totale della batteria. Spegne il carico sotto i 3,3V e lo riattiva solo sopra i 3,7V (isteresi di sicurezza).
 
-Smart Battery Guard: Protegge la batteria spegnendo il dispositivo se la tensione scende sotto i 3,3V e riattivandolo solo quando risale sopra i 3,7V (isteresi di sicurezza).
+Stato all'Avvio: Il sistema esegue sempre 3 lampeggi rapidi iniziali. Se la batteria è scarica, seguiranno 6 lampeggi e il modulo Heltec rimarrà spento.
 
-Stato all'avvio: 3 lampeggi rapidi indicano il corretto avvio del firmware. Seguiti da:
+🔘 4. Funzioni Avanzate del Pulsante
+Reset Rapido (1-5 sec): LED acceso fisso fino al rilascio. Salva la tensione attuale negli offset EEPROM (0x00, 0x01 e in chiaro dai 0x03 al 0x07) e riavvia forzatamente l'Heltec.
 
-Nessun lampeggio: Batteria carica.
+Modalità Manutenzione (>5 sec): Ideale per cambio antenna o test. Il sistema spegne il carico e il LED lampeggia (500ms ON / 500ms OFF). Per uscire, premere nuovamente per 5 secondi fino ai 3 lampi classici di riavvio.
 
-3 lampeggi veloci: Batteria in "zona gialla" (tra soglia OFF e soglia ON).
+⚡ 5. Hardware e Alimentazione
+Step-Up 5V: Fondamentale per il progetto. Eroga 5V fissi al PIC12F683 indipendentemente dal calo della batteria (da 2V a 4.5V). Questo garantisce una tensione di riferimento costante per letture ADC precise al millivolt.
 
-6 lampeggi veloci: Batteria scarica (il modulo Heltec resta spento).
+Componenti Chiave: PIC12F683, Modulo RTC DS3231 (ZS-042), Step-Up 5V, Mosfet P-Channel (distacco carico).
 
-4. Funzioni del Pulsante
-Reset Rapido (1-5 sec): Accende il LED fisso fino al rilascio. Salva i dati della tensione negli offset EEPROM (0x00, 0x01 e in chiaro dai 0x03 al 0x07 per verifica) e riavvia il modulo Heltec.
-
-Modalità Manutenzione (>5 sec): Utile per operazioni tecniche (es. cambio antenna). Il sistema spegne il carico e il LED lampeggia ogni secondo (500ms ON / 500ms OFF). Per uscire, tenere premuto nuovamente per oltre 5 secondi; il sistema eseguirà i lampeggi di avvio e tornerà operativo.
-
-5. Hardware e Alimentazione
-Step-Up 5V: Il circuito utilizza un modulo step-up che eroga 5V costanti al PIC12F683 indipendentemente dalla tensione della batteria (anche se scende a 2V o sale a 4,3V). Questo è fondamentale per mantenere stabile il riferimento del comparatore ADC e garantire letture precise della batteria.
-
-Componenti: PIC12F683, modulo RTC DS3231, step-up 5V, mosfet P-Channel per il distacco carico e componentistica passiva comune.
-
-Nota sul Modello RTC
-Il modello consigliato è il DS3231 (spesso venduto come modulo "ZS-042" o "DS3231SN"). È preferibile al vecchio DS1307 perché:
-
-Integra un cristallo di quarzo interno (meno sensibile all'umidità e ai disturbi).
-
-Possiede un sensore di temperatura interno per correggere la frequenza del clock, evitando che l'orologio "corra" o "ritardi" al cambiare delle stagioni.
- 
-Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.3V e lo riattiva se poi risale oltre i 3.7V, 
-
-lo stepup è un modulo che eroga 5V fissi al PIC MICRO, a prescindere dal voltaggio in ingresso, che sia 3V, 2V o che sia 4.3V.
-
-cosi anche se la batteria al momento eroga 4.5V oppure 3,4V, lo stepup porta sempre alimentazione al pic da 5V  (per avere la costante del comparatore che misura il voltaggio della batteria)
-
-gli altri componenti sono pochi e molto comuni
-
-pic micro 12F683, sorgenti mikrobasic/mikroc e schema elettrico (jpeg e pdf)
+Nota tecnica sul DS3231: Si è scelto il modello DS3231 rispetto al DS1307 perché integra un sensore di temperatura per correggere la deriva del quarzo, garantendo precisione assoluta anche in ambienti esterni soggetti a sbalzi termici.
 
 datasheet del pic micro (12F683)
 
