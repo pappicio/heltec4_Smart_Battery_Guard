@@ -285,7 +285,7 @@ end sub
           'esempio; data: Lunedì, 30.03.2026 , ore: 04.05
             Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
             delay_safe_ms(500)
-            ' Feedback: 5 lampeggi rapidi (100ms) come richiesto
+            ' Feedback: 10 lampeggi rapidi (100ms)
             Lampi(10, 100)
             delay_safe_ms(500)
          end if
