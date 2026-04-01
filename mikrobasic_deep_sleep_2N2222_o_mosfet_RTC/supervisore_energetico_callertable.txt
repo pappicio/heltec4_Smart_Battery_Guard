@@ -17,7 +17,7 @@ main
 				PutZerosToLATSda
 				Delay_1us
 			EEPROM_Write
-		Segnale_Triplo
+		Lampi
 			Delay_Safe_ms
 		Leggi_Batteria_mV
 			ADC_Read
@@ -26,6 +26,8 @@ main
 			Mul_32x32_U
 		soglia_batteria
 			Delay_Safe_ms
+			Lampi
+				Delay_Safe_ms
 	Delay_Safe_ms
 	Leggi_Batteria_mV
 		ADC_Read
@@ -34,10 +36,14 @@ main
 		Mul_32x32_U
 	soglia_batteria
 		Delay_Safe_ms
+		Lampi
+			Delay_Safe_ms
 	Estrai_e_Lampeggia
 		Lampeggia_Cifra
 			Delay_Safe_ms
 	Lampeggia_Cifra
+		Delay_Safe_ms
+	Lampi
 		Delay_Safe_ms
 	Leggi_Ora_RTC
 		Soft_I2C_Start

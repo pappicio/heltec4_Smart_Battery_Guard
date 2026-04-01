@@ -256,6 +256,7 @@ irp_bit
 j
 l
 lampeggia_cifra
+lampi
 leggi_batteria_mv
 leggi_ora_rtc
 longint2double
@@ -272,6 +273,7 @@ mul_32x32_s
 mul_32x32_u
 mul_8x8_s
 mul_8x8_u
+n
 n
 nil
 not_bod
@@ -348,7 +350,6 @@ scrivi_ora_rtc
 scs
 scs_bit
 sdiv3232l
-segnale_triplo
 setfdz32
 setfov32
 setfun32
@@ -374,6 +375,7 @@ sveglie_wdt
 swap
 swdten
 swdten_bit
+t_on
 t0cs
 t0cs_bit
 t0ie
@@ -473,7 +475,6 @@ vcfg
 vcfg_bit
 vdelay_advanced_ms
 vdelay_ms
-visualizza_ora_rtc
 vr0
 vr0_bit
 vr1
