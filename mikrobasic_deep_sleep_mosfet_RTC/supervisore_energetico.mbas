@@ -5,7 +5,7 @@ dim Soft_I2C_Scl as sbit at GP5_bit
 dim Soft_I2C_Sda as sbit at GP4_bit
 dim Soft_I2C_Scl_Direction as sbit at TRISIO5_bit  ' <--- DEVE ESSERE 5
 dim Soft_I2C_Sda_Direction as sbit at TRISIO4_bit  ' <--- DEVE ESSERE 4
-dim RTC_presente, finestra_oraria as byte  ' 0 = Assente, 1 = Funzionante
+dim RTC_presente, finestra_oraria, spento  as byte  ' 0 = Assente, 1 = Funzionante
 ' --- VARIABILI GLOBALI ---
 dim batteria_mv as LongWord         ' Memorizza la tensione batteria in millivolt
 dim i, j as byte                    ' Variabili di utilità per cicli e conteggi                                                     d
@@ -227,6 +227,7 @@ end sub
       ' Imposta il numero di cicli per coprire 24h reali (correzione 29.9s)
       cicli_per_giorno = 2883
 
+      spento=0
 
 
       TRISIO.4 = 0
@@ -465,10 +466,12 @@ end sub
                 ' Protezione batteria scarica
                 if (batteria_mv <= soglia_off) then
                     GPIO.0 = 1 ' Spegne Heltec
+                    spento=1
                 end if
                 ' Isteresi: riaccende solo se carica
                 if (batteria_mv >= soglia_on) then
                     GPIO.0 = 0 ' Accende Heltec
+                    spento=0
                 end if
 
                 sveglie_wdt = 0 ' Reset qui dopo il controllo batteria
@@ -508,7 +511,7 @@ end sub
                                if (giorno = 1) or (giorno = 4) then
                                  GPIO.0 = 1
                                  Delay_Safe_ms(10000)
-                                 if (batteria_mv > soglia_off) then GPIO.0 = 0 end if
+                                 if ((batteria_mv > soglia_off) and (spento = 0)) then GPIO.0 = 0 end if
                                  reset_fatto = 1
                                end if
                             end if
@@ -522,7 +525,7 @@ end sub
                         if (ore >= 7) and (ore < 13) then 'dalle 7 alle 13 accendiamo
                             'ogni giorno oppure......
                             if (giorno = 1) or (giorno = 2) or (giorno = 3) or (giorno = 4) or (giorno = 5) or (giorno = 6) or (giorno = 7)   then
-                               if (batteria_mv > soglia_off) then
+                               if ((batteria_mv > soglia_off)  and (spento=0))  then
                                   'accendiamo.....
                                   GPIO.0 = 0
                                else
