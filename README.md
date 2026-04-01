@@ -25,7 +25,7 @@ Interroga lo stato del sistema tramite una pressione prolungata. Al rilascio del
 ---
 
 ### 🔄 **3. ***Reset Programmato e Smart Battery Guard*****
-* ***Reset Ciclico:*** Di default, ogni ***3 giorni*** l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa (personalizzabile da 1 a X giorni; 0 disabilita).
+* ***Reset Ciclico:*** Di default, ogni ***3 giorni*** (senza RTC, ***con RTC, programmazione timer ON/OFF oraria e girnsaliera, o a giorni prestabiliti***, da codice, come meglio rpeferite), l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa (personalizzabile da 1 a X giorni; 0 disabilita).
 * ***Smart Battery Guard:*** Protezione totale della batteria. Spegne il carico sotto i ***3,3V*** e lo riattiva solo sopra i ***3,7V*** (isteresi di sicurezza).
 * ***Stato all'Avvio:*** Il sistema esegue ***3 lampeggi iniziali***; se la batteria in zona gialla (tra i 3.3 e i 3.7 V) eseguira dopo una breve pausa, ***3 lampeggi veloci***: Se la batteria è scarica (<3.3V), seguiranno invece ***6 lampeggi veloci*** e il modulo Heltec rimarrà spento. 
 Se invece la batteria è carica, nn ci saranno feedback visivi dal led ma solo i ***3 lampeggi iniziali***.
