@@ -1,25 +1,60 @@
 # lora (meshtastic) modules Smart_Battery_Guard
+Documentazione Tecnica: Solar Power Manager (PIC12F683)
+1. Gestione RTC (Real Time Clock) - Modello DS3231
+Il sistema utilizza il modulo DS3231, un orologio in tempo reale estremamente preciso grazie al suo oscillatore con compensazione termica. Consente di programmare cicli di riavvio del modulo LoRa o di definire fasce orarie di accensione/spegnimento per il risparmio energetico.
 
-***VERSIONE CON RTC: potrete decidere ore e giorni in cui riavviare modulo lora o semplicemente ore del giorno in cui tenerlo acceso e il resto della giornata, spento.
-per programmare RTC con orario preciso, da codice impostare: Giorno della settimana (1=lunedi, 2=martedi... , 7=domenica, giorno, mese e anno (gg,mm,aa) ore e minuti (, ore, minuti)
-impostare le ore 12.00 per esempio, alle pre 12.00 precise inserire batteria per alimentare uttto compreso il pic, tenedo premuto il pulsante modulo pic per al eno 1.5 secondi, 10 lampeggi veloci confermano che RTC è stato scritto con data e ora, e visto che era stato specificato ore 12.00, e alle 12 precvise è stato programmato con accensioen e testo premuto, spaccherà il secondo.
-Nel caso voleste controllare effettivamente che segna ora esatta, durante il normale funzionamento, premere e tenere premuto il pulsante per almneo 2.5 secondi, il led stato si accende e poi si spegne (allo scoccare dei 2.5 secondi) rilasciarlo e i lampeggi vi insicheranno prima millivolt batteria, esempio 3.75v=2650mv=lampeggi lunghi: 3,7,5,0, pausa, 3 lampeggi veloci e poi le ore: esempio orer 12.32, 1 lampeggio lento seguito ds 2 lampeggi lenti (ore: 12), pausa di 1 secondo, 3 lampeggi lenti, 2 lampeggi lenti (èer lo 0, un lampeggio brevissimo), quindi minuti:32, cosi sarete sicuri che segna l'ora esatta, ed avendo ill modulo RTC una batteria tampone, durerà per 10 annui, con lo scartio di pochi secondi l'anno***
+Programmazione orario: Da codice, impostare Giorno della settimana (1=Lunedì... 7=Domenica), Giorno, Mese, Anno, Ore e Minuti.
 
-***AGGIUNTA FUNZIONE Visualizzazione millivolt, se si pigia il pulsante da 2.5 secondi a 5 secondi (ve ne accorgete perchè il led di stato si spegne e resta spento), il led inizia a lampeggiare:
-esempio, la batteria misura 3865mv, farà: 3 lampeggi veloci, pausa, 8 lampeggi veloci, pausa, 6 lsampeggi veloci, pausa, 1 lampeggi veloce, piu degli altri, indica 0 (arrotonda ultimo valore sempre a 0, essendo per lo piu irrilevante!), potrete leggere i mv della batteria visivamente senza leggere la EEPROM, per lo 0, invece (come gia detto) 1 lampeggio velocissimo, se i mv fossero 3860, il 4 stadio di lampeggi, terminerebbe con 1 solo lampeggio piu breve degli altri, 0 = lampeggio brevissimo!***
- 
-***AGGIUNTA FUNZIONE DI RESET PROGRAMMATO, OGNI 3 Giorni di default la alimentazione verrà interrotta per 10 secondi per poi essere riattivata, facendo riaccendere (livello batteria permettendo) il modulo lora, ma si puo cambiare da 1 a X, se si imposta a 0 giorni, si disabilita tale funzionalita, anche se consiglio di tenerla attiva.***
+Procedura di sincronizzazione: Se desiderate impostare, ad esempio, le ore 12:00 precise, caricate il codice e, allo scoccare delle 12:00, alimentate il circuito tenendo premuto il pulsante per almeno 1,5 secondi.
 
+Conferma: 10 lampeggi veloci del LED confermeranno l'avvenuta scrittura nell'RTC. Grazie alla batteria tampone integrata, il modulo manterrà l'orario per circa 10 anni con uno scarto minimo di pochi secondi l'anno.
 
-all'avvio del pic micro e solo in quel caso, 3 lampeggi veloci del led indicano il normale funzionamento del software all' interno del pic micro stesso, tutto regolare, heltec viene avviato. ***(seguiti da: nessun lampeggio se batteria carica, 3 lampeggi veloci se batteria in zona gialla (tra valore_OFF e valore_ON), 6 lampeggi veloci, batteria scarica, oltre il valore_OFF, e heltec resta spento, non si accende, livello batteria critico)***
+2. Visualizzazione Diagnostica (Volt e Ora)
+Durante il normale funzionamento, è possibile interrogare il sistema:
 
-una breve spiegazione sulla funzione del tasto:
-pressione tra 1 e 5 secondi, accende led e lo lascia acceso fino al rilascio del tasto, salva i dati del valore voltaggio negli offset 0X00 e 0X01, mentre dall'iffset 3 al 7 scrive  su 4 bytes i dati relativi al voltaggio attuale in chiaro, cioe 00002222, tradotto in decimale darà oò voltaggio in millivolt letti al momento,
-cosi da poter verificare che siano coerenti con il voltaggio effettivo attualed ella batteria e riavvia heltec, 
-Tocca precisare che dopo il rilascio del tasto il led: nn si accende se la carica batteria è ok, fa tre lampeggi veloci se la carica è tra valore_on e valore_off, fa sei lampeggi velici se la carica è sotto il valore_off e nn accende heltec, ma lo lascia spento, visto che la carica è al di sotto del valore minimo!!!
+Pressione tra 2,5 e 5 secondi: Al rilascio del tasto (il LED si spegne per indicare il superamento della soglia temporale), il sistema comunica i dati tramite lampeggi.
 
-Se premuto per piu di 5 secondi, tiene heltec in spegnimento, cosi potrete fare manutenzione, esempio, cambio antenna senza far soffrire la componentistica della radio in assenza del finale (l'antenna appunto), il led inizia a lampeggiare per 500ms ogni secondo, per idicare l'ingresso nello stato menutentivo, per tornare al funzionamento normale, tenere premuto il tasto per almeno altri 5 secondi almeno, il led fara i 3 lampeggi classsici dell'avvio e si spegne, heltec si riavvia e torna a funzionare in modo regolare.
- 
+Lettura Millivolt: Se la batteria misura 3860mV, il LED eseguirà:
+
+3 lampeggi (migliaia) -> pausa;
+
+8 lampeggi (centinaia) -> pausa;
+
+6 lampeggi (decine) -> pausa;
+
+1 lampeggio brevissimo (indica lo 0 per le unità).
+
+Lettura Ora (dopo i Volt): Dopo una breve pausa e 2 lampeggi rapidi di separazione, il LED indicherà l'ora corrente (es. 12:32) con la stessa logica (1 lampo, pausa, 2 lampi per le ore 12; pausa lunga; 3 lampi, pausa, 2 lampi per i minuti 32).
+
+3. Reset Programmato e Smart Battery Guard
+Reset Ciclico: Di default, ogni 3 giorni l'alimentazione viene interrotta per 10 secondi per garantire la stabilità del modulo LoRa. Questa funzione è personalizzabile da 1 a X giorni (impostando 0 si disabilita).
+
+Smart Battery Guard: Protegge la batteria spegnendo il dispositivo se la tensione scende sotto i 3,3V e riattivandolo solo quando risale sopra i 3,7V (isteresi di sicurezza).
+
+Stato all'avvio: 3 lampeggi rapidi indicano il corretto avvio del firmware. Seguiti da:
+
+Nessun lampeggio: Batteria carica.
+
+3 lampeggi veloci: Batteria in "zona gialla" (tra soglia OFF e soglia ON).
+
+6 lampeggi veloci: Batteria scarica (il modulo Heltec resta spento).
+
+4. Funzioni del Pulsante
+Reset Rapido (1-5 sec): Accende il LED fisso fino al rilascio. Salva i dati della tensione negli offset EEPROM (0x00, 0x01 e in chiaro dai 0x03 al 0x07 per verifica) e riavvia il modulo Heltec.
+
+Modalità Manutenzione (>5 sec): Utile per operazioni tecniche (es. cambio antenna). Il sistema spegne il carico e il LED lampeggia ogni secondo (500ms ON / 500ms OFF). Per uscire, tenere premuto nuovamente per oltre 5 secondi; il sistema eseguirà i lampeggi di avvio e tornerà operativo.
+
+5. Hardware e Alimentazione
+Step-Up 5V: Il circuito utilizza un modulo step-up che eroga 5V costanti al PIC12F683 indipendentemente dalla tensione della batteria (anche se scende a 2V o sale a 4,3V). Questo è fondamentale per mantenere stabile il riferimento del comparatore ADC e garantire letture precise della batteria.
+
+Componenti: PIC12F683, modulo RTC DS3231, step-up 5V, mosfet P-Channel per il distacco carico e componentistica passiva comune.
+
+Nota sul Modello RTC
+Il modello consigliato è il DS3231 (spesso venduto come modulo "ZS-042" o "DS3231SN"). È preferibile al vecchio DS1307 perché:
+
+Integra un cristallo di quarzo interno (meno sensibile all'umidità e ai disturbi).
+
+Possiede un sensore di temperatura interno per correggere la frequenza del clock, evitando che l'orologio "corra" o "ritardi" al cambiare delle stagioni.
  
 Smart Battery Guard, consente di spegnere e riaccendere il disposiotivo meshtastic se la batteria scende oltre la soglia di 3.3V e lo riattiva se poi risale oltre i 3.7V, 
 
