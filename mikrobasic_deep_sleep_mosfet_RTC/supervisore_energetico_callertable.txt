@@ -1,6 +1,20 @@
 main
 	Init_Hardware
 		Delay_Safe_ms
+		Scrivi_Ora_RTC
+			Delay_Safe_ms
+			Soft_I2C_Init
+			Soft_I2C_Start
+				Delay_1us
+				PutZerosToLATSda
+				PutZerosToLATScl
+			Soft_I2C_Write
+				Delay_1us
+				PutZerosToLATScl
+				PutZerosToLATSda
+			Soft_I2C_Stop
+				PutZerosToLATSda
+				Delay_1us
 		Lampi
 			Delay_Safe_ms
 		Leggi_Batteria_mV

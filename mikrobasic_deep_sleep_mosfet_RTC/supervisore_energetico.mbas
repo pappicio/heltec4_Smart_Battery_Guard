@@ -256,7 +256,7 @@ end sub
       ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
       'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
-      RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+      RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
       finestra_oraria = 0
       giorni_riavvio = 3
 
@@ -269,12 +269,14 @@ end sub
           giorni_riavvio = 0
          i = 0
          while (GPIO.3 = 0) and (i < 15)
+              GPIO.2 = 1
               delay_safe_ms(100)
               i = i + 1
          wend
 
          ' Se il tasto è stato tenuto premuto per 1.5 secondi (15 * 100ms)
          if (i = 15) then
+             GPIO.2 = 0
           ' COMMENTO DATI PER RTC (Formato BCD):
           ' Giorno: 30 Marzo 2026 -> 0x30, 0x03, 0x26
           ' Ora:   04:05:00       -> 0x04, 0x05
@@ -283,13 +285,14 @@ end sub
           ' Chiamata: GiornoSettimana, Giorno, Mese, Anno, Ore, Minuti
           'esempio; data: Lunedì, 30.03.2026 , ore: 04.05
             Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
+            GPIO.2 = 0
             delay_safe_ms(500)
             ' Feedback: 10 lampeggi rapidi (100ms)
             Lampi(10, 100)
             delay_safe_ms(500)
          end if
       end if
-
+       GPIO.2 = 0
 
 
 
@@ -457,7 +460,7 @@ end sub
                    GPIO.0 = 0
                    spento = 0
                 else
-                    spento = 1
+                   spento = 1
                 end if
                 if (batteria_mv < soglia_on) then
                     soglia_batteria
@@ -482,7 +485,7 @@ end sub
                 ' Isteresi: riaccende solo se carica
                 if (batteria_mv >= soglia_on) then
                     GPIO.0 = 0 ' Accende Heltec
-                    spento=0
+                    spento = 0
                 end if
 
                 sveglie_wdt = 0 ' Reset qui dopo il controllo batteria
