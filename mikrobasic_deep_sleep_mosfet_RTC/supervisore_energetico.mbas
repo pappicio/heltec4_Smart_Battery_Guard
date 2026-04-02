@@ -41,7 +41,8 @@ dim cicli_per_giorno as Word    ' Numero di cicli WDT calcolati per 24 ore
 sub procedure Delay_Safe_ms(dim n as word)
     dim k as word
     for k = 1 to n
-        delay_us(980)                ' Pausa di 1ms calcolando i tempi della esecuzione altre uistruzioni in sub, si arriva ad arrotondare a 1ms circa...
+        delay_us(978)               ' Pausa di 1ms calcolando i tempi della esecuzione altre uistruzioni in sub, si arriva ad arrotondare a 1ms circa...
+
         clrwdt                       ' Reset del Watchdog ad ogni millisecondo
     next k
 end sub
@@ -558,6 +559,7 @@ end sub
                     end if
                     minuti_count = 0
                 end if
+                
             end if
 
             ' --- Queste istruzioni devono stare fuori dall'if del conteggio batteria ---

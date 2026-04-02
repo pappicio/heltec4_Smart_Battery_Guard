@@ -1,7 +1,13 @@
 <BREAKS>
   <BP>
     <UnitName>supervisore_energetico.mbas</UnitName>
-    <Line>47</Line>
+    <Line>42</Line>
+    <Enabled>True</Enabled>
+    <Type>0</Type>
+  </BP>
+  <BP>
+    <UnitName>supervisore_energetico.mbas</UnitName>
+    <Line>48</Line>
     <Enabled>True</Enabled>
     <Type>0</Type>
   </BP>
