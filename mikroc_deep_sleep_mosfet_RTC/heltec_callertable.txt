@@ -1,6 +1,4 @@
 main
-	__CC2DW
-		____DoICP
 	Init_Hardware
 		Delay_Safe_ms
 		Scrivi_Ora_RTC
@@ -63,5 +61,4 @@ main
 			PutZerosToLATScl
 			PutZerosToLATSda
 		Mul_8X8_U
-	Div_16X16_U
 	Mul_32x32_U

@@ -155,6 +155,7 @@ eeprom_write
 equals_double
 estrai_e_lampeggia
 f
+finestra_oraria
 fixsign32
 fsr
 fsrptr
@@ -358,6 +359,7 @@ soft_i2c_write
 soglia_batteria
 soglia_off
 soglia_on
+spento
 status
 sub_32x32_fp
 sveglie_wdt

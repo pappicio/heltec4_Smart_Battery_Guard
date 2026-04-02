@@ -619,8 +619,8 @@ _Init_Hardware:
 	BSF        GPIO+0, 0
 ;supervisore_energetico.mbas,256 :: 		GPIO.2 = 0
 	BCF        GPIO+0, 2
-;supervisore_energetico.mbas,261 :: 		RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
-	BCF        _RTC_presente+0, BitPos(_RTC_presente+0)
+;supervisore_energetico.mbas,261 :: 		RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+	BSF        _RTC_presente+0, BitPos(_RTC_presente+0)
 ;supervisore_energetico.mbas,262 :: 		finestra_oraria = 0
 	BCF        _finestra_oraria+0, BitPos(_finestra_oraria+0)
 ;supervisore_energetico.mbas,263 :: 		giorni_riavvio = 3
