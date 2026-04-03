@@ -83,11 +83,13 @@ end sub
 sub procedure Leggi_Ora_RTC()
     ' --- SEGNALE VISIVO E RESET BUS ---
     gpio.2 = 1           ' Accende il LED (Segnale di attività I2C)
-
+    ore=0
+    minuti=0
+    delay_safe_ms(150)
     ' Reset del Bus: se l'RTC era rimasto "appeso", questo lo sblocca
     Soft_I2C_Start()
     Soft_I2C_Stop()
-    delay_safe_ms(1)        ' Piccola pausa di assestamento
+    delay_safe_ms(10)        ' Piccola pausa di assestamento
 
     ' --- FASE 1: PUNTAMENTO (Scrittura) ---
     Soft_I2C_Start()
@@ -259,7 +261,7 @@ end sub
       ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
       'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
-      RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+      RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
       finestra_oraria = 0
       giorni_riavvio = 3
 

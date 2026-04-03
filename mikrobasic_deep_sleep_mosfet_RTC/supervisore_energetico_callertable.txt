@@ -44,6 +44,7 @@ main
 	Lampi
 		Delay_Safe_ms
 	Leggi_Ora_RTC
+		Delay_Safe_ms
 		Soft_I2C_Start
 			Delay_1us
 			PutZerosToLATSda
@@ -51,7 +52,6 @@ main
 		Soft_I2C_Stop
 			PutZerosToLATSda
 			Delay_1us
-		Delay_Safe_ms
 		Soft_I2C_Write
 			Delay_1us
 			PutZerosToLATScl
