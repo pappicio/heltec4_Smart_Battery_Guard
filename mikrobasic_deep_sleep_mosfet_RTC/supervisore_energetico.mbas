@@ -236,11 +236,6 @@ end sub
       spento=0
 
 
-      TRISIO.4 = 0
-      GPIO.4 = 1 ' SDA Alto
-      TRISIO.5 = 0
-      GPIO.5 = 1 ' SCL Alto
-
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -262,7 +257,7 @@ end sub
       ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
       'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
-      RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+      RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
       finestra_oraria = 0
       giorni_riavvio = 3
 
@@ -271,7 +266,12 @@ end sub
       ' Controlliamo se il tasto (GP3) è premuto all'avvio
       ' Aspettiamo circa 1 secondo per confermare l'intenzione
       if (RTC_presente = 1) then
-          minuti_count = 20
+         ' --- CONFIGURAZIONE PER RTC PRESENTE ---
+         TRISIO.4 = 0    ' SDA come Uscita
+         TRISIO.5 = 0    ' SCL come Uscita
+         GPIO.4 = 1      ' SDA Alto (Idle I2C)
+         GPIO.5 = 1      ' SCL Alto (Idle I2C)
+      
           giorni_riavvio = 0
          i = 0
          while (GPIO.3 = 0) and (i < 15)
@@ -297,8 +297,14 @@ end sub
             Lampi(10, 100)
             delay_safe_ms(500)
          end if
-      end if
-       GPIO.2 = 0
+      else
+          ' --- CONFIGURAZIONE PER RTC ASSENTE (BYPASS) ---
+          TRISIO.4 = 1    ' SDA in Alta Impedenza (Input)
+          TRISIO.5 = 1    ' SCL in Alta Impedenza (Input)
+          GPIO.4 = 0
+          GPIO.5 = 0
+        end if
+      GPIO.2 = 0
 
 
 
