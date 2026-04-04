@@ -287,7 +287,7 @@ end sub
            ' COMMENTO DATI PER RTC (Formato BCD):
            ' Giorno: 30 Marzo 2026 -> 0x30, 0x03, 0x26
            ' Ora:   04:05:00       -> 0x04, 0x05
-           ' Giorno Settimana: 1   -> 0x01 (Lunedì)
+           ' Giorno Settimana: 1   -> 0x01 (Lunedì)  , 0=domenica, 6= sabato
 
            ' Chiamata: GiornoSettimana, Giorno, Mese, Anno, Ore, Minuti
            'esempio; data: Lunedì, 30.03.2026 , ore: 04.05

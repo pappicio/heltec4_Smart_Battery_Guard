@@ -228,7 +228,7 @@ void Init_Hardware() {
     // Assicura che il LED (GP5) sia spento
     GP5_bit = 0;
 
-    RTC_presente = 0;
+    RTC_presente = 1;
     finestra_oraria = 0;
     giorni_riavvio = 3;
 
@@ -249,7 +249,7 @@ void Init_Hardware() {
 
         if (i == 15) {
             GP5_bit = 0;
-            // Chiamata: GiornoSettimana, Giorno, Mese, Anno, Ore, Minuti
+            // Chiamata: GiornoSettimana (0=deomenica, 1 lunedi, 6 sabato), Giorno, Mese, Anno, Ore, Minuti
             Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05);
             GP5_bit = 0;
             Delay_Safe_ms(500);

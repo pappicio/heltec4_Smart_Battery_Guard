@@ -639,8 +639,8 @@ _Init_Hardware:
 	BSF        GP4_bit+0, BitPos(GP4_bit+0)
 ;heltec.c,229 :: 		GP5_bit = 0;
 	BCF        GP5_bit+0, BitPos(GP5_bit+0)
-;heltec.c,231 :: 		RTC_presente = 0;
-	BCF        _RTC_presente+0, BitPos(_RTC_presente+0)
+;heltec.c,231 :: 		RTC_presente = 1;
+	BSF        _RTC_presente+0, BitPos(_RTC_presente+0)
 ;heltec.c,232 :: 		finestra_oraria = 0;
 	BCF        _finestra_oraria+0, BitPos(_finestra_oraria+0)
 ;heltec.c,233 :: 		giorni_riavvio = 3;

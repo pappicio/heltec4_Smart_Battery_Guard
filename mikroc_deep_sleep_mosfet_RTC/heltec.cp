@@ -223,7 +223,7 @@ void Init_Hardware() {
 
  GP5_bit = 0;
 
- RTC_presente = 0;
+ RTC_presente = 1;
  finestra_oraria = 0;
  giorni_riavvio = 3;
 
