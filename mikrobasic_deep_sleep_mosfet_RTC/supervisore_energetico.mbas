@@ -243,7 +243,7 @@ end sub
   'SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
       soglia_off   = 3300  '300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
       soglia_on    = 3600  '(45%), va piu che bene
-      taratura_vcc = 5050  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
+      taratura_vcc = 5010  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
       giorni_riavvio = 0
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -258,7 +258,7 @@ end sub
       ' Se vuoi resettare tutto, decommenta la riga sotto per una volta sola
       'ma o usiamo RTC, o giorni di riavvio da WDT, molto meno preciso
 
-      RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+      RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
       finestra_oraria = 0
       giorni_riavvio = 3
 
@@ -291,7 +291,7 @@ end sub
 
            ' Chiamata: GiornoSettimana, Giorno, Mese, Anno, Ore, Minuti
            'esempio; data: Lunedì, 30.03.2026 , ore: 04.05
-             Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
+             Scrivi_Ora_RTC(0x06,    0x04, 0x04, 0x26,    0x20, 0x55)
              GPIO.5 = 0
              delay_safe_ms(500)
              ' Feedback: 10 lampeggi rapidi (100ms)

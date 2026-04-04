@@ -610,8 +610,8 @@ _Init_Hardware:
 	MOVWF      _soglia_on+0
 	MOVLW      14
 	MOVWF      _soglia_on+1
-;supervisore_energetico.mbas,246 :: 		taratura_vcc = 5050  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
-	MOVLW      186
+;supervisore_energetico.mbas,246 :: 		taratura_vcc = 5010  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
+	MOVLW      146
 	MOVWF      _taratura_vcc+0
 	MOVLW      19
 	MOVWF      _taratura_vcc+1
@@ -621,8 +621,8 @@ _Init_Hardware:
 	BSF        GPIO+0, 4
 ;supervisore_energetico.mbas,256 :: 		GPIO.5 = 0
 	BCF        GPIO+0, 5
-;supervisore_energetico.mbas,261 :: 		RTC_presente = 0 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
-	BCF        _RTC_presente+0, BitPos(_RTC_presente+0)
+;supervisore_energetico.mbas,261 :: 		RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+	BSF        _RTC_presente+0, BitPos(_RTC_presente+0)
 ;supervisore_energetico.mbas,262 :: 		finestra_oraria = 0
 	BCF        _finestra_oraria+0, BitPos(_finestra_oraria+0)
 ;supervisore_energetico.mbas,263 :: 		giorni_riavvio = 3
@@ -684,18 +684,18 @@ L__Init_Hardware49:
 	GOTO       L__Init_Hardware53
 ;supervisore_energetico.mbas,286 :: 		GPIO.5 = 0
 	BCF        GPIO+0, 5
-;supervisore_energetico.mbas,294 :: 		Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
-	MOVLW      1
+;supervisore_energetico.mbas,294 :: 		Scrivi_Ora_RTC(0x06,    0x04, 0x04, 0x26,    0x20, 0x55)
+	MOVLW      6
 	MOVWF      FARG_Scrivi_Ora_RTC_s_g_sett+0
-	MOVLW      48
+	MOVLW      4
 	MOVWF      FARG_Scrivi_Ora_RTC_s_g+0
-	MOVLW      3
+	MOVLW      4
 	MOVWF      FARG_Scrivi_Ora_RTC_s_m+0
 	MOVLW      38
 	MOVWF      FARG_Scrivi_Ora_RTC_s_a+0
-	MOVLW      4
+	MOVLW      32
 	MOVWF      FARG_Scrivi_Ora_RTC_s_ore+0
-	MOVLW      5
+	MOVLW      85
 	MOVWF      FARG_Scrivi_Ora_RTC_s_min+0
 	CALL       _Scrivi_Ora_RTC+0
 ;supervisore_energetico.mbas,295 :: 		GPIO.5 = 0
