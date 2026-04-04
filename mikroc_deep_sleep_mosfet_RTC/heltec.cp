@@ -1,15 +1,13 @@
 #line 1 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC/heltec.c"
-#line 7 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC/heltec.c"
-sbit Soft_I2C_Scl at GP5_bit;
-sbit Soft_I2C_Sda at GP4_bit;
-sbit Soft_I2C_Scl_Direction at TRISIO5_bit;
-sbit Soft_I2C_Sda_Direction at TRISIO4_bit;
-
+#line 8 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC/heltec.c"
+sbit Soft_I2C_Scl at GP0_bit;
+sbit Soft_I2C_Sda at GP2_bit;
+sbit Soft_I2C_Scl_Direction at TRISIO0_bit;
+sbit Soft_I2C_Sda_Direction at TRISIO2_bit;
 
 bit RTC_presente;
 bit finestra_oraria;
 bit spento;
-bit reset_fatto;
 
 
 unsigned int batteria_mv;
@@ -24,7 +22,7 @@ unsigned int val_da_lampeggiare;
 
 
 unsigned short ore, minuti, giorno;
-unsigned short bcd_val;
+bit reset_fatto;
 unsigned short minuti_count;
 
 
@@ -35,8 +33,8 @@ unsigned int cicli_per_giorno;
 
 void Delay_Safe_ms(unsigned int n) {
  unsigned int k;
- for (k = 0; k < n; k++) {
- delay_us(980);
+ for (k = 1; k <= n; k++) {
+ Delay_us(978);
  asm clrwdt;
  }
 }
@@ -46,14 +44,14 @@ void Lampeggia_Cifra(unsigned short c) {
  unsigned short l;
  if (c == 0) {
 
- GPIO.F2 = 1;
+ GP5_bit = 1;
  Delay_Safe_ms(50);
- GPIO.F2 = 0;
+ GP5_bit = 0;
  } else {
- for (l = 0; l < c; l++) {
- GPIO.F2 = 1;
+ for (l = 1; l <= c; l++) {
+ GP5_bit = 1;
  Delay_Safe_ms(250);
- GPIO.F2 = 0;
+ GP5_bit = 0;
  Delay_Safe_ms(250);
  asm clrwdt;
  }
@@ -73,61 +71,69 @@ void Estrai_e_Lampeggia(unsigned int divisore) {
 
 
 void Leggi_Ora_RTC() {
+ unsigned short bcd_temp;
 
- GPIO.F2 = 1;
+ GP5_bit = 1;
+ Delay_Safe_ms(100);
 
 
  Soft_I2C_Start();
  Soft_I2C_Stop();
- Delay_Safe_ms(1);
+ Delay_Safe_ms(10);
 
 
  Soft_I2C_Start();
  Soft_I2C_Write(0xD0);
  Soft_I2C_Write(0x01);
+ Soft_I2C_Start();
+ Soft_I2C_Write(0xD1);
+ bcd_temp = Soft_I2C_Read(0);
+ Soft_I2C_Stop();
+
+ minuti = ((bcd_temp >> 4) * 10) + (bcd_temp & 0x0F);
+
+ Delay_Safe_ms(10);
 
 
  Soft_I2C_Start();
+ Soft_I2C_Write(0xD0);
+ Soft_I2C_Write(0x02);
+ Soft_I2C_Start();
  Soft_I2C_Write(0xD1);
-
-
- bcd_val = Soft_I2C_Read(1);
- minuti = ((bcd_val >> 4) * 10) + (bcd_val & 0x0F);
-
-
- bcd_val = Soft_I2C_Read(1);
- bcd_val &= 0x3F;
- ore = ((bcd_val >> 4) * 10) + (bcd_val & 0x0F);
-
-
- bcd_val = Soft_I2C_Read(0);
- giorno = bcd_val & 0x07;
-
+ bcd_temp = Soft_I2C_Read(0);
  Soft_I2C_Stop();
- Delay_Safe_ms(1);
- GPIO.F2 = 0;
+
+ bcd_temp &= 0x3F;
+ ore = ((bcd_temp >> 4) * 10) + (bcd_temp & 0x0F);
+
+ GP5_bit = 0;
 }
 
 
 void Leggi_Batteria_mV() {
- unsigned short k;
+ unsigned short i_adc;
  unsigned long somma = 0;
  unsigned int media_pulita;
 
- for (k = 0; k < 64; k++) {
+
+ for (i_adc = 1; i_adc <= 64; i_adc++) {
  somma += ADC_Read(1);
  Delay_Safe_ms(1);
  }
+
+
  media_pulita = (unsigned int)(somma >> 6);
+
+
  batteria_mv = (unsigned int)(( (unsigned long)media_pulita * taratura_vcc ) >> 10);
 }
 
 
 void Lampi(unsigned short n, unsigned int t_on) {
- for (j = 0; j < n; j++) {
- GPIO.F2 = 1;
+ for (j = 1; j <= n; j++) {
+ GP5_bit = 1;
  Delay_Safe_ms(t_on);
- GPIO.F2 = 0;
+ GP5_bit = 0;
  Delay_Safe_ms(t_on);
  }
 }
@@ -135,18 +141,22 @@ void Lampi(unsigned short n, unsigned int t_on) {
 
 void soglia_batteria() {
  if (batteria_mv <= soglia_off) {
- GPIO.F2 = 0;
+ GP5_bit = 0;
  Delay_Safe_ms(500);
+
  Lampi(6, 100);
- } else if (batteria_mv > soglia_off && batteria_mv <= soglia_on) {
+ } else {
+ if ((batteria_mv > soglia_off) && (batteria_mv <= soglia_on)) {
+
  Delay_Safe_ms(500);
  Lampi(3, 100);
+ }
  }
 }
 
 
 void Scrivi_Ora_RTC(unsigned short s_g_sett, unsigned short s_g, unsigned short s_m, unsigned short s_a, unsigned short s_ore, unsigned short s_min) {
- GPIO.F2 = 1;
+ GP5_bit = 1;
  Delay_Safe_ms(100);
  Soft_I2C_Init();
  Delay_Safe_ms(100);
@@ -162,66 +172,100 @@ void Scrivi_Ora_RTC(unsigned short s_g_sett, unsigned short s_g, unsigned short 
  Soft_I2C_Write(s_a);
  Soft_I2C_Stop();
  Delay_Safe_ms(800);
- GPIO.F2 = 0;
+ GP5_bit = 0;
  Delay_Safe_ms(500);
 }
 
 
 void Init_Hardware() {
+
  RTC_presente = 0;
- OSCCON = 0x67;
+ OSCCON = 0b01100111;
+
+
  CMCON0 = 7;
- ANSEL = 0x12;
- TRISIO = 0x0A;
- OPTION_REG = 0x0F;
- WPU = 0x00;
+
+
+ ANSEL = 0b00010010;
+
+
+ TRISIO = 0b00001010;
+
+
+ OPTION_REG = 0b00001111;
+
+
+ WPU = 0b00000000;
+
+
  INTCON.GPIE = 1;
+
+
  IOC.B3 = 1;
 
- conteggio_cicli = 0;
- cicli_per_giorno = 2883;
- spento = 0;
 
- TRISIO.F4 = 0; GPIO.F4 = 1;
- TRISIO.F5 = 0; GPIO.F5 = 1;
+ conteggio_cicli = 0;
+
+
+ cicli_per_giorno = 2883;
+
+ spento = 0;
 
 
  soglia_off = 3300;
  soglia_on = 3600;
  taratura_vcc = 5050;
- giorni_riavvio = 3;
+ giorni_riavvio = 0;
 
- GPIO.F0 = 1;
- GPIO.F2 = 0;
+
+ GP4_bit = 1;
+
+
+ GP5_bit = 0;
 
  RTC_presente = 0;
  finestra_oraria = 0;
+ giorni_riavvio = 3;
 
 
  if (RTC_presente == 1) {
- minuti_count = 20;
+ TRISIO.B0 = 0;
+ TRISIO.B2 = 0;
+ GP0_bit = 1;
+ GP2_bit = 1;
+
  giorni_riavvio = 0;
  i = 0;
- while (GPIO.F3 == 0 && i < 15) {
- GPIO.F2 = 1;
+ while ((GP3_bit == 0) && (i < 15)) {
+ GP5_bit = 1;
  Delay_Safe_ms(100);
  i++;
  }
- if (i == 15) {
- GPIO.F2 = 0;
- Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05);
- Lampi(10, 100);
- }
- }
- GPIO.F2 = 0;
 
+ if (i == 15) {
+ GP5_bit = 0;
+
+ Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05);
+ GP5_bit = 0;
+ Delay_Safe_ms(500);
+ Lampi(10, 100);
+ Delay_Safe_ms(500);
+ }
+ } else {
+ TRISIO.B0 = 1;
+ TRISIO.B2 = 1;
+ GP0_bit = 0;
+ GP2_bit = 0;
+ }
+
+ GP5_bit = 0;
  Delay_Safe_ms(500);
  Lampi(3, 250);
  Delay_Safe_ms(500);
  Leggi_Batteria_mV();
 
  if (batteria_mv > soglia_off) {
- GPIO.F0 = 0;
+ GP4_bit = 0;
  spento = 0;
  } else {
  spento = 1;
@@ -230,6 +274,7 @@ void Init_Hardware() {
  in_manutenzione = 0;
  reset_fatto = 0;
  sveglie_wdt = 0;
+
  soglia_batteria();
 }
 
@@ -238,44 +283,47 @@ void main() {
  Init_Hardware();
 
  while (1) {
+
  if (INTCON.GPIF == 1) {
  dummy = GPIO;
  INTCON.GPIF = 0;
  }
 
 
- if (GPIO.F3 == 0) {
+ if (GP3_bit == 0) {
  i = 0;
- while (GPIO.F3 == 0 && i < 50) {
+ while ((GP3_bit == 0) && (i < 50)) {
  Delay_Safe_ms(100);
  i++;
- if (i == 10) GPIO.F2 = 1;
- if (i == 25) GPIO.F2 = 0;
+ if (i == 10) GP5_bit = 1;
+ if (i == 25) GP5_bit = 0;
  }
 
 
- if (i >= 10 && i < 25) {
- GPIO.F2 = 0;
+ if ((i >= 10) && (i < 25)) {
+ GP5_bit = 0;
  Leggi_Batteria_mV();
- GPIO.F0 = 1;
+ GP4_bit = 1;
  Delay_Safe_ms(2000);
+
  if (batteria_mv > soglia_off) {
- GPIO.F0 = 0;
+ GP4_bit = 0;
  spento = 0;
  } else {
  spento = 1;
  }
- GPIO.F2 = 0;
+ GP5_bit = 0;
  if (batteria_mv < soglia_on) soglia_batteria();
  sveglie_wdt = 0;
  conteggio_cicli = 0;
  }
 
 
- if (i >= 25 && i < 50) {
- GPIO.F2 = 0;
+ if ((i >= 25) && (i < 50)) {
+ GP5_bit = 0;
  Leggi_Batteria_mV();
  Delay_Safe_ms(1000);
+
  val_da_lampeggiare = batteria_mv;
  Estrai_e_Lampeggia(1000);
  Estrai_e_Lampeggia(100);
@@ -286,7 +334,9 @@ void main() {
  Delay_Safe_ms(1000);
  Lampi(2, 100);
  Leggi_Ora_RTC();
- GPIO.F2 = 1; Delay_Safe_ms(100); GPIO.F2 = 0;
+ GP5_bit = 1;
+ Delay_Safe_ms(100);
+ GP5_bit = 0;
  Delay_Safe_ms(1000);
  val_da_lampeggiare = ore;
  Estrai_e_Lampeggia(10);
@@ -300,28 +350,48 @@ void main() {
 
 
  if (i >= 50) {
- GPIO.F0 = 1;
- Lampi(10, 100);
+ GP4_bit = 1;
+ for (j = 1; j <= 20; j++) {
+ GP5_bit = !GP5_bit;
+ Delay_Safe_ms(100);
+ }
+ GP5_bit = 0;
  in_manutenzione = 1;
  while (in_manutenzione) {
- GPIO.F2 = 1; Delay_Safe_ms(500); GPIO.F2 = 0;
- if (GPIO.F3 == 0) {
+ GP5_bit = 1;
+ Delay_Safe_ms(500);
+ GP5_bit = 0;
+ if (GP3_bit == 0) {
  i = 0;
- while (GPIO.F3 == 0 && i < 50) { Delay_Safe_ms(100); i++; }
- if (i >= 50) in_manutenzione = 0;
+ while ((GP3_bit == 0) && (i < 50)) {
+ Delay_Safe_ms(100);
+ i++;
+ }
+ if (i >= 50) {
+ in_manutenzione = 0;
+ for (j = 1; j <= 20; j++) {
+ GP5_bit = !GP5_bit;
+ Delay_Safe_ms(100);
+ }
+ GP5_bit = 0;
+ }
  } else {
  Delay_Safe_ms(500);
  }
  asm clrwdt;
  }
- Lampi(10, 100);
  Leggi_Batteria_mV();
- if (batteria_mv > soglia_off) { GPIO.F0 = 0; spento = 0; }
- else spento = 1;
+ if (batteria_mv > soglia_off) {
+ GP4_bit = 0;
+ spento = 0;
+ } else {
+ spento = 1;
+ }
  if (batteria_mv < soglia_on) soglia_batteria();
  sveglie_wdt = 13;
  conteggio_cicli = 0;
  minuti_count = 0;
+ asm clrwdt;
  }
  }
 
@@ -329,8 +399,14 @@ void main() {
  if (!in_manutenzione) {
  if (sveglie_wdt >= 13) {
  Leggi_Batteria_mV();
- if (batteria_mv <= soglia_off) { GPIO.F0 = 1; spento = 1; }
- if (batteria_mv >= soglia_on) { GPIO.F0 = 0; spento = 0; }
+ if (batteria_mv <= soglia_off) {
+ GP4_bit = 1;
+ spento = 1;
+ }
+ if (batteria_mv >= soglia_on) {
+ GP4_bit = 0;
+ spento = 0;
+ }
 
  sveglie_wdt = 0;
 
@@ -342,44 +418,56 @@ void main() {
  finestra_oraria = 0;
  }
 
-
  if (giorni_riavvio > 0) {
  conteggio_cicli++;
  if (conteggio_cicli >= ((unsigned long)cicli_per_giorno * giorni_riavvio)) {
- GPIO.F0 = 1; Delay_Safe_ms(2000);
- if (batteria_mv > soglia_off) { GPIO.F0 = 0; spento = 0; }
- else spento = 1;
+ GP4_bit = 1;
+ Delay_Safe_ms(2000);
+ if (batteria_mv > soglia_off) {
+ GP4_bit = 0;
+ spento = 0;
+ } else {
+ spento = 1;
+ }
  conteggio_cicli = 0;
  }
  }
 
-
  if (minuti_count >= 20) {
  Leggi_Ora_RTC();
- if (!finestra_oraria) {
+ if (finestra_oraria == 0) {
  if (ore == 4) {
- if (!reset_fatto) {
- if (giorno == 1 || giorno == 4) {
- GPIO.F0 = 1; Delay_Safe_ms(10000);
- if (batteria_mv > soglia_off && !spento) GPIO.F0 = 0;
+ if (reset_fatto == 0) {
+ if ((giorno == 1) || (giorno == 4)) {
+ GP4_bit = 1;
+ Delay_Safe_ms(10000);
+ if ((batteria_mv > soglia_off) && (spento == 0)) GP4_bit = 0;
  reset_fatto = 1;
  }
  }
- } else { reset_fatto = 0; }
  } else {
-
- if (ore >= 7 && ore < 13) {
- if (batteria_mv > soglia_off && !spento) GPIO.F0 = 0;
- else GPIO.F0 = 1;
- } else { GPIO.F0 = 1; }
+ reset_fatto = 0;
+ }
+ } else {
+ if ((ore >= 7) && (ore < 13)) {
+ if ((batteria_mv > soglia_off) && (spento == 0)) {
+ GP4_bit = 0;
+ } else {
+ GP4_bit = 1;
+ }
+ } else {
+ GP4_bit = 1;
+ }
  }
  minuti_count = 0;
  }
  }
+
  sveglie_wdt++;
  asm clrwdt;
  asm sleep;
  asm nop;
+
  } else {
  Delay_Safe_ms(100);
  asm clrwdt;
