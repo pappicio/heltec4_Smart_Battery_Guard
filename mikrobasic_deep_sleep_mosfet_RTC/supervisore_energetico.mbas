@@ -12,7 +12,7 @@ dim spento as bit
 
 ' --- VARIABILI GLOBALI ---
 dim batteria_mv as word         ' Memorizza la tensione batteria in millivolt
-dim i, j as byte                    ' Variabili di utilit‡ per cicli e conteggi                                                     d
+dim i, j as byte                    ' Variabili di utilit√† per cicli e conteggi                                                     d
 dim sveglie_wdt as word             ' Conta quante volte il Watchdog ha svegliato il chip
 dim in_manutenzione as boolean      ' Flag per lo stato di blocco manutenzione
 dim dummy as byte                   ' Variabile di appoggio per lettura GPIO
@@ -80,45 +80,46 @@ sub procedure Estrai_e_Lampeggia(dim divisore as word)
 end sub
 
 ' --- LETTURA ORA RTC ---
+' --- LETTURA ORA RTC (CORRETTA) ---
 sub procedure Leggi_Ora_RTC()
-    ' --- SEGNALE VISIVO E RESET BUS ---
-    gpio.2 = 1           ' Accende il LED (Segnale di attivit‡ I2C)
-    ore=0
-    minuti=0
-    delay_safe_ms(150)
-    ' Reset del Bus: se l'RTC era rimasto "appeso", questo lo sblocca
+    dim bcd_temp as byte
+
+    gpio.2 = 1           ' Accende tutto
+    delay_safe_ms(100)   ' Tempo di sveglia
+
+    ' Reset Bus
     Soft_I2C_Start()
     Soft_I2C_Stop()
-    delay_safe_ms(10)        ' Piccola pausa di assestamento
+    delay_safe_ms(10)
 
-    ' --- FASE 1: PUNTAMENTO (Scrittura) ---
+    ' --- LETTURA MINUTI ---
     Soft_I2C_Start()
-    Soft_I2C_Write(0xD0) ' Indirizzo RTC (Scrittura)
-    Soft_I2C_Write(0x01) ' Punta al registro 0x01 (Minuti)
-
-    ' --- FASE 2: LETTURA (Restart) ---
-    Soft_I2C_Start()     ' Segnale di Restart
-    Soft_I2C_Write(0xD1) ' Indirizzo RTC (Lettura)
-
-    ' 1. Legge i MINUTI (0x01)
-    bcd_val = Soft_I2C_Read(1) ' Manda ACK (1) per continuare a leggere
-    minuti = ((bcd_val >> 4) * 10) + (bcd_val and 0x0F)
-
-    ' 2. Legge le ORE (0x02)
-    bcd_val = Soft_I2C_Read(1) ' Manda ACK (1) per continuare
-    ' --- CRITICAL FIX: PULIZIA DEI BIT 6 E 7 (Formato 12/24h) ---
-    bcd_val = bcd_val and 0x3F ' <--- Questo garantisce che 04 sia 04 e non 68!
-    ore = ((bcd_val >> 4) * 10) + (bcd_val and 0x0F)
-
-    ' 3. Legge il GIORNO DELLA SETTIMANA (0x03)
-    bcd_val = Soft_I2C_Read(0) ' Manda NACK (0) per chiudere la lettura
-    giorno = bcd_val and 0x07 ' Isola solo i primi 3 bit (1-7)
-
-    ' --- CHIUSURA ---
+    Soft_I2C_Write(0xD0)
+    Soft_I2C_Write(0x01)
+    Soft_I2C_Start()
+    Soft_I2C_Write(0xD1)
+    bcd_temp = Soft_I2C_Read(0)
     Soft_I2C_Stop()
-    delay_safe_ms(1)
-    gpio.2 = 0           ' Spegne il LED (Lettura completata)
+    ' Conversione BCD -> DEC
+    minuti = ((bcd_temp >> 4) * 10) + (bcd_temp and 0x0F)
+
+    delay_safe_ms(10)
+
+    ' --- LETTURA ORE ---
+    Soft_I2C_Start()
+    Soft_I2C_Write(0xD0)
+    Soft_I2C_Write(0x02)
+    Soft_I2C_Start()
+    Soft_I2C_Write(0xD1)
+    bcd_temp = Soft_I2C_Read(0)
+    Soft_I2C_Stop()
+    ' Pulisce bit 12/24h e converte BCD -> DEC
+    bcd_temp = bcd_temp and 0x3F
+    ore = ((bcd_temp >> 4) * 10) + (bcd_temp and 0x0F)
+
+    gpio.2 = 0           ' Spegne tutto
 end sub
+
 
 
 
@@ -267,7 +268,7 @@ end sub
 
 
       ' --- LOGICA DI SINCRONIZZAZIONE MANUALE RTC ---
-      ' Controlliamo se il tasto (GP3) Ë premuto all'avvio
+      ' Controlliamo se il tasto (GP3) √® premuto all'avvio
       ' Aspettiamo circa 1 secondo per confermare l'intenzione
       if (RTC_presente = 1) then
           minuti_count = 20
@@ -279,16 +280,16 @@ end sub
               i = i + 1
          wend
 
-         ' Se il tasto Ë stato tenuto premuto per 1.5 secondi (15 * 100ms)
+         ' Se il tasto √® stato tenuto premuto per 1.5 secondi (15 * 100ms)
          if (i = 15) then
              GPIO.2 = 0
           ' COMMENTO DATI PER RTC (Formato BCD):
           ' Giorno: 30 Marzo 2026 -> 0x30, 0x03, 0x26
           ' Ora:   04:05:00       -> 0x04, 0x05
-          ' Giorno Settimana: 1   -> 0x01 (LunedÏ)
+          ' Giorno Settimana: 1   -> 0x01 (Luned√¨)
 
           ' Chiamata: GiornoSettimana, Giorno, Mese, Anno, Ore, Minuti
-          'esempio; data: LunedÏ, 30.03.2026 , ore: 04.05
+          'esempio; data: Luned√¨, 30.03.2026 , ore: 04.05
             Scrivi_Ora_RTC(0x01, 0x30, 0x03, 0x26, 0x04, 0x05)
             GPIO.2 = 0
             delay_safe_ms(500)
@@ -313,7 +314,7 @@ end sub
       ' Esegue la prima scansione della tensione batteria
       Leggi_Batteria_mV()
 
-      ' Se la tensione letta Ë sicura, porta GP0 a massa per alimentare l'Heltec
+      ' Se la tensione letta √® sicura, porta GP0 a massa per alimentare l'Heltec
       if (batteria_mv > soglia_off) then
           GPIO.0 = 0
           spento = 0
@@ -353,7 +354,7 @@ end sub
                     GPIO.2 = 1     ' Accende LED dopo 1 secondo di pressione
                 end if
                 if (i = 25) then
-                    GPIO.2 = 0     ' Spegne LED dopo 2.5 secondi (cambio modalit‡)
+                    GPIO.2 = 0     ' Spegne LED dopo 2.5 secondi (cambio modalit√†)
                 end if
             wend
 
@@ -396,7 +397,7 @@ end sub
                 Estrai_e_Lampeggia(1000) ' Migliaia
                 Estrai_e_Lampeggia(100)  ' Centinaia
                 Estrai_e_Lampeggia(10)   ' Decine
-                Lampeggia_Cifra(0)       ' Unit‡ fisse
+                Lampeggia_Cifra(0)       ' Unit√† fisse
 
                 ' --- VISUALIZZAZIONE ORA (Se vuoi tentare di farcela stare) ---
                 if (RTC_presente = 1) then
@@ -410,7 +411,7 @@ end sub
                     ' Ore
                     val_da_lampeggiare = word(ore)
                     Estrai_e_Lampeggia(10)
-                    Lampeggia_Cifra(byte(val_da_lampeggiare)) ' Il resto sono le unit‡
+                    Lampeggia_Cifra(byte(val_da_lampeggiare)) ' Il resto sono le unit√†
 
                     Delay_Safe_ms(1000)
 
@@ -453,7 +454,7 @@ end sub
                             GPIO.2 = 0
                         end if
                     else
-                        ' Se il tasto non Ë premuto, completa il secondo di delay
+                        ' Se il tasto non √® premuto, completa il secondo di delay
                         ' per rendere il lampeggio di stato simmetrico
                         Delay_Safe_ms(500)
                     end if
