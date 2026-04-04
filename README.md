@@ -93,3 +93,7 @@ https://it.aliexpress.com/item/1005004617543846.html?spm=a2g0o.productlist.main.
 ADATTATORE mosfet SMD (SOT23-3) per millefori (SIP3)
 
 https://it.aliexpress.com/item/1005006626188055.html?spm=a2g0o.productlist.main.10.1f94Te9qTe9qfL&algo_pvid=a7fdd15a-6daa-4bc9-b32e-30f053d9a163&algo_exp_id=a7fdd15a-6daa-4bc9-b32e-30f053d9a163-9&pdp_ext_f=%7B%22order%22%3A%221297%22%2C%22spu_best_type%22%3A%22price%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21EUR%211.93%211.93%21%21%212.18%212.18%21%40211b819117747092144196460e3172%2112000037858523309%21sea%21IT%211910279782%21X%211%210%21n_tag%3A-29919%3Bd%3Af1c9b8e%3Bm03_new_user%3A-29895&curPageLogUid=uQJpqORxMooQ&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005006626188055%7C_p_origin_prod%3A
+
+MODULO RTC 3231 amazon
+
+https://www.amazon.it/dp/B0FN3Z58LH?ref=ppx_yo2ov_dt_b_fed_asin_title
