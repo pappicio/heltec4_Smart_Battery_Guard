@@ -14,6 +14,7 @@ __savepclath
 __savestatus
 _adc_external_vrefh
 _adc_internal_vrefh
+acceso
 adc_get_sample
 adc_get_sample_ptr
 adc_init
@@ -345,6 +346,7 @@ rp0
 rp0_bit
 rp1
 rp1_bit
+rstpin
 rtc_presente
 s_a
 s_g
