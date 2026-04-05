@@ -14,7 +14,6 @@ __savepclath
 __savestatus
 _adc_external_vrefh
 _adc_internal_vrefh
-acceso
 adc_get_sample
 adc_get_sample_ptr
 adc_init
@@ -47,6 +46,7 @@ ans2_bit
 ans3
 ans3_bit
 ansel
+attivo
 b0
 b1
 b2
@@ -56,6 +56,7 @@ b5
 b6
 b7
 batteria_mv
+bcd_val
 boot16_delay_5ms
 byte2double
 c
@@ -112,6 +113,7 @@ dc1b0
 dc1b0_bit
 dc1b1
 dc1b1_bit
+dec_val
 delay_100ms
 delay_10ms
 delay_10us

@@ -14,7 +14,6 @@ __savepclath
 __savestatus
 _adc_external_vrefh
 _adc_internal_vrefh
-acceso
 adc_get_sample
 adc_get_sample_ptr
 adc_init
@@ -47,6 +46,7 @@ ans2_bit
 ans3
 ans3_bit
 ansel
+attivo
 b0
 b1
 b2

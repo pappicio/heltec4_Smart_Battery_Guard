@@ -8,7 +8,7 @@ dim Soft_I2C_Scl_Direction as sbit at TRISIO0_bit
 dim Soft_I2C_Sda_Direction as sbit at TRISIO2_bit
 
 dim RSTpin as boolean
-dim acceso as boolean
+dim attivo as boolean
 
 dim RTC_presente as bit
 dim finestra_oraria as bit
@@ -243,7 +243,7 @@ end sub
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-      acceso=1
+      attivo=1
   'SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
   
       RSTpin=true
@@ -264,11 +264,11 @@ end sub
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
       if RSTpin=true then
-         acceso=0
+         attivo=0
       end if
       
       ' Forza GP4 alto: spegne il carico (Mosfet P-channel) all'accensione (Nuovo PIN)
-      GPIO.4 = acceso
+      GPIO.4 = attivo
 
       ' Assicura che il LED (GP5) sia spento
       GPIO.5 = 0
@@ -339,7 +339,7 @@ end sub
 
       ' Se la tensione letta è sicura, porta GP4 a massa per alimentare l'Heltec (Nuovo PIN Mosfet)
       if (batteria_mv > soglia_off) then
-          GPIO.4 = not  acceso
+          GPIO.4 = not  attivo
           spento = 0
       else
           spento = 1
@@ -387,13 +387,13 @@ end sub
                 Leggi_Batteria_mV()
 
                 ' Esecuzione Reset Fisico Heltec (Spegne/Pausa/Riaccende) su GP4
-                GPIO.4 =  acceso
+                GPIO.4 =  attivo
                 Delay_Safe_ms(2000)
                 ' Controllo soglie per Feedback LED
 
                 ' Riaccende solo se non siamo sotto soglia critica
                 if (batteria_mv > soglia_off) then
-                    GPIO.4 = not  acceso
+                    GPIO.4 = not  attivo
                     spento = 0
                 else
                     spento = 1
@@ -448,7 +448,7 @@ end sub
             ' CASO 3: Manutenzione (SOPRA i 5 secondi)
             ' --- 3. MANUTENZIONE (>5s) ---
             if (i >= 50) then
-                GPIO.4 = acceso                       ' Distacca il carico (Heltec OFF) su GP4
+                GPIO.4 = attivo                       ' Distacca il carico (Heltec OFF) su GP4
                 ' Lampeggio veloce di conferma ingresso (10 cicli ON/OFF = 20 passaggi)
                 for j = 1 to 20
                     GPIO.5 = not GPIO.5         ' Lampeggio veloce di conferma
@@ -457,7 +457,7 @@ end sub
                 GPIO.5 = 0
                 in_manutenzione = true          ' Entra nel loop di blocco
                 while (in_manutenzione = true)
-                    ' Segnale visivo di stato: LED acceso 500ms / spento 500ms
+                    ' Segnale visivo di stato: LED attivo 500ms / spento 500ms
                     GPIO.5 = 1
                     Delay_Safe_ms(500)
                     GPIO.5 = 0
@@ -486,7 +486,7 @@ end sub
                 ' Uscita dalla manutenzione: reset contatori e riaccensione
                 Leggi_Batteria_mV()
                 if (batteria_mv > soglia_off) then
-                   GPIO.4 = not acceso ' Carico ON
+                   GPIO.4 = not attivo ' Carico ON
                    spento = 0
                 else
                    spento = 1
@@ -508,12 +508,12 @@ end sub
                 Leggi_Batteria_mV()
                 ' Protezione batteria scarica
                 if (batteria_mv <= soglia_off) then
-                    GPIO.4 =  acceso ' Spegne Heltec su GP4
+                    GPIO.4 =  attivo ' Spegne Heltec su GP4
                     spento=1
                 end if
                 ' Isteresi: riaccende solo se carica
                 if (batteria_mv >= soglia_on) then
-                    GPIO.4 = not  acceso ' Accende Heltec
+                    GPIO.4 = not  attivo ' Accende Heltec
                     spento = 0
                 end if
 
@@ -532,10 +532,10 @@ end sub
                     conteggio_cicli = conteggio_cicli + 1
                     ' Verifica se sono passati i giorni impostati
                     if (conteggio_cicli >= (cicli_per_giorno * giorni_riavvio)) then
-                        GPIO.4 = acceso           ' Ciclo di spegnimento GP4
+                        GPIO.4 = attivo           ' Ciclo di spegnimento GP4
                         Delay_Safe_ms(2000)
                         if (batteria_mv > soglia_off) then
-                            GPIO.4 = not acceso       ' Riaccensione
+                            GPIO.4 = not attivo       ' Riaccensione
                             spento = 0
                         else
                            spento = 1
@@ -555,9 +555,9 @@ end sub
                         if (ore = 4)  then
                             if (reset_fatto = 0) then
                                if (giorno = 1) or (giorno = 4) then
-                                 GPIO.4 = acceso
+                                 GPIO.4 = attivo
                                  Delay_Safe_ms(10000)
-                                 if ((batteria_mv > soglia_off) and (spento = 0)) then GPIO.4 = not acceso end if
+                                 if ((batteria_mv > soglia_off) and (spento = 0)) then GPIO.4 = not attivo end if
                                  reset_fatto = 1
                                end if
                             end if
@@ -573,14 +573,14 @@ end sub
                             if (giorno = 1) or (giorno = 2) or (giorno = 3) or (giorno = 4) or (giorno = 5) or (giorno = 6) or (giorno = 7)   then
                                if ((batteria_mv > soglia_off)  and (spento=0))  then
                                   'accendiamo.....
-                                  GPIO.4 = not acceso
+                                  GPIO.4 = not attivo
                                else
-                                  GPIO.4 = acceso
+                                  GPIO.4 = attivo
                                end if
                             end if
                         else
                             'fuori orario, spegniamo
-                            GPIO.4 = acceso
+                            GPIO.4 = attivo
                         end if
                     end if
                     minuti_count = 0

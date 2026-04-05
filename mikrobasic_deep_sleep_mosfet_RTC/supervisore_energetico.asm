@@ -600,9 +600,9 @@ _Init_Hardware:
 	MOVWF      _cicli_per_giorno+1
 ;supervisore_energetico.mbas,240 :: 		spento=0
 	BCF        _spento+0, BitPos(_spento+0)
-;supervisore_energetico.mbas,246 :: 		acceso=1
+;supervisore_energetico.mbas,246 :: 		attivo=1
 	MOVLW      1
-	MOVWF      _acceso+0
+	MOVWF      _attivo+0
 ;supervisore_energetico.mbas,249 :: 		RSTpin=true
 	MOVLW      255
 	MOVWF      _RSTpin+0
@@ -630,10 +630,10 @@ _Init_Hardware:
 	MOVWF      _taratura_vcc+1
 ;supervisore_energetico.mbas,262 :: 		giorni_riavvio = 0
 	CLRF       _giorni_riavvio+0
-;supervisore_energetico.mbas,267 :: 		acceso=0
-	CLRF       _acceso+0
-;supervisore_energetico.mbas,271 :: 		GPIO.4 = acceso
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,267 :: 		attivo=0
+	CLRF       _attivo+0
+;supervisore_energetico.mbas,271 :: 		GPIO.4 = attivo
+	BTFSC      _attivo+0, 0
 	GOTO       L__Init_Hardware204
 	BCF        GPIO+0, 4
 	GOTO       L__Init_Hardware205
@@ -781,8 +781,8 @@ L__Init_Hardware49:
 L__Init_Hardware208:
 	BTFSC      STATUS+0, 0
 	GOTO       L__Init_Hardware59
-;supervisore_energetico.mbas,342 :: 		GPIO.4 = not  acceso
-	COMF       _acceso+0, 0
+;supervisore_energetico.mbas,342 :: 		GPIO.4 = not  attivo
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__Init_Hardware209
@@ -904,8 +904,8 @@ L__main75:
 	BCF        GPIO+0, 5
 ;supervisore_energetico.mbas,387 :: 		Leggi_Batteria_mV()
 	CALL       _Leggi_Batteria_mV+0
-;supervisore_energetico.mbas,390 :: 		GPIO.4 =  acceso
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,390 :: 		GPIO.4 =  attivo
+	BTFSC      _attivo+0, 0
 	GOTO       L__main214
 	BCF        GPIO+0, 4
 	GOTO       L__main215
@@ -928,8 +928,8 @@ L__main215:
 L__main216:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main88
-;supervisore_energetico.mbas,396 :: 		GPIO.4 = not  acceso
-	COMF       _acceso+0, 0
+;supervisore_energetico.mbas,396 :: 		GPIO.4 = not  attivo
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__main217
@@ -1095,8 +1095,8 @@ L__main94:
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
 	GOTO       L__main100
-;supervisore_energetico.mbas,451 :: 		GPIO.4 = acceso                       ' Distacca il carico (Heltec OFF) su GP4
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,451 :: 		GPIO.4 = attivo                       ' Distacca il carico (Heltec OFF) su GP4
+	BTFSC      _attivo+0, 0
 	GOTO       L__main220
 	BCF        GPIO+0, 4
 	GOTO       L__main221
@@ -1240,8 +1240,8 @@ L__main109:
 L__main224:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main129
-;supervisore_energetico.mbas,489 :: 		GPIO.4 = not acceso ' Carico ON
-	COMF       _acceso+0, 0
+;supervisore_energetico.mbas,489 :: 		GPIO.4 = not attivo ' Carico ON
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__main225
@@ -1315,8 +1315,8 @@ L__main228:
 L__main229:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main141
-;supervisore_energetico.mbas,511 :: 		GPIO.4 =  acceso ' Spegne Heltec su GP4
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,511 :: 		GPIO.4 =  attivo ' Spegne Heltec su GP4
+	BTFSC      _attivo+0, 0
 	GOTO       L__main230
 	BCF        GPIO+0, 4
 	GOTO       L__main231
@@ -1336,8 +1336,8 @@ L__main141:
 L__main232:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main144
-;supervisore_energetico.mbas,516 :: 		GPIO.4 = not  acceso ' Accende Heltec
-	COMF       _acceso+0, 0
+;supervisore_energetico.mbas,516 :: 		GPIO.4 = not  attivo ' Accende Heltec
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__main233
@@ -1423,8 +1423,8 @@ L__main148:
 L__main235:
 	BTFSS      STATUS+0, 0
 	GOTO       L__main153
-;supervisore_energetico.mbas,535 :: 		GPIO.4 = acceso           ' Ciclo di spegnimento GP4
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,535 :: 		GPIO.4 = attivo           ' Ciclo di spegnimento GP4
+	BTFSC      _attivo+0, 0
 	GOTO       L__main236
 	BCF        GPIO+0, 4
 	GOTO       L__main237
@@ -1447,8 +1447,8 @@ L__main237:
 L__main238:
 	BTFSC      STATUS+0, 0
 	GOTO       L__main156
-;supervisore_energetico.mbas,538 :: 		GPIO.4 = not acceso       ' Riaccensione
-	COMF       _acceso+0, 0
+;supervisore_energetico.mbas,538 :: 		GPIO.4 = not attivo       ' Riaccensione
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__main239
@@ -1509,8 +1509,8 @@ L__main150:
 	IORWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main171
-;supervisore_energetico.mbas,558 :: 		GPIO.4 = acceso
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,558 :: 		GPIO.4 = attivo
+	BTFSC      _attivo+0, 0
 	GOTO       L__main241
 	BCF        GPIO+0, 4
 	GOTO       L__main242
@@ -1523,7 +1523,7 @@ L__main242:
 	MOVLW      39
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;supervisore_energetico.mbas,560 :: 		if ((batteria_mv > soglia_off) and (spento = 0)) then GPIO.4 = not acceso end if
+;supervisore_energetico.mbas,560 :: 		if ((batteria_mv > soglia_off) and (spento = 0)) then GPIO.4 = not attivo end if
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
@@ -1549,7 +1549,7 @@ L__main245:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main174
-	COMF       _acceso+0, 0
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__main246
@@ -1675,8 +1675,8 @@ L__main250:
 	ANDWF      R0+0, 1
 	BTFSC      STATUS+0, 2
 	GOTO       L__main183
-;supervisore_energetico.mbas,576 :: 		GPIO.4 = not acceso
-	COMF       _acceso+0, 0
+;supervisore_energetico.mbas,576 :: 		GPIO.4 = not attivo
+	COMF       _attivo+0, 0
 	MOVWF      R0+0
 	BTFSC      R0+0, 0
 	GOTO       L__main251
@@ -1688,8 +1688,8 @@ L__main252:
 	GOTO       L__main184
 ;supervisore_energetico.mbas,577 :: 		else
 L__main183:
-;supervisore_energetico.mbas,578 :: 		GPIO.4 = acceso
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,578 :: 		GPIO.4 = attivo
+	BTFSC      _attivo+0, 0
 	GOTO       L__main253
 	BCF        GPIO+0, 4
 	GOTO       L__main254
@@ -1703,8 +1703,8 @@ L__main180:
 	GOTO       L__main178
 ;supervisore_energetico.mbas,581 :: 		else
 L__main177:
-;supervisore_energetico.mbas,583 :: 		GPIO.4 = acceso
-	BTFSC      _acceso+0, 0
+;supervisore_energetico.mbas,583 :: 		GPIO.4 = attivo
+	BTFSC      _attivo+0, 0
 	GOTO       L__main255
 	BCF        GPIO+0, 4
 	GOTO       L__main256
