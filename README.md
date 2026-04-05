@@ -8,7 +8,7 @@ VERSIONE PILOTAGGIO ALIMENTAZIONE:
 
 ---
 
-progetto con RTC e sezan RTC, PILOTAGGIO ALIMENTAZIONE / Pin RST, stesso codice sorgente, basta impostare la variabile rtc_presente a 1 (se lo montate) o  a 0 e compilare con mikrobasic versione demo che supporta la compilazione completa per questo progetto (piccolo!) per le versioni ALIMENTAZIONE/RST, basta impostare la variabile RSTPin a 0 (alimentazione) o a 1 (Pilotaggio helte a mezzo pin RST).
+progetto con RTC e sezna RTC, PILOTAGGIO (mofulo lora) da: ALIMENTAZIONE/Pin RST, stesso codice sorgente, basta impostare la variabile rtc_presente a 1 (se lo montate) o  a 0 e compilare con mikrobasic versione demo che supporta la compilazione completa per questo progetto (piccolo!) per le versioni ALIMENTAZIONE/RST, basta impostare la variabile RSTPin a 0 (alimentazione) o a 1 (Pilotaggio helte a mezzo pin RST).
 ---
 
 ### 🕒 **1. ***Gestione RTC (Real Time Clock) - Modello DS3231*****
