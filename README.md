@@ -3,6 +3,8 @@
 ***Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.***
 
 ---
+progetto con RTC e sezan RTC, stesso codice sorgente, basta impostare la variabile rtc_presente a 1 (se lo montate) o  a 0 e compilare con mikrobasic versione demo che supporta la compilazione completa per questo progetto (piccolo!)
+---
 
 ### 🕒 **1. ***Gestione RTC (Real Time Clock) - Modello DS3231*****
 Il sistema utilizza il modulo ***DS3231***, un orologio ad alta precisione con compensazione termica. Consente di definire cicli di riavvio o fasce orarie di funzionamento.
