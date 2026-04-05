@@ -1,6 +1,6 @@
 # ☀️ ***Solar Power Manager - PIC12F683 & DS3231***
 
-***Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.***
+***Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3/v4 e tutti gli altri) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.***
 ---
 
 ***IMPORTANTE: VERSIONE PILOTAGGIO ALIMENTAZIONE:***
