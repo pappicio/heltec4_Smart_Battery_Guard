@@ -3,12 +3,12 @@
 ***Sistema intelligente di gestione energetica per nodi LoRa/Meshtastic (Heltec v3) con controllo carica batteria, reset programmato e sincronizzazione RTC manuale.***
 ---
 
-VERSIONE PILOTAGGIO ALIMENTAZIONE:
+IMPORTANTE: VERSIONE PILOTAGGIO ALIMENTAZIONE:
 ***IMPORTANTE: se si usa un heltec v4, nn sarò possibile usare lo sppnotto dedicato al pannello solare, ma un modulo esterno tipo: TP4056 altrimenti a heltec spento da mosfet, la batteria nn potra dicevere la ricarica avendo la corrente interrotta da heltec a batteria!!!!! Quindi: pannello, modulo ricarica a batteria, da batteria poi a modulo power saver e infine da modulo power saver a modulo lora, fine!***
 
 ---
 
-progetto con RTC e sezna RTC, PILOTAGGIO (mofulo lora) da: ALIMENTAZIONE/Pin RST, stesso codice sorgente, basta impostare la variabile rtc_presente a 1 (se lo montate) o  a 0 e compilare con mikrobasic versione demo che supporta la compilazione completa per questo progetto (piccolo!) per le versioni ALIMENTAZIONE/RST, basta impostare la variabile RSTPin a 0 (alimentazione) o a 1 (Pilotaggio helte a mezzo pin RST).
+progetto con RTC e sezna RTC, PILOTAGGIO (modulo lora) da: ALIMENTAZIONE/Pin RST, stesso codice sorgente, basta impostare la variabile rtc_presente a 1 (se lo montate) o  a 0 e compilare con mikrobasic versione demo che supporta la compilazione completa per questo progetto (piccolo!) per le versioni ALIMENTAZIONE/RST, basta impostare la variabile RSTPin a 0 (alimentazione) o a 1 (Pilotaggio heltec a mezzo pin RST).
 ---
 
 ### 🕒 **1. ***Gestione RTC (Real Time Clock) - Modello DS3231*****
