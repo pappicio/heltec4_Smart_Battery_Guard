@@ -166,12 +166,16 @@ sub procedure soglia_batteria
        GPIO.5 = 0                   ' Spegne LED su GP5
        delay_safe_ms(500)
        ' Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
-       lampi(6,100)
+       lampi(5,100)
     else
          if (batteria_mv > soglia_off) and (batteria_mv <= soglia_on)  then
-            ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
-            delay_safe_ms(500)
+             ' Batteria MEDIA (Zona Gialla): 3 lampi rapidi
+             delay_safe_ms(500)
              Lampi(3,100)
+         else
+         ' Batteria carica (Zona Verde): 1 lampo rapido
+             delay_safe_ms(500)
+             Lampi(1,100)
          end if
     end if
 end sub
@@ -399,9 +403,7 @@ end sub
                     spento = 1
                 end if
                 gpio.5=0
-                if (batteria_mv < soglia_on) then
-                    soglia_batteria
-                end if
+                soglia_batteria
                 sveglie_wdt = 0
                 conteggio_cicli = 0
             end if
@@ -491,9 +493,7 @@ end sub
                 else
                    spento = 1
                 end if
-                if (batteria_mv < soglia_on) then
-                    soglia_batteria
-                end if
+                soglia_batteria
                 sveglie_wdt = 13 ' Forza controllo batteria subito
                 conteggio_cicli = 0
                 minuti_count = 0

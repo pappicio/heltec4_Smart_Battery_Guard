@@ -11,10 +11,10 @@ L_Delay_Safe_ms0:
 	MOVF       R1+1, 0
 	SUBWF      FARG_Delay_Safe_ms_n+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__Delay_Safe_ms117
+	GOTO       L__Delay_Safe_ms116
 	MOVF       R1+0, 0
 	SUBWF      FARG_Delay_Safe_ms_n+0, 0
-L__Delay_Safe_ms117:
+L__Delay_Safe_ms116:
 	BTFSS      STATUS+0, 0
 	GOTO       L_Delay_Safe_ms1
 ;heltec.c,46 :: 		Delay_us(978);             // Pausa di 1ms calcolando i tempi della esecuzione altre uistruzioni in sub, si arriva ad arrotondare a 1ms circa...
@@ -116,10 +116,10 @@ L_Estrai_e_Lampeggia9:
 	MOVF       FARG_Estrai_e_Lampeggia_divisore+1, 0
 	SUBWF      _val_da_lampeggiare+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__Estrai_e_Lampeggia120
+	GOTO       L__Estrai_e_Lampeggia119
 	MOVF       FARG_Estrai_e_Lampeggia_divisore+0, 0
 	SUBWF      _val_da_lampeggiare+0, 0
-L__Estrai_e_Lampeggia120:
+L__Estrai_e_Lampeggia119:
 	BTFSS      STATUS+0, 0
 	GOTO       L_Estrai_e_Lampeggia10
 ;heltec.c,76 :: 		val_da_lampeggiare = val_da_lampeggiare - divisore;
@@ -339,17 +339,17 @@ L_Leggi_Batteria_mV12:
 	MOVF       Leggi_Batteria_mV_somma_L0+3, 0
 	MOVWF      R0+3
 	MOVF       R4+0, 0
-L__Leggi_Batteria_mV123:
+L__Leggi_Batteria_mV122:
 	BTFSC      STATUS+0, 2
-	GOTO       L__Leggi_Batteria_mV124
+	GOTO       L__Leggi_Batteria_mV123
 	RRF        R0+3, 1
 	RRF        R0+2, 1
 	RRF        R0+1, 1
 	RRF        R0+0, 1
 	BCF        R0+3, 7
 	ADDLW      255
-	GOTO       L__Leggi_Batteria_mV123
-L__Leggi_Batteria_mV124:
+	GOTO       L__Leggi_Batteria_mV122
+L__Leggi_Batteria_mV123:
 ;heltec.c,140 :: 		batteria_mv = (unsigned int)(((unsigned long)media_pulita * taratura_vcc) >> 10);
 	MOVLW      0
 	MOVWF      R0+2
@@ -372,17 +372,17 @@ L__Leggi_Batteria_mV124:
 	MOVF       R0+3, 0
 	MOVWF      R4+3
 	MOVF       R8+0, 0
-L__Leggi_Batteria_mV125:
+L__Leggi_Batteria_mV124:
 	BTFSC      STATUS+0, 2
-	GOTO       L__Leggi_Batteria_mV126
+	GOTO       L__Leggi_Batteria_mV125
 	RRF        R4+3, 1
 	RRF        R4+2, 1
 	RRF        R4+1, 1
 	RRF        R4+0, 1
 	BCF        R4+3, 7
 	ADDLW      255
-	GOTO       L__Leggi_Batteria_mV125
-L__Leggi_Batteria_mV126:
+	GOTO       L__Leggi_Batteria_mV124
+L__Leggi_Batteria_mV125:
 	MOVF       R4+0, 0
 	MOVWF      _batteria_mv+0
 	MOVF       R4+1, 0
@@ -436,10 +436,10 @@ _soglia_batteria:
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__soglia_batteria129
+	GOTO       L__soglia_batteria128
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__soglia_batteria129:
+L__soglia_batteria128:
 	BTFSS      STATUS+0, 0
 	GOTO       L_soglia_batteria17
 ;heltec.c,156 :: 		GPIO.F5 = 0;                   // Spegne LED su GP5
@@ -450,8 +450,8 @@ L__soglia_batteria129:
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,159 :: 		Lampi(6, 100);
-	MOVLW      6
+;heltec.c,159 :: 		Lampi(5, 100);
+	MOVLW      5
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      100
 	MOVWF      FARG_Lampi_t_on+0
@@ -465,22 +465,22 @@ L_soglia_batteria17:
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__soglia_batteria130
+	GOTO       L__soglia_batteria129
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__soglia_batteria130:
+L__soglia_batteria129:
 	BTFSC      STATUS+0, 0
 	GOTO       L_soglia_batteria21
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_on+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__soglia_batteria131
+	GOTO       L__soglia_batteria130
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_on+0, 0
-L__soglia_batteria131:
+L__soglia_batteria130:
 	BTFSS      STATUS+0, 0
 	GOTO       L_soglia_batteria21
-L__soglia_batteria105:
+L__soglia_batteria104:
 ;heltec.c,163 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
@@ -495,219 +495,236 @@ L__soglia_batteria105:
 	MOVLW      0
 	MOVWF      FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;heltec.c,165 :: 		}
+;heltec.c,165 :: 		} else {
+	GOTO       L_soglia_batteria22
 L_soglia_batteria21:
-;heltec.c,166 :: 		}
+;heltec.c,167 :: 		Delay_Safe_ms(500);
+	MOVLW      244
+	MOVWF      FARG_Delay_Safe_ms_n+0
+	MOVLW      1
+	MOVWF      FARG_Delay_Safe_ms_n+1
+	CALL       _Delay_Safe_ms+0
+;heltec.c,168 :: 		Lampi(1, 100);
+	MOVLW      1
+	MOVWF      FARG_Lampi_n+0
+	MOVLW      100
+	MOVWF      FARG_Lampi_t_on+0
+	MOVLW      0
+	MOVWF      FARG_Lampi_t_on+1
+	CALL       _Lampi+0
+;heltec.c,169 :: 		}
+L_soglia_batteria22:
+;heltec.c,170 :: 		}
 L_soglia_batteria18:
-;heltec.c,167 :: 		}
+;heltec.c,171 :: 		}
 L_end_soglia_batteria:
 	RETURN
 ; end of _soglia_batteria
 
 _Scrivi_Ora_RTC:
 
-;heltec.c,170 :: 		void Scrivi_Ora_RTC(unsigned char s_g_sett, unsigned char s_g, unsigned char s_m, unsigned char s_a, unsigned char s_ore, unsigned char s_min) {
-;heltec.c,171 :: 		GPIO.F5 = 1; // LED su GP5
+;heltec.c,174 :: 		void Scrivi_Ora_RTC(unsigned char s_g_sett, unsigned char s_g, unsigned char s_m, unsigned char s_a, unsigned char s_ore, unsigned char s_min) {
+;heltec.c,175 :: 		GPIO.F5 = 1; // LED su GP5
 	BSF        GPIO+0, 5
-;heltec.c,172 :: 		Delay_Safe_ms(100);
+;heltec.c,176 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,173 :: 		Soft_I2C_Init();     // Inizializza
+;heltec.c,177 :: 		Soft_I2C_Init();     // Inizializza
 	CALL       _Soft_I2C_Init+0
-;heltec.c,174 :: 		Delay_Safe_ms(100);
+;heltec.c,178 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,175 :: 		Soft_I2C_Start();
+;heltec.c,179 :: 		Soft_I2C_Start();
 	CALL       _Soft_I2C_Start+0
-;heltec.c,176 :: 		Soft_I2C_Write(0xD0); // Indirizzo DS3231 (Scrittura)
+;heltec.c,180 :: 		Soft_I2C_Write(0xD0); // Indirizzo DS3231 (Scrittura)
 	MOVLW      208
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,177 :: 		Soft_I2C_Write(0x00); // Inizia dal registro 0 (Secondi)
+;heltec.c,181 :: 		Soft_I2C_Write(0x00); // Inizia dal registro 0 (Secondi)
 	CLRF       FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,178 :: 		Soft_I2C_Write(0x00); // Secondi (sempre 00)
+;heltec.c,182 :: 		Soft_I2C_Write(0x00); // Secondi (sempre 00)
 	CLRF       FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,179 :: 		Soft_I2C_Write(s_min); // Minuti (es. 0x05)
+;heltec.c,183 :: 		Soft_I2C_Write(s_min); // Minuti (es. 0x05)
 	MOVF       FARG_Scrivi_Ora_RTC_s_min+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,180 :: 		Soft_I2C_Write(s_ore); // Ore (es. 0x04)
+;heltec.c,184 :: 		Soft_I2C_Write(s_ore); // Ore (es. 0x04)
 	MOVF       FARG_Scrivi_Ora_RTC_s_ore+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,181 :: 		Soft_I2C_Write(s_g_sett); // Giorno Settimana (1=Lun, 2=Mar... 7=Dom)
+;heltec.c,185 :: 		Soft_I2C_Write(s_g_sett); // Giorno Settimana (1=Lun, 2=Mar... 7=Dom)
 	MOVF       FARG_Scrivi_Ora_RTC_s_g_sett+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,182 :: 		Soft_I2C_Write(s_g);   // Giorno Mese (es. 0x30)
+;heltec.c,186 :: 		Soft_I2C_Write(s_g);   // Giorno Mese (es. 0x30)
 	MOVF       FARG_Scrivi_Ora_RTC_s_g+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,183 :: 		Soft_I2C_Write(s_m);   // Mese (es. 0x03)
+;heltec.c,187 :: 		Soft_I2C_Write(s_m);   // Mese (es. 0x03)
 	MOVF       FARG_Scrivi_Ora_RTC_s_m+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,184 :: 		Soft_I2C_Write(s_a);   // Anno (es. 0x26)
+;heltec.c,188 :: 		Soft_I2C_Write(s_a);   // Anno (es. 0x26)
 	MOVF       FARG_Scrivi_Ora_RTC_s_a+0, 0
 	MOVWF      FARG_Soft_I2C_Write_data_+0
 	CALL       _Soft_I2C_Write+0
-;heltec.c,185 :: 		Soft_I2C_Stop();
+;heltec.c,189 :: 		Soft_I2C_Stop();
 	CALL       _Soft_I2C_Stop+0
-;heltec.c,186 :: 		Delay_Safe_ms(800);
+;heltec.c,190 :: 		Delay_Safe_ms(800);
 	MOVLW      32
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,187 :: 		GPIO.F5 = 0;
+;heltec.c,191 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,188 :: 		Delay_Safe_ms(500);
+;heltec.c,192 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,189 :: 		}
+;heltec.c,193 :: 		}
 L_end_Scrivi_Ora_RTC:
 	RETURN
 ; end of _Scrivi_Ora_RTC
 
 _Init_Hardware:
 
-;heltec.c,192 :: 		void Init_Hardware() {
-;heltec.c,194 :: 		RTC_presente = 0;
+;heltec.c,196 :: 		void Init_Hardware() {
+;heltec.c,198 :: 		RTC_presente = 0;
 	BCF        _RTC_presente+0, BitPos(_RTC_presente+0)
-;heltec.c,195 :: 		OSCCON = 0b01100111;
+;heltec.c,199 :: 		OSCCON = 0b01100111;
 	MOVLW      103
 	MOVWF      OSCCON+0
-;heltec.c,198 :: 		CMCON0 = 7;
+;heltec.c,202 :: 		CMCON0 = 7;
 	MOVLW      7
 	MOVWF      CMCON0+0
-;heltec.c,201 :: 		ANSEL = 0b00010010;
+;heltec.c,205 :: 		ANSEL = 0b00010010;
 	MOVLW      18
 	MOVWF      ANSEL+0
-;heltec.c,204 :: 		TRISIO = 0b00001010;
+;heltec.c,208 :: 		TRISIO = 0b00001010;
 	MOVLW      10
 	MOVWF      TRISIO+0
-;heltec.c,207 :: 		OPTION_REG = 0b00001111;
+;heltec.c,211 :: 		OPTION_REG = 0b00001111;
 	MOVLW      15
 	MOVWF      OPTION_REG+0
-;heltec.c,210 :: 		WPU = 0b00000000;
+;heltec.c,214 :: 		WPU = 0b00000000;
 	CLRF       WPU+0
-;heltec.c,213 :: 		INTCON.GPIE = 1;
+;heltec.c,217 :: 		INTCON.GPIE = 1;
 	BSF        INTCON+0, 3
-;heltec.c,216 :: 		IOC.F3 = 1;
+;heltec.c,220 :: 		IOC.F3 = 1;
 	BSF        IOC+0, 3
-;heltec.c,219 :: 		conteggio_cicli = 0;
+;heltec.c,223 :: 		conteggio_cicli = 0;
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;heltec.c,222 :: 		cicli_per_giorno = 2883;
+;heltec.c,226 :: 		cicli_per_giorno = 2883;
 	MOVLW      67
 	MOVWF      _cicli_per_giorno+0
 	MOVLW      11
 	MOVWF      _cicli_per_giorno+1
-;heltec.c,224 :: 		spento = 0;
+;heltec.c,228 :: 		spento = 0;
 	BCF        _spento+0, BitPos(_spento+0)
-;heltec.c,225 :: 		attivo = 1;
+;heltec.c,229 :: 		attivo = 1;
 	BSF        _attivo+0, BitPos(_attivo+0)
-;heltec.c,228 :: 		RSTpin = 1; // true
+;heltec.c,232 :: 		RSTpin = 1; // true
 	BSF        _RSTpin+0, BitPos(_RSTpin+0)
-;heltec.c,231 :: 		RTC_presente = 1; //se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
+;heltec.c,235 :: 		RTC_presente = 1; //se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
 	BSF        _RTC_presente+0, BitPos(_RTC_presente+0)
-;heltec.c,234 :: 		finestra_oraria = 0;
+;heltec.c,238 :: 		finestra_oraria = 0;
 	BCF        _finestra_oraria+0, BitPos(_finestra_oraria+0)
-;heltec.c,235 :: 		giorni_riavvio = 3;
+;heltec.c,239 :: 		giorni_riavvio = 3;
 	MOVLW      3
 	MOVWF      _giorni_riavvio+0
-;heltec.c,239 :: 		soglia_off   = 3300;  //300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
+;heltec.c,243 :: 		soglia_off   = 3300;  //300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
 	MOVLW      228
 	MOVWF      _soglia_off+0
 	MOVLW      12
 	MOVWF      _soglia_off+1
-;heltec.c,240 :: 		soglia_on    = 3600;  //(45%), va piu che bene
+;heltec.c,244 :: 		soglia_on    = 3600;  //(45%), va piu che bene
 	MOVLW      16
 	MOVWF      _soglia_on+0
 	MOVLW      14
 	MOVWF      _soglia_on+1
-;heltec.c,241 :: 		taratura_vcc = 5010;  //segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
+;heltec.c,245 :: 		taratura_vcc = 5010;  //segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
 	MOVLW      146
 	MOVWF      _taratura_vcc+0
 	MOVLW      19
 	MOVWF      _taratura_vcc+1
-;heltec.c,242 :: 		giorni_riavvio = 0;
+;heltec.c,246 :: 		giorni_riavvio = 0;
 	CLRF       _giorni_riavvio+0
-;heltec.c,246 :: 		if (RSTpin == 1) {
+;heltec.c,250 :: 		if (RSTpin == 1) {
 	BTFSS      _RSTpin+0, BitPos(_RSTpin+0)
-	GOTO       L_Init_Hardware22
-;heltec.c,247 :: 		attivo = 0;
-	BCF        _attivo+0, BitPos(_attivo+0)
-;heltec.c,248 :: 		}
-L_Init_Hardware22:
-;heltec.c,251 :: 		GPIO.F4 = attivo;
-	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__Init_Hardware134
-	BCF        GPIO+0, 4
-	GOTO       L__Init_Hardware135
-L__Init_Hardware134:
-	BSF        GPIO+0, 4
-L__Init_Hardware135:
-;heltec.c,254 :: 		GPIO.F5 = 0;
-	BCF        GPIO+0, 5
-;heltec.c,259 :: 		if (RTC_presente == 1) {
-	BTFSS      _RTC_presente+0, BitPos(_RTC_presente+0)
 	GOTO       L_Init_Hardware23
-;heltec.c,261 :: 		TRISIO.F0 = 0;    // SDA come Uscita (GP0)
+;heltec.c,251 :: 		attivo = 0;
+	BCF        _attivo+0, BitPos(_attivo+0)
+;heltec.c,252 :: 		}
+L_Init_Hardware23:
+;heltec.c,255 :: 		GPIO.F4 = attivo;
+	BTFSC      _attivo+0, BitPos(_attivo+0)
+	GOTO       L__Init_Hardware133
+	BCF        GPIO+0, 4
+	GOTO       L__Init_Hardware134
+L__Init_Hardware133:
+	BSF        GPIO+0, 4
+L__Init_Hardware134:
+;heltec.c,258 :: 		GPIO.F5 = 0;
+	BCF        GPIO+0, 5
+;heltec.c,263 :: 		if (RTC_presente == 1) {
+	BTFSS      _RTC_presente+0, BitPos(_RTC_presente+0)
+	GOTO       L_Init_Hardware24
+;heltec.c,265 :: 		TRISIO.F0 = 0;    // SDA come Uscita (GP0)
 	BCF        TRISIO+0, 0
-;heltec.c,262 :: 		TRISIO.F2 = 0;    // SCL come Uscita (GP2)
+;heltec.c,266 :: 		TRISIO.F2 = 0;    // SCL come Uscita (GP2)
 	BCF        TRISIO+0, 2
-;heltec.c,263 :: 		GPIO.F0 = 1;      // SDA Alto (Idle I2C)
+;heltec.c,267 :: 		GPIO.F0 = 1;      // SDA Alto (Idle I2C)
 	BSF        GPIO+0, 0
-;heltec.c,264 :: 		GPIO.F2 = 1;      // SCL Alto (Idle I2C)
+;heltec.c,268 :: 		GPIO.F2 = 1;      // SCL Alto (Idle I2C)
 	BSF        GPIO+0, 2
-;heltec.c,266 :: 		giorni_riavvio = 0;
+;heltec.c,270 :: 		giorni_riavvio = 0;
 	CLRF       _giorni_riavvio+0
-;heltec.c,267 :: 		i = 0;
+;heltec.c,271 :: 		i = 0;
 	CLRF       _i+0
-;heltec.c,268 :: 		while ((GPIO.F3 == 0) && (i < 15)) {
-L_Init_Hardware24:
+;heltec.c,272 :: 		while ((GPIO.F3 == 0) && (i < 15)) {
+L_Init_Hardware25:
 	BTFSC      GPIO+0, 3
-	GOTO       L_Init_Hardware25
+	GOTO       L_Init_Hardware26
 	MOVLW      15
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
-	GOTO       L_Init_Hardware25
-L__Init_Hardware106:
-;heltec.c,269 :: 		GPIO.F5 = 1; // LED su GP5
+	GOTO       L_Init_Hardware26
+L__Init_Hardware105:
+;heltec.c,273 :: 		GPIO.F5 = 1; // LED su GP5
 	BSF        GPIO+0, 5
-;heltec.c,270 :: 		Delay_Safe_ms(100);
+;heltec.c,274 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,271 :: 		i = i + 1;
+;heltec.c,275 :: 		i = i + 1;
 	INCF       _i+0, 1
-;heltec.c,272 :: 		}
-	GOTO       L_Init_Hardware24
-L_Init_Hardware25:
-;heltec.c,275 :: 		if (i == 15) {
+;heltec.c,276 :: 		}
+	GOTO       L_Init_Hardware25
+L_Init_Hardware26:
+;heltec.c,279 :: 		if (i == 15) {
 	MOVF       _i+0, 0
 	XORLW      15
 	BTFSS      STATUS+0, 2
-	GOTO       L_Init_Hardware28
-;heltec.c,276 :: 		GPIO.F5 = 0;
+	GOTO       L_Init_Hardware29
+;heltec.c,280 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,283 :: 		Scrivi_Ora_RTC(0x06, 0x04, 0x04, 0x26, 0x20, 0x55);
+;heltec.c,287 :: 		Scrivi_Ora_RTC(0x06, 0x04, 0x04, 0x26, 0x20, 0x55);
 	MOVLW      6
 	MOVWF      FARG_Scrivi_Ora_RTC_s_g_sett+0
 	MOVLW      4
@@ -721,15 +738,15 @@ L_Init_Hardware25:
 	MOVLW      85
 	MOVWF      FARG_Scrivi_Ora_RTC_s_min+0
 	CALL       _Scrivi_Ora_RTC+0
-;heltec.c,284 :: 		GPIO.F5 = 0;
+;heltec.c,288 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,285 :: 		Delay_Safe_ms(500);
+;heltec.c,289 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,287 :: 		Lampi(10, 100);
+;heltec.c,291 :: 		Lampi(10, 100);
 	MOVLW      10
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      100
@@ -737,233 +754,221 @@ L_Init_Hardware25:
 	MOVLW      0
 	MOVWF      FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;heltec.c,288 :: 		Delay_Safe_ms(500);
+;heltec.c,292 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,289 :: 		}
-L_Init_Hardware28:
-;heltec.c,290 :: 		} else {
-	GOTO       L_Init_Hardware29
-L_Init_Hardware23:
-;heltec.c,292 :: 		TRISIO.F0 = 1;    // SDA in Alta Impedenza (Input)
-	BSF        TRISIO+0, 0
-;heltec.c,293 :: 		TRISIO.F2 = 1;    // SCL in Alta Impedenza (Input)
-	BSF        TRISIO+0, 2
-;heltec.c,294 :: 		GPIO.F0 = 0;
-	BCF        GPIO+0, 0
-;heltec.c,295 :: 		GPIO.F2 = 0;
-	BCF        GPIO+0, 2
-;heltec.c,296 :: 		}
+;heltec.c,293 :: 		}
 L_Init_Hardware29:
-;heltec.c,297 :: 		GPIO.F5 = 0;
+;heltec.c,294 :: 		} else {
+	GOTO       L_Init_Hardware30
+L_Init_Hardware24:
+;heltec.c,296 :: 		TRISIO.F0 = 1;    // SDA in Alta Impedenza (Input)
+	BSF        TRISIO+0, 0
+;heltec.c,297 :: 		TRISIO.F2 = 1;    // SCL in Alta Impedenza (Input)
+	BSF        TRISIO+0, 2
+;heltec.c,298 :: 		GPIO.F0 = 0;
+	BCF        GPIO+0, 0
+;heltec.c,299 :: 		GPIO.F2 = 0;
+	BCF        GPIO+0, 2
+;heltec.c,300 :: 		}
+L_Init_Hardware30:
+;heltec.c,301 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,300 :: 		Delay_Safe_ms(500);
+;heltec.c,304 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,303 :: 		Lampi(3, 250);
+;heltec.c,307 :: 		Lampi(3, 250);
 	MOVLW      3
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      250
 	MOVWF      FARG_Lampi_t_on+0
 	CLRF       FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;heltec.c,306 :: 		Delay_Safe_ms(500);
+;heltec.c,310 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,309 :: 		Leggi_Batteria_mV();
+;heltec.c,313 :: 		Leggi_Batteria_mV();
 	CALL       _Leggi_Batteria_mV+0
-;heltec.c,312 :: 		if (batteria_mv > soglia_off) {
+;heltec.c,316 :: 		if (batteria_mv > soglia_off) {
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__Init_Hardware136
+	GOTO       L__Init_Hardware135
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__Init_Hardware136:
+L__Init_Hardware135:
 	BTFSC      STATUS+0, 0
-	GOTO       L_Init_Hardware30
-;heltec.c,313 :: 		GPIO.F4 = !attivo;
-	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__Init_Hardware137
-	BSF        GPIO+0, 4
-	GOTO       L__Init_Hardware138
-L__Init_Hardware137:
-	BCF        GPIO+0, 4
-L__Init_Hardware138:
-;heltec.c,314 :: 		spento = 0;
-	BCF        _spento+0, BitPos(_spento+0)
-;heltec.c,315 :: 		} else {
 	GOTO       L_Init_Hardware31
-L_Init_Hardware30:
-;heltec.c,316 :: 		spento = 1;
-	BSF        _spento+0, BitPos(_spento+0)
-;heltec.c,317 :: 		}
+;heltec.c,317 :: 		GPIO.F4 = !attivo;
+	BTFSC      _attivo+0, BitPos(_attivo+0)
+	GOTO       L__Init_Hardware136
+	BSF        GPIO+0, 4
+	GOTO       L__Init_Hardware137
+L__Init_Hardware136:
+	BCF        GPIO+0, 4
+L__Init_Hardware137:
+;heltec.c,318 :: 		spento = 0;
+	BCF        _spento+0, BitPos(_spento+0)
+;heltec.c,319 :: 		} else {
+	GOTO       L_Init_Hardware32
 L_Init_Hardware31:
-;heltec.c,320 :: 		in_manutenzione = 0;
+;heltec.c,320 :: 		spento = 1;
+	BSF        _spento+0, BitPos(_spento+0)
+;heltec.c,321 :: 		}
+L_Init_Hardware32:
+;heltec.c,324 :: 		in_manutenzione = 0;
 	BCF        _in_manutenzione+0, BitPos(_in_manutenzione+0)
-;heltec.c,321 :: 		reset_fatto = 0;
+;heltec.c,325 :: 		reset_fatto = 0;
 	BCF        _reset_fatto+0, BitPos(_reset_fatto+0)
-;heltec.c,322 :: 		sveglie_wdt = 0;  // Forza lettura batteria al primo giro
+;heltec.c,326 :: 		sveglie_wdt = 0;  // Forza lettura batteria al primo giro
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;heltec.c,325 :: 		soglia_batteria();
+;heltec.c,329 :: 		soglia_batteria();
 	CALL       _soglia_batteria+0
-;heltec.c,326 :: 		}
+;heltec.c,330 :: 		}
 L_end_Init_Hardware:
 	RETURN
 ; end of _Init_Hardware
 
 _main:
 
-;heltec.c,329 :: 		void main() {
-;heltec.c,330 :: 		Init_Hardware();                // Configura il chip
+;heltec.c,333 :: 		void main() {
+;heltec.c,334 :: 		Init_Hardware();                // Configura il chip
 	CALL       _Init_Hardware+0
-;heltec.c,332 :: 		while (1) {
-L_main32:
-;heltec.c,334 :: 		if (INTCON.GPIF == 1) {
+;heltec.c,336 :: 		while (1) {
+L_main33:
+;heltec.c,338 :: 		if (INTCON.GPIF == 1) {
 	BTFSS      INTCON+0, 0
-	GOTO       L_main34
-;heltec.c,335 :: 		dummy = GPIO;
+	GOTO       L_main35
+;heltec.c,339 :: 		dummy = GPIO;
 	MOVF       GPIO+0, 0
 	MOVWF      _dummy+0
-;heltec.c,336 :: 		INTCON.GPIF = 0;
+;heltec.c,340 :: 		INTCON.GPIF = 0;
 	BCF        INTCON+0, 0
-;heltec.c,337 :: 		}
-L_main34:
-;heltec.c,340 :: 		if (GPIO.F3 == 0) {
+;heltec.c,341 :: 		}
+L_main35:
+;heltec.c,344 :: 		if (GPIO.F3 == 0) {
 	BTFSC      GPIO+0, 3
-	GOTO       L_main35
-;heltec.c,341 :: 		i = 0;
+	GOTO       L_main36
+;heltec.c,345 :: 		i = 0;
 	CLRF       _i+0
-;heltec.c,342 :: 		while ((GPIO.F3 == 0) && (i < 50)) {
-L_main36:
+;heltec.c,346 :: 		while ((GPIO.F3 == 0) && (i < 50)) {
+L_main37:
 	BTFSC      GPIO+0, 3
-	GOTO       L_main37
+	GOTO       L_main38
 	MOVLW      50
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
-	GOTO       L_main37
-L__main115:
-;heltec.c,343 :: 		Delay_Safe_ms(100); // Campionamento pressione (100ms * 50 = 5s max)
+	GOTO       L_main38
+L__main114:
+;heltec.c,347 :: 		Delay_Safe_ms(100); // Campionamento pressione (100ms * 50 = 5s max)
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,344 :: 		i = i + 1;
+;heltec.c,348 :: 		i = i + 1;
 	INCF       _i+0, 1
-;heltec.c,345 :: 		if (i == 10) {
+;heltec.c,349 :: 		if (i == 10) {
 	MOVF       _i+0, 0
 	XORLW      10
 	BTFSS      STATUS+0, 2
-	GOTO       L_main40
-;heltec.c,346 :: 		GPIO.F5 = 1;     // Accende LED dopo 1 secondo di pressione (GP5)
+	GOTO       L_main41
+;heltec.c,350 :: 		GPIO.F5 = 1;     // Accende LED dopo 1 secondo di pressione (GP5)
 	BSF        GPIO+0, 5
-;heltec.c,347 :: 		}
-L_main40:
-;heltec.c,348 :: 		if (i == 25) {
+;heltec.c,351 :: 		}
+L_main41:
+;heltec.c,352 :: 		if (i == 25) {
 	MOVF       _i+0, 0
 	XORLW      25
 	BTFSS      STATUS+0, 2
-	GOTO       L_main41
-;heltec.c,349 :: 		GPIO.F5 = 0;     // Spegne LED dopo 2.5 secondi (cambio modalità)
+	GOTO       L_main42
+;heltec.c,353 :: 		GPIO.F5 = 0;     // Spegne LED dopo 2.5 secondi (cambio modalità)
 	BCF        GPIO+0, 5
-;heltec.c,350 :: 		}
-L_main41:
-;heltec.c,351 :: 		}
-	GOTO       L_main36
-L_main37:
-;heltec.c,354 :: 		if ((i >= 10) && (i < 25)) {
+;heltec.c,354 :: 		}
+L_main42:
+;heltec.c,355 :: 		}
+	GOTO       L_main37
+L_main38:
+;heltec.c,358 :: 		if ((i >= 10) && (i < 25)) {
 	MOVLW      10
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
-	GOTO       L_main44
+	GOTO       L_main45
 	MOVLW      25
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
-	GOTO       L_main44
-L__main114:
-;heltec.c,355 :: 		GPIO.F5 = 0;
+	GOTO       L_main45
+L__main113:
+;heltec.c,359 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,356 :: 		Leggi_Batteria_mV();
+;heltec.c,360 :: 		Leggi_Batteria_mV();
 	CALL       _Leggi_Batteria_mV+0
-;heltec.c,359 :: 		GPIO.F4 = attivo;
+;heltec.c,363 :: 		GPIO.F4 = attivo;
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main140
+	GOTO       L__main139
 	BCF        GPIO+0, 4
-	GOTO       L__main141
-L__main140:
+	GOTO       L__main140
+L__main139:
 	BSF        GPIO+0, 4
-L__main141:
-;heltec.c,360 :: 		Delay_Safe_ms(2000);
+L__main140:
+;heltec.c,364 :: 		Delay_Safe_ms(2000);
 	MOVLW      208
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      7
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,363 :: 		if (batteria_mv > soglia_off) {
+;heltec.c,367 :: 		if (batteria_mv > soglia_off) {
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main142
+	GOTO       L__main141
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__main142:
+L__main141:
 	BTFSC      STATUS+0, 0
-	GOTO       L_main45
-;heltec.c,364 :: 		GPIO.F4 = !attivo;
-	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main143
-	BSF        GPIO+0, 4
-	GOTO       L__main144
-L__main143:
-	BCF        GPIO+0, 4
-L__main144:
-;heltec.c,365 :: 		spento = 0;
-	BCF        _spento+0, BitPos(_spento+0)
-;heltec.c,366 :: 		} else {
 	GOTO       L_main46
-L_main45:
-;heltec.c,367 :: 		spento = 1;
-	BSF        _spento+0, BitPos(_spento+0)
-;heltec.c,368 :: 		}
-L_main46:
-;heltec.c,369 :: 		GPIO.F5 = 0;
-	BCF        GPIO+0, 5
-;heltec.c,370 :: 		if (batteria_mv < soglia_on) {
-	MOVF       _soglia_on+1, 0
-	SUBWF      _batteria_mv+1, 0
-	BTFSS      STATUS+0, 2
-	GOTO       L__main145
-	MOVF       _soglia_on+0, 0
-	SUBWF      _batteria_mv+0, 0
-L__main145:
-	BTFSC      STATUS+0, 0
+;heltec.c,368 :: 		GPIO.F4 = !attivo;
+	BTFSC      _attivo+0, BitPos(_attivo+0)
+	GOTO       L__main142
+	BSF        GPIO+0, 4
+	GOTO       L__main143
+L__main142:
+	BCF        GPIO+0, 4
+L__main143:
+;heltec.c,369 :: 		spento = 0;
+	BCF        _spento+0, BitPos(_spento+0)
+;heltec.c,370 :: 		} else {
 	GOTO       L_main47
-;heltec.c,371 :: 		soglia_batteria();
-	CALL       _soglia_batteria+0
+L_main46:
+;heltec.c,371 :: 		spento = 1;
+	BSF        _spento+0, BitPos(_spento+0)
 ;heltec.c,372 :: 		}
 L_main47:
-;heltec.c,373 :: 		sveglie_wdt = 0;
+;heltec.c,373 :: 		GPIO.F5 = 0;
+	BCF        GPIO+0, 5
+;heltec.c,374 :: 		soglia_batteria();
+	CALL       _soglia_batteria+0
+;heltec.c,376 :: 		sveglie_wdt = 0;
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;heltec.c,374 :: 		conteggio_cicli = 0;
+;heltec.c,377 :: 		conteggio_cicli = 0;
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;heltec.c,375 :: 		}
-L_main44:
-;heltec.c,378 :: 		if ((i >= 25) && (i < 50)) {
+;heltec.c,378 :: 		}
+L_main45:
+;heltec.c,381 :: 		if ((i >= 25) && (i < 50)) {
 	MOVLW      25
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
@@ -972,53 +977,53 @@ L_main44:
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_main50
-L__main113:
-;heltec.c,379 :: 		GPIO.F5 = 0;
+L__main112:
+;heltec.c,382 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,380 :: 		Leggi_Batteria_mV();
+;heltec.c,383 :: 		Leggi_Batteria_mV();
 	CALL       _Leggi_Batteria_mV+0
-;heltec.c,381 :: 		Delay_Safe_ms(1000);
+;heltec.c,384 :: 		Delay_Safe_ms(1000);
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,384 :: 		val_da_lampeggiare = batteria_mv;
+;heltec.c,387 :: 		val_da_lampeggiare = batteria_mv;
 	MOVF       _batteria_mv+0, 0
 	MOVWF      _val_da_lampeggiare+0
 	MOVF       _batteria_mv+1, 0
 	MOVWF      _val_da_lampeggiare+1
-;heltec.c,386 :: 		Estrai_e_Lampeggia(1000); // Migliaia
+;heltec.c,389 :: 		Estrai_e_Lampeggia(1000); // Migliaia
 	MOVLW      232
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	MOVLW      3
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;heltec.c,387 :: 		Estrai_e_Lampeggia(100);  // Centinaia
+;heltec.c,390 :: 		Estrai_e_Lampeggia(100);  // Centinaia
 	MOVLW      100
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	MOVLW      0
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;heltec.c,388 :: 		Estrai_e_Lampeggia(10);   // Decine
+;heltec.c,391 :: 		Estrai_e_Lampeggia(10);   // Decine
 	MOVLW      10
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	MOVLW      0
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;heltec.c,389 :: 		Lampeggia_Cifra(0);       // Unità fisse
+;heltec.c,392 :: 		Lampeggia_Cifra(0);       // Unità fisse
 	CLRF       FARG_Lampeggia_Cifra_c+0
 	CALL       _Lampeggia_Cifra+0
-;heltec.c,392 :: 		if (RTC_presente == 1) {
+;heltec.c,395 :: 		if (RTC_presente == 1) {
 	BTFSS      _RTC_presente+0, BitPos(_RTC_presente+0)
 	GOTO       L_main51
-;heltec.c,393 :: 		Delay_Safe_ms(1000);
+;heltec.c,396 :: 		Delay_Safe_ms(1000);
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,394 :: 		Lampi(2, 100);
+;heltec.c,397 :: 		Lampi(2, 100);
 	MOVLW      2
 	MOVWF      FARG_Lampi_n+0
 	MOVLW      100
@@ -1026,76 +1031,76 @@ L__main113:
 	MOVLW      0
 	MOVWF      FARG_Lampi_t_on+1
 	CALL       _Lampi+0
-;heltec.c,395 :: 		Leggi_Ora_RTC();
+;heltec.c,398 :: 		Leggi_Ora_RTC();
 	CALL       _Leggi_Ora_RTC+0
-;heltec.c,396 :: 		GPIO.F5 = 1;
+;heltec.c,399 :: 		GPIO.F5 = 1;
 	BSF        GPIO+0, 5
-;heltec.c,397 :: 		Delay_Safe_ms(100);
+;heltec.c,400 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,398 :: 		GPIO.F5 = 0;
+;heltec.c,401 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,399 :: 		Delay_Safe_ms(1000);
+;heltec.c,402 :: 		Delay_Safe_ms(1000);
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,401 :: 		val_da_lampeggiare = (unsigned int)ore;
+;heltec.c,404 :: 		val_da_lampeggiare = (unsigned int)ore;
 	MOVF       _ore+0, 0
 	MOVWF      _val_da_lampeggiare+0
 	CLRF       _val_da_lampeggiare+1
-;heltec.c,402 :: 		Estrai_e_Lampeggia(10);
+;heltec.c,405 :: 		Estrai_e_Lampeggia(10);
 	MOVLW      10
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	MOVLW      0
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;heltec.c,403 :: 		Lampeggia_Cifra((unsigned char)val_da_lampeggiare); // Il resto sono le unità
+;heltec.c,406 :: 		Lampeggia_Cifra((unsigned char)val_da_lampeggiare); // Il resto sono le unità
 	MOVF       _val_da_lampeggiare+0, 0
 	MOVWF      FARG_Lampeggia_Cifra_c+0
 	CALL       _Lampeggia_Cifra+0
-;heltec.c,405 :: 		Delay_Safe_ms(1000);
+;heltec.c,408 :: 		Delay_Safe_ms(1000);
 	MOVLW      232
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      3
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,408 :: 		val_da_lampeggiare = (unsigned int)minuti;
+;heltec.c,411 :: 		val_da_lampeggiare = (unsigned int)minuti;
 	MOVF       _minuti+0, 0
 	MOVWF      _val_da_lampeggiare+0
 	CLRF       _val_da_lampeggiare+1
-;heltec.c,409 :: 		Estrai_e_Lampeggia(10);
+;heltec.c,412 :: 		Estrai_e_Lampeggia(10);
 	MOVLW      10
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+0
 	MOVLW      0
 	MOVWF      FARG_Estrai_e_Lampeggia_divisore+1
 	CALL       _Estrai_e_Lampeggia+0
-;heltec.c,410 :: 		Lampeggia_Cifra((unsigned char)val_da_lampeggiare);
+;heltec.c,413 :: 		Lampeggia_Cifra((unsigned char)val_da_lampeggiare);
 	MOVF       _val_da_lampeggiare+0, 0
 	MOVWF      FARG_Lampeggia_Cifra_c+0
 	CALL       _Lampeggia_Cifra+0
-;heltec.c,411 :: 		}
+;heltec.c,414 :: 		}
 L_main51:
-;heltec.c,412 :: 		}
+;heltec.c,415 :: 		}
 L_main50:
-;heltec.c,415 :: 		if (i >= 50) {
+;heltec.c,418 :: 		if (i >= 50) {
 	MOVLW      50
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
 	GOTO       L_main52
-;heltec.c,416 :: 		GPIO.F4 = attivo;                       // Distacca il carico (Heltec OFF) su GP4
+;heltec.c,419 :: 		GPIO.F4 = attivo;                       // Distacca il carico (Heltec OFF) su GP4
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main146
+	GOTO       L__main144
 	BCF        GPIO+0, 4
-	GOTO       L__main147
-L__main146:
+	GOTO       L__main145
+L__main144:
 	BSF        GPIO+0, 4
-L__main147:
-;heltec.c,418 :: 		for (j = 1; j <= 20; j++) {
+L__main145:
+;heltec.c,421 :: 		for (j = 1; j <= 20; j++) {
 	MOVLW      1
 	MOVWF      _j+0
 L_main53:
@@ -1103,44 +1108,44 @@ L_main53:
 	SUBLW      20
 	BTFSS      STATUS+0, 0
 	GOTO       L_main54
-;heltec.c,419 :: 		GPIO.F5 = !GPIO.F5;         // Lampeggio veloce di conferma
+;heltec.c,422 :: 		GPIO.F5 = !GPIO.F5;         // Lampeggio veloce di conferma
 	MOVLW      32
 	XORWF      GPIO+0, 1
-;heltec.c,420 :: 		Delay_Safe_ms(100);
+;heltec.c,423 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,418 :: 		for (j = 1; j <= 20; j++) {
+;heltec.c,421 :: 		for (j = 1; j <= 20; j++) {
 	INCF       _j+0, 1
-;heltec.c,421 :: 		}
+;heltec.c,424 :: 		}
 	GOTO       L_main53
 L_main54:
-;heltec.c,422 :: 		GPIO.F5 = 0;
+;heltec.c,425 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,423 :: 		in_manutenzione = 1;          // Entra nel loop di blocco
+;heltec.c,426 :: 		in_manutenzione = 1;          // Entra nel loop di blocco
 	BSF        _in_manutenzione+0, BitPos(_in_manutenzione+0)
-;heltec.c,424 :: 		while (in_manutenzione == 1) {
+;heltec.c,427 :: 		while (in_manutenzione == 1) {
 L_main56:
 	BTFSS      _in_manutenzione+0, BitPos(_in_manutenzione+0)
 	GOTO       L_main57
-;heltec.c,426 :: 		GPIO.F5 = 1;
+;heltec.c,429 :: 		GPIO.F5 = 1;
 	BSF        GPIO+0, 5
-;heltec.c,427 :: 		Delay_Safe_ms(500);
+;heltec.c,430 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,428 :: 		GPIO.F5 = 0;
+;heltec.c,431 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,429 :: 		if (GPIO.F3 == 0) {        // Controlla se si preme di nuovo per uscire
+;heltec.c,432 :: 		if (GPIO.F3 == 0) {        // Controlla se si preme di nuovo per uscire
 	BTFSC      GPIO+0, 3
 	GOTO       L_main58
-;heltec.c,430 :: 		i = 0;
+;heltec.c,433 :: 		i = 0;
 	CLRF       _i+0
-;heltec.c,431 :: 		while ((GPIO.F3 == 0) && (i < 50)) {
+;heltec.c,434 :: 		while ((GPIO.F3 == 0) && (i < 50)) {
 L_main59:
 	BTFSC      GPIO+0, 3
 	GOTO       L_main60
@@ -1148,26 +1153,26 @@ L_main59:
 	SUBWF      _i+0, 0
 	BTFSC      STATUS+0, 0
 	GOTO       L_main60
-L__main112:
-;heltec.c,432 :: 		Delay_Safe_ms(100);
+L__main111:
+;heltec.c,435 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,433 :: 		i = i + 1;
+;heltec.c,436 :: 		i = i + 1;
 	INCF       _i+0, 1
-;heltec.c,434 :: 		}
+;heltec.c,437 :: 		}
 	GOTO       L_main59
 L_main60:
-;heltec.c,435 :: 		if (i >= 50) {       // Uscita dopo altri 5 secondi
+;heltec.c,438 :: 		if (i >= 50) {       // Uscita dopo altri 5 secondi
 	MOVLW      50
 	SUBWF      _i+0, 0
 	BTFSS      STATUS+0, 0
 	GOTO       L_main63
-;heltec.c,436 :: 		in_manutenzione = 0;
+;heltec.c,439 :: 		in_manutenzione = 0;
 	BCF        _in_manutenzione+0, BitPos(_in_manutenzione+0)
-;heltec.c,438 :: 		for (j = 1; j <= 20; j++) {
+;heltec.c,441 :: 		for (j = 1; j <= 20; j++) {
 	MOVLW      1
 	MOVWF      _j+0
 L_main64:
@@ -1175,185 +1180,173 @@ L_main64:
 	SUBLW      20
 	BTFSS      STATUS+0, 0
 	GOTO       L_main65
-;heltec.c,439 :: 		GPIO.F5 = !GPIO.F5;
+;heltec.c,442 :: 		GPIO.F5 = !GPIO.F5;
 	MOVLW      32
 	XORWF      GPIO+0, 1
-;heltec.c,440 :: 		Delay_Safe_ms(100);
+;heltec.c,443 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,438 :: 		for (j = 1; j <= 20; j++) {
+;heltec.c,441 :: 		for (j = 1; j <= 20; j++) {
 	INCF       _j+0, 1
-;heltec.c,441 :: 		}
+;heltec.c,444 :: 		}
 	GOTO       L_main64
 L_main65:
-;heltec.c,442 :: 		GPIO.F5 = 0;
+;heltec.c,445 :: 		GPIO.F5 = 0;
 	BCF        GPIO+0, 5
-;heltec.c,443 :: 		}
+;heltec.c,446 :: 		}
 L_main63:
-;heltec.c,444 :: 		} else {
+;heltec.c,447 :: 		} else {
 	GOTO       L_main67
 L_main58:
-;heltec.c,445 :: 		Delay_Safe_ms(500);
+;heltec.c,448 :: 		Delay_Safe_ms(500);
 	MOVLW      244
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      1
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,446 :: 		}
+;heltec.c,449 :: 		}
 L_main67:
-;heltec.c,447 :: 		asm clrwdt;
+;heltec.c,450 :: 		asm clrwdt;
 	CLRWDT
-;heltec.c,448 :: 		}
+;heltec.c,451 :: 		}
 	GOTO       L_main56
 L_main57:
-;heltec.c,450 :: 		Leggi_Batteria_mV();
+;heltec.c,453 :: 		Leggi_Batteria_mV();
 	CALL       _Leggi_Batteria_mV+0
-;heltec.c,451 :: 		if (batteria_mv > soglia_off) {
+;heltec.c,454 :: 		if (batteria_mv > soglia_off) {
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main148
+	GOTO       L__main146
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__main148:
+L__main146:
 	BTFSC      STATUS+0, 0
 	GOTO       L_main68
-;heltec.c,452 :: 		GPIO.F4 = !attivo; // Carico ON
+;heltec.c,455 :: 		GPIO.F4 = !attivo; // Carico ON
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main149
+	GOTO       L__main147
 	BSF        GPIO+0, 4
-	GOTO       L__main150
-L__main149:
+	GOTO       L__main148
+L__main147:
 	BCF        GPIO+0, 4
-L__main150:
-;heltec.c,453 :: 		spento = 0;
+L__main148:
+;heltec.c,456 :: 		spento = 0;
 	BCF        _spento+0, BitPos(_spento+0)
-;heltec.c,454 :: 		} else {
+;heltec.c,457 :: 		} else {
 	GOTO       L_main69
 L_main68:
-;heltec.c,455 :: 		spento = 1;
+;heltec.c,458 :: 		spento = 1;
 	BSF        _spento+0, BitPos(_spento+0)
-;heltec.c,456 :: 		}
-L_main69:
-;heltec.c,457 :: 		if (batteria_mv < soglia_on) {
-	MOVF       _soglia_on+1, 0
-	SUBWF      _batteria_mv+1, 0
-	BTFSS      STATUS+0, 2
-	GOTO       L__main151
-	MOVF       _soglia_on+0, 0
-	SUBWF      _batteria_mv+0, 0
-L__main151:
-	BTFSC      STATUS+0, 0
-	GOTO       L_main70
-;heltec.c,458 :: 		soglia_batteria();
-	CALL       _soglia_batteria+0
 ;heltec.c,459 :: 		}
-L_main70:
-;heltec.c,460 :: 		sveglie_wdt = 13; // Forza controllo batteria subito
+L_main69:
+;heltec.c,460 :: 		soglia_batteria();
+	CALL       _soglia_batteria+0
+;heltec.c,462 :: 		sveglie_wdt = 13; // Forza controllo batteria subito
 	MOVLW      13
 	MOVWF      _sveglie_wdt+0
 	MOVLW      0
 	MOVWF      _sveglie_wdt+1
-;heltec.c,461 :: 		conteggio_cicli = 0;
+;heltec.c,463 :: 		conteggio_cicli = 0;
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;heltec.c,462 :: 		minuti_count = 0;
+;heltec.c,464 :: 		minuti_count = 0;
 	CLRF       _minuti_count+0
-;heltec.c,463 :: 		asm clrwdt;
+;heltec.c,465 :: 		asm clrwdt;
 	CLRWDT
-;heltec.c,464 :: 		}
+;heltec.c,466 :: 		}
 L_main52:
-;heltec.c,465 :: 		}
-L_main35:
-;heltec.c,468 :: 		if (in_manutenzione == 0) {
+;heltec.c,467 :: 		}
+L_main36:
+;heltec.c,470 :: 		if (in_manutenzione == 0) {
 	BTFSC      _in_manutenzione+0, BitPos(_in_manutenzione+0)
-	GOTO       L_main71
-;heltec.c,470 :: 		if (sveglie_wdt >= 13) {
+	GOTO       L_main70
+;heltec.c,472 :: 		if (sveglie_wdt >= 13) {
 	MOVLW      0
 	SUBWF      _sveglie_wdt+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main152
+	GOTO       L__main149
 	MOVLW      13
 	SUBWF      _sveglie_wdt+0, 0
-L__main152:
+L__main149:
 	BTFSS      STATUS+0, 0
-	GOTO       L_main72
-;heltec.c,471 :: 		Leggi_Batteria_mV();
+	GOTO       L_main71
+;heltec.c,473 :: 		Leggi_Batteria_mV();
 	CALL       _Leggi_Batteria_mV+0
-;heltec.c,473 :: 		if (batteria_mv <= soglia_off) {
+;heltec.c,475 :: 		if (batteria_mv <= soglia_off) {
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main153
+	GOTO       L__main150
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__main153:
+L__main150:
 	BTFSS      STATUS+0, 0
-	GOTO       L_main73
-;heltec.c,474 :: 		GPIO.F4 = attivo; // Spegne Heltec su GP4
+	GOTO       L_main72
+;heltec.c,476 :: 		GPIO.F4 = attivo; // Spegne Heltec su GP4
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main154
+	GOTO       L__main151
 	BCF        GPIO+0, 4
-	GOTO       L__main155
-L__main154:
+	GOTO       L__main152
+L__main151:
 	BSF        GPIO+0, 4
-L__main155:
-;heltec.c,475 :: 		spento = 1;
+L__main152:
+;heltec.c,477 :: 		spento = 1;
 	BSF        _spento+0, BitPos(_spento+0)
-;heltec.c,476 :: 		}
-L_main73:
-;heltec.c,478 :: 		if (batteria_mv >= soglia_on) {
+;heltec.c,478 :: 		}
+L_main72:
+;heltec.c,480 :: 		if (batteria_mv >= soglia_on) {
 	MOVF       _soglia_on+1, 0
 	SUBWF      _batteria_mv+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main156
+	GOTO       L__main153
 	MOVF       _soglia_on+0, 0
 	SUBWF      _batteria_mv+0, 0
-L__main156:
+L__main153:
 	BTFSS      STATUS+0, 0
-	GOTO       L_main74
-;heltec.c,479 :: 		GPIO.F4 = !attivo; // Accende Heltec
+	GOTO       L_main73
+;heltec.c,481 :: 		GPIO.F4 = !attivo; // Accende Heltec
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main157
+	GOTO       L__main154
 	BSF        GPIO+0, 4
-	GOTO       L__main158
-L__main157:
+	GOTO       L__main155
+L__main154:
 	BCF        GPIO+0, 4
-L__main158:
-;heltec.c,480 :: 		spento = 0;
+L__main155:
+;heltec.c,482 :: 		spento = 0;
 	BCF        _spento+0, BitPos(_spento+0)
-;heltec.c,481 :: 		}
-L_main74:
-;heltec.c,483 :: 		sveglie_wdt = 0; // Reset qui dopo il controllo batteria
+;heltec.c,483 :: 		}
+L_main73:
+;heltec.c,485 :: 		sveglie_wdt = 0; // Reset qui dopo il controllo batteria
 	CLRF       _sveglie_wdt+0
 	CLRF       _sveglie_wdt+1
-;heltec.c,485 :: 		if (RTC_presente == 1) {
+;heltec.c,487 :: 		if (RTC_presente == 1) {
 	BTFSS      _RTC_presente+0, BitPos(_RTC_presente+0)
-	GOTO       L_main75
-;heltec.c,486 :: 		giorni_riavvio = 0;
+	GOTO       L_main74
+;heltec.c,488 :: 		giorni_riavvio = 0;
 	CLRF       _giorni_riavvio+0
-;heltec.c,487 :: 		minuti_count = minuti_count + 1;
+;heltec.c,489 :: 		minuti_count = minuti_count + 1;
 	INCF       _minuti_count+0, 1
-;heltec.c,488 :: 		} else {
-	GOTO       L_main76
-L_main75:
-;heltec.c,489 :: 		minuti_count = 0;
+;heltec.c,490 :: 		} else {
+	GOTO       L_main75
+L_main74:
+;heltec.c,491 :: 		minuti_count = 0;
 	CLRF       _minuti_count+0
-;heltec.c,490 :: 		finestra_oraria = 0;
+;heltec.c,492 :: 		finestra_oraria = 0;
 	BCF        _finestra_oraria+0, BitPos(_finestra_oraria+0)
-;heltec.c,491 :: 		}
-L_main76:
-;heltec.c,494 :: 		if (giorni_riavvio > 0) {
+;heltec.c,493 :: 		}
+L_main75:
+;heltec.c,496 :: 		if (giorni_riavvio > 0) {
 	MOVF       _giorni_riavvio+0, 0
 	SUBLW      0
 	BTFSC      STATUS+0, 0
-	GOTO       L_main77
-;heltec.c,495 :: 		conteggio_cicli = conteggio_cicli + 1;
+	GOTO       L_main76
+;heltec.c,497 :: 		conteggio_cicli = conteggio_cicli + 1;
 	MOVF       _conteggio_cicli+0, 0
 	MOVWF      R0+0
 	MOVF       _conteggio_cicli+1, 0
@@ -1377,7 +1370,7 @@ L_main76:
 	MOVWF      _conteggio_cicli+2
 	MOVF       R0+3, 0
 	MOVWF      _conteggio_cicli+3
-;heltec.c,497 :: 		if (conteggio_cicli >= ((unsigned long)cicli_per_giorno * giorni_riavvio)) {
+;heltec.c,499 :: 		if (conteggio_cicli >= ((unsigned long)cicli_per_giorno * giorni_riavvio)) {
 	MOVF       _cicli_per_giorno+0, 0
 	MOVWF      R0+0
 	MOVF       _cicli_per_giorno+1, 0
@@ -1393,114 +1386,171 @@ L_main76:
 	MOVF       R0+3, 0
 	SUBWF      _conteggio_cicli+3, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main159
+	GOTO       L__main156
 	MOVF       R0+2, 0
 	SUBWF      _conteggio_cicli+2, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main159
+	GOTO       L__main156
 	MOVF       R0+1, 0
 	SUBWF      _conteggio_cicli+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main159
+	GOTO       L__main156
 	MOVF       R0+0, 0
 	SUBWF      _conteggio_cicli+0, 0
-L__main159:
+L__main156:
 	BTFSS      STATUS+0, 0
-	GOTO       L_main78
-;heltec.c,498 :: 		GPIO.F4 = attivo;           // Ciclo di spegnimento GP4
+	GOTO       L_main77
+;heltec.c,500 :: 		GPIO.F4 = attivo;           // Ciclo di spegnimento GP4
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main160
+	GOTO       L__main157
 	BCF        GPIO+0, 4
-	GOTO       L__main161
-L__main160:
+	GOTO       L__main158
+L__main157:
 	BSF        GPIO+0, 4
-L__main161:
-;heltec.c,499 :: 		Delay_Safe_ms(2000);
+L__main158:
+;heltec.c,501 :: 		Delay_Safe_ms(2000);
 	MOVLW      208
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      7
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,500 :: 		if (batteria_mv > soglia_off) {
+;heltec.c,502 :: 		if (batteria_mv > soglia_off) {
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
-	GOTO       L__main162
+	GOTO       L__main159
 	MOVF       _batteria_mv+0, 0
 	SUBWF      _soglia_off+0, 0
-L__main162:
+L__main159:
 	BTFSC      STATUS+0, 0
-	GOTO       L_main79
-;heltec.c,501 :: 		GPIO.F4 = !attivo;       // Riaccensione
+	GOTO       L_main78
+;heltec.c,503 :: 		GPIO.F4 = !attivo;       // Riaccensione
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main163
+	GOTO       L__main160
 	BSF        GPIO+0, 4
-	GOTO       L__main164
-L__main163:
+	GOTO       L__main161
+L__main160:
 	BCF        GPIO+0, 4
-L__main164:
-;heltec.c,502 :: 		spento = 0;
+L__main161:
+;heltec.c,504 :: 		spento = 0;
 	BCF        _spento+0, BitPos(_spento+0)
-;heltec.c,503 :: 		} else {
-	GOTO       L_main80
-L_main79:
-;heltec.c,504 :: 		spento = 1;
+;heltec.c,505 :: 		} else {
+	GOTO       L_main79
+L_main78:
+;heltec.c,506 :: 		spento = 1;
 	BSF        _spento+0, BitPos(_spento+0)
-;heltec.c,505 :: 		}
-L_main80:
-;heltec.c,506 :: 		conteggio_cicli = 0;  // Reset timer
+;heltec.c,507 :: 		}
+L_main79:
+;heltec.c,508 :: 		conteggio_cicli = 0;  // Reset timer
 	CLRF       _conteggio_cicli+0
 	CLRF       _conteggio_cicli+1
 	CLRF       _conteggio_cicli+2
 	CLRF       _conteggio_cicli+3
-;heltec.c,507 :: 		}
-L_main78:
-;heltec.c,508 :: 		}
+;heltec.c,509 :: 		}
 L_main77:
-;heltec.c,511 :: 		if (minuti_count >= 20) {
+;heltec.c,510 :: 		}
+L_main76:
+;heltec.c,513 :: 		if (minuti_count >= 20) {
 	MOVLW      20
 	SUBWF      _minuti_count+0, 0
 	BTFSS      STATUS+0, 0
-	GOTO       L_main81
-;heltec.c,512 :: 		Leggi_Ora_RTC();
+	GOTO       L_main80
+;heltec.c,514 :: 		Leggi_Ora_RTC();
 	CALL       _Leggi_Ora_RTC+0
-;heltec.c,515 :: 		if (finestra_oraria == 0) {
+;heltec.c,517 :: 		if (finestra_oraria == 0) {
 	BTFSC      _finestra_oraria+0, BitPos(_finestra_oraria+0)
-	GOTO       L_main82
-;heltec.c,517 :: 		if (ore == 4) {
+	GOTO       L_main81
+;heltec.c,519 :: 		if (ore == 4) {
 	MOVF       _ore+0, 0
 	XORLW      4
 	BTFSS      STATUS+0, 2
-	GOTO       L_main83
-;heltec.c,518 :: 		if (reset_fatto == 0) {
+	GOTO       L_main82
+;heltec.c,520 :: 		if (reset_fatto == 0) {
 	BTFSC      _reset_fatto+0, BitPos(_reset_fatto+0)
-	GOTO       L_main84
-;heltec.c,519 :: 		if ((giorno == 1) || (giorno == 4)) {
+	GOTO       L_main83
+;heltec.c,521 :: 		if ((giorno == 1) || (giorno == 4)) {
 	MOVF       _giorno+0, 0
 	XORLW      1
 	BTFSC      STATUS+0, 2
-	GOTO       L__main111
+	GOTO       L__main110
 	MOVF       _giorno+0, 0
 	XORLW      4
 	BTFSC      STATUS+0, 2
-	GOTO       L__main111
-	GOTO       L_main87
-L__main111:
-;heltec.c,520 :: 		GPIO.F4 = attivo;
+	GOTO       L__main110
+	GOTO       L_main86
+L__main110:
+;heltec.c,522 :: 		GPIO.F4 = attivo;
 	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main165
+	GOTO       L__main162
 	BCF        GPIO+0, 4
-	GOTO       L__main166
-L__main165:
+	GOTO       L__main163
+L__main162:
 	BSF        GPIO+0, 4
-L__main166:
-;heltec.c,521 :: 		Delay_Safe_ms(10000);
+L__main163:
+;heltec.c,523 :: 		Delay_Safe_ms(10000);
 	MOVLW      16
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      39
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,522 :: 		if ((batteria_mv > soglia_off) && (spento == 0)) { GPIO.F4 = !attivo; }
+;heltec.c,524 :: 		if ((batteria_mv > soglia_off) && (spento == 0)) { GPIO.F4 = !attivo; }
+	MOVF       _batteria_mv+1, 0
+	SUBWF      _soglia_off+1, 0
+	BTFSS      STATUS+0, 2
+	GOTO       L__main164
+	MOVF       _batteria_mv+0, 0
+	SUBWF      _soglia_off+0, 0
+L__main164:
+	BTFSC      STATUS+0, 0
+	GOTO       L_main89
+	BTFSC      _spento+0, BitPos(_spento+0)
+	GOTO       L_main89
+L__main109:
+	BTFSC      _attivo+0, BitPos(_attivo+0)
+	GOTO       L__main165
+	BSF        GPIO+0, 4
+	GOTO       L__main166
+L__main165:
+	BCF        GPIO+0, 4
+L__main166:
+L_main89:
+;heltec.c,525 :: 		reset_fatto = 1;
+	BSF        _reset_fatto+0, BitPos(_reset_fatto+0)
+;heltec.c,526 :: 		}
+L_main86:
+;heltec.c,527 :: 		}
+L_main83:
+;heltec.c,528 :: 		} else {
+	GOTO       L_main90
+L_main82:
+;heltec.c,529 :: 		reset_fatto = 0;
+	BCF        _reset_fatto+0, BitPos(_reset_fatto+0)
+;heltec.c,530 :: 		}
+L_main90:
+;heltec.c,531 :: 		} else {
+	GOTO       L_main91
+L_main81:
+;heltec.c,533 :: 		if ((ore >= 7) && (ore < 13)) { //dalle 7 alle 13 accendiamo
+	MOVLW      7
+	SUBWF      _ore+0, 0
+	BTFSS      STATUS+0, 0
+	GOTO       L_main94
+	MOVLW      13
+	SUBWF      _ore+0, 0
+	BTFSC      STATUS+0, 0
+	GOTO       L_main94
+L__main108:
+;heltec.c,535 :: 		if ((giorno >= 1) && (giorno <= 7)) {
+	MOVLW      1
+	SUBWF      _giorno+0, 0
+	BTFSS      STATUS+0, 0
+	GOTO       L_main97
+	MOVF       _giorno+0, 0
+	SUBLW      7
+	BTFSS      STATUS+0, 0
+	GOTO       L_main97
+L__main107:
+;heltec.c,536 :: 		if ((batteria_mv > soglia_off) && (spento == 0)) {
 	MOVF       _batteria_mv+1, 0
 	SUBWF      _soglia_off+1, 0
 	BTFSS      STATUS+0, 2
@@ -1509,10 +1559,11 @@ L__main166:
 	SUBWF      _soglia_off+0, 0
 L__main167:
 	BTFSC      STATUS+0, 0
-	GOTO       L_main90
+	GOTO       L_main100
 	BTFSC      _spento+0, BitPos(_spento+0)
-	GOTO       L_main90
-L__main110:
+	GOTO       L_main100
+L__main106:
+;heltec.c,538 :: 		GPIO.F4 = !attivo;
 	BTFSC      _attivo+0, BitPos(_attivo+0)
 	GOTO       L__main168
 	BSF        GPIO+0, 4
@@ -1520,126 +1571,68 @@ L__main110:
 L__main168:
 	BCF        GPIO+0, 4
 L__main169:
-L_main90:
-;heltec.c,523 :: 		reset_fatto = 1;
-	BSF        _reset_fatto+0, BitPos(_reset_fatto+0)
-;heltec.c,524 :: 		}
-L_main87:
-;heltec.c,525 :: 		}
-L_main84:
-;heltec.c,526 :: 		} else {
-	GOTO       L_main91
-L_main83:
-;heltec.c,527 :: 		reset_fatto = 0;
-	BCF        _reset_fatto+0, BitPos(_reset_fatto+0)
-;heltec.c,528 :: 		}
-L_main91:
-;heltec.c,529 :: 		} else {
-	GOTO       L_main92
-L_main82:
-;heltec.c,531 :: 		if ((ore >= 7) && (ore < 13)) { //dalle 7 alle 13 accendiamo
-	MOVLW      7
-	SUBWF      _ore+0, 0
-	BTFSS      STATUS+0, 0
-	GOTO       L_main95
-	MOVLW      13
-	SUBWF      _ore+0, 0
-	BTFSC      STATUS+0, 0
-	GOTO       L_main95
-L__main109:
-;heltec.c,533 :: 		if ((giorno >= 1) && (giorno <= 7)) {
-	MOVLW      1
-	SUBWF      _giorno+0, 0
-	BTFSS      STATUS+0, 0
-	GOTO       L_main98
-	MOVF       _giorno+0, 0
-	SUBLW      7
-	BTFSS      STATUS+0, 0
-	GOTO       L_main98
-L__main108:
-;heltec.c,534 :: 		if ((batteria_mv > soglia_off) && (spento == 0)) {
-	MOVF       _batteria_mv+1, 0
-	SUBWF      _soglia_off+1, 0
-	BTFSS      STATUS+0, 2
+;heltec.c,539 :: 		} else {
+	GOTO       L_main101
+L_main100:
+;heltec.c,540 :: 		GPIO.F4 = attivo;
+	BTFSC      _attivo+0, BitPos(_attivo+0)
 	GOTO       L__main170
-	MOVF       _batteria_mv+0, 0
-	SUBWF      _soglia_off+0, 0
-L__main170:
-	BTFSC      STATUS+0, 0
-	GOTO       L_main101
-	BTFSC      _spento+0, BitPos(_spento+0)
-	GOTO       L_main101
-L__main107:
-;heltec.c,536 :: 		GPIO.F4 = !attivo;
-	BTFSC      _attivo+0, BitPos(_attivo+0)
+	BCF        GPIO+0, 4
 	GOTO       L__main171
+L__main170:
 	BSF        GPIO+0, 4
-	GOTO       L__main172
 L__main171:
-	BCF        GPIO+0, 4
-L__main172:
-;heltec.c,537 :: 		} else {
-	GOTO       L_main102
+;heltec.c,541 :: 		}
 L_main101:
-;heltec.c,538 :: 		GPIO.F4 = attivo;
+;heltec.c,542 :: 		}
+L_main97:
+;heltec.c,543 :: 		} else {
+	GOTO       L_main102
+L_main94:
+;heltec.c,545 :: 		GPIO.F4 = attivo;
 	BTFSC      _attivo+0, BitPos(_attivo+0)
+	GOTO       L__main172
+	BCF        GPIO+0, 4
 	GOTO       L__main173
-	BCF        GPIO+0, 4
-	GOTO       L__main174
+L__main172:
+	BSF        GPIO+0, 4
 L__main173:
-	BSF        GPIO+0, 4
-L__main174:
-;heltec.c,539 :: 		}
+;heltec.c,546 :: 		}
 L_main102:
-;heltec.c,540 :: 		}
-L_main98:
-;heltec.c,541 :: 		} else {
-	GOTO       L_main103
-L_main95:
-;heltec.c,543 :: 		GPIO.F4 = attivo;
-	BTFSC      _attivo+0, BitPos(_attivo+0)
-	GOTO       L__main175
-	BCF        GPIO+0, 4
-	GOTO       L__main176
-L__main175:
-	BSF        GPIO+0, 4
-L__main176:
-;heltec.c,544 :: 		}
-L_main103:
-;heltec.c,545 :: 		}
-L_main92:
-;heltec.c,546 :: 		minuti_count = 0;
-	CLRF       _minuti_count+0
 ;heltec.c,547 :: 		}
-L_main81:
-;heltec.c,548 :: 		}
-L_main72:
-;heltec.c,551 :: 		sveglie_wdt = sveglie_wdt + 1;    // Incrementa conteggio risvegli
+L_main91:
+;heltec.c,548 :: 		minuti_count = 0;
+	CLRF       _minuti_count+0
+;heltec.c,549 :: 		}
+L_main80:
+;heltec.c,550 :: 		}
+L_main71:
+;heltec.c,553 :: 		sveglie_wdt = sveglie_wdt + 1;    // Incrementa conteggio risvegli
 	INCF       _sveglie_wdt+0, 1
 	BTFSC      STATUS+0, 2
 	INCF       _sveglie_wdt+1, 1
-;heltec.c,552 :: 		asm clrwdt;                       // Pulizia watchdog
+;heltec.c,554 :: 		asm clrwdt;                       // Pulizia watchdog
 	CLRWDT
-;heltec.c,553 :: 		asm sleep;                        // Il chip dorme (Risparmio Max)
+;heltec.c,555 :: 		asm sleep;                        // Il chip dorme (Risparmio Max)
 	SLEEP
-;heltec.c,554 :: 		asm nop;                          // Istruzione necessaria dopo lo sleep
+;heltec.c,556 :: 		asm nop;                          // Istruzione necessaria dopo lo sleep
 	NOP
-;heltec.c,555 :: 		} else {
-	GOTO       L_main104
-L_main71:
-;heltec.c,557 :: 		Delay_Safe_ms(100);
+;heltec.c,557 :: 		} else {
+	GOTO       L_main103
+L_main70:
+;heltec.c,559 :: 		Delay_Safe_ms(100);
 	MOVLW      100
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
-;heltec.c,558 :: 		asm clrwdt;
+;heltec.c,560 :: 		asm clrwdt;
 	CLRWDT
-;heltec.c,559 :: 		}
-L_main104:
-;heltec.c,560 :: 		}
-	GOTO       L_main32
 ;heltec.c,561 :: 		}
+L_main103:
+;heltec.c,562 :: 		}
+	GOTO       L_main33
+;heltec.c,563 :: 		}
 L_end_main:
 	GOTO       $+0
 ; end of _main

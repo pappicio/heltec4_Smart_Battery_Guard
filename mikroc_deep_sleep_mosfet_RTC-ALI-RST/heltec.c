@@ -156,12 +156,16 @@ void soglia_batteria() {
         GPIO.F5 = 0;                   // Spegne LED su GP5
         Delay_Safe_ms(500);
         // Batteria CRITICA (Sotto 3.33V): 6 lampi rapidi
-        Lampi(6, 100);
+        Lampi(5, 100);
     } else {
         if ((batteria_mv > soglia_off) && (batteria_mv <= soglia_on)) {
             // Batteria MEDIA (Zona Gialla): 3 lampi rapidi
             Delay_Safe_ms(500);
             Lampi(3, 100);
+        } else {
+            // Batteria MEDIA (Zona Gialla): 3 lampi rapidi
+            Delay_Safe_ms(500);
+            Lampi(1, 100);
         }
     }
 }
@@ -367,9 +371,8 @@ void main() {
                     spento = 1;
                 }
                 GPIO.F5 = 0;
-                if (batteria_mv < soglia_on) {
-                    soglia_batteria();
-                }
+                soglia_batteria();
+
                 sveglie_wdt = 0;
                 conteggio_cicli = 0;
             }
@@ -454,9 +457,8 @@ void main() {
                 } else {
                    spento = 1;
                 }
-                if (batteria_mv < soglia_on) {
-                    soglia_batteria();
-                }
+                soglia_batteria();
+
                 sveglie_wdt = 13; // Forza controllo batteria subito
                 conteggio_cicli = 0;
                 minuti_count = 0;

@@ -1,5 +1,5 @@
-#line 1 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC/heltec.c"
-#line 8 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC/heltec.c"
+#line 1 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC-ALI-RST/heltec.c"
+#line 8 "C:/projects/accensione_heltec/mikroc_deep_sleep_mosfet_RTC-ALI-RST/heltec.c"
 sbit Soft_I2C_Scl at GP0_bit;
 sbit Soft_I2C_Sda at GP2_bit;
 sbit Soft_I2C_Scl_Direction at TRISIO0_bit;
@@ -151,12 +151,16 @@ void soglia_batteria() {
  GPIO.F5 = 0;
  Delay_Safe_ms(500);
 
- Lampi(6, 100);
+ Lampi(5, 100);
  } else {
  if ((batteria_mv > soglia_off) && (batteria_mv <= soglia_on)) {
 
  Delay_Safe_ms(500);
  Lampi(3, 100);
+ } else {
+
+ Delay_Safe_ms(500);
+ Lampi(1, 100);
  }
  }
 }
@@ -362,9 +366,8 @@ void main() {
  spento = 1;
  }
  GPIO.F5 = 0;
- if (batteria_mv < soglia_on) {
  soglia_batteria();
- }
+
  sveglie_wdt = 0;
  conteggio_cicli = 0;
  }
@@ -449,9 +452,8 @@ void main() {
  } else {
  spento = 1;
  }
- if (batteria_mv < soglia_on) {
  soglia_batteria();
- }
+
  sveglie_wdt = 13;
  conteggio_cicli = 0;
  minuti_count = 0;
