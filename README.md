@@ -5,7 +5,10 @@
 
 ***IMPORTANTE: VERSIONE PILOTAGGIO ALIMENTAZIONE:***
 ---
-***se si usa un heltec v4 (o cmq altro modulo con spinottino dedicsato al pannello solare), nn sarò possibile usare lo spinotto dedicato al pannello solare, ma un modulo esterno tipo: TP4056 altrimenti a heltec spento da mosfet, la batteria nn potra dicevere la ricarica avendo la corrente interrotta da heltec a batteria!!!!! Quindi: pannello, modulo ricarica a batteria, da batteria poi a modulo power saver e infine da modulo power saver a modulo lora, fine!***
+***se si usa un heltec v4 (o cmq altro modulo con spinottino dedicato al pannello solare), nn sarò possibile usare lo spinotto dedicato al pannello solare, ma un modulo esterno tipo: TP4056 altrimenti a heltec spento da mosfet, la batteria nn potra dicevere la ricarica avendo la corrente interrotta da heltec a batteria!!!!! Quindi: pannello, modulo ricarica a batteria, da batteria poi a modulo power saver e infine da modulo power saver a modulo lora, fine!***
+
+***Dunque, in breve: Usate spinotto SOLAR dello stesso modulo lora assieme allo spinotto PWR? Obbligatoriamente dovrete usare la versione RST di questo modulo, pena malfunzionamentie mancate ricariuche della batteria dopo lo spegnimento da parte del mosfet.
+Usate un modulo id ricarica esterno, dpotrete usare la versione ALI, oppure (sconsigliato) la versione RST, indifferentemente, ma la versione ALI, garantisce consumi nettamente minori a batteria scarica!!!***
 
 ---
 
