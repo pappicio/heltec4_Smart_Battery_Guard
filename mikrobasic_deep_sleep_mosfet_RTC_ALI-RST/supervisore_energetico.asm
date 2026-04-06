@@ -620,9 +620,8 @@ _Init_Hardware:
 ;supervisore_energetico.mbas,250 :: 		attivo=1
 	MOVLW      1
 	MOVWF      _attivo+0
-;supervisore_energetico.mbas,253 :: 		RSTpin=true
-	MOVLW      255
-	MOVWF      _RSTpin+0
+;supervisore_energetico.mbas,253 :: 		RSTpin=false
+	CLRF       _RSTpin+0
 ;supervisore_energetico.mbas,257 :: 		RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
 	BSF        _RTC_presente+0, BitPos(_RTC_presente+0)
 ;supervisore_energetico.mbas,258 :: 		finestra_oraria = 0
@@ -648,7 +647,7 @@ _Init_Hardware:
 ;supervisore_energetico.mbas,266 :: 		giorni_riavvio = 0
 	CLRF       _giorni_riavvio+0
 ;supervisore_energetico.mbas,271 :: 		attivo=0
-	CLRF       _attivo+0
+L__Init_Hardware45:
 ;supervisore_energetico.mbas,275 :: 		GPIO.4 = attivo
 	BTFSC      _attivo+0, 0
 	GOTO       L__Init_Hardware198
