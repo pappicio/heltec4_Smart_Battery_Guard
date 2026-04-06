@@ -42,9 +42,9 @@ Se invece la batteria è carica, nn ci saranno feedback visivi dal led ma solo i
 
 ### 🔘 **4. ***Funzioni del Pulsante di Controllo*****
 * ***Reset Rapido (1.0 - 2.5 sec):*** Il LED rimane acceso fisso fino al rilascio. Esegue il riavvio forzato del modulo Heltec.
-    * Se voltaggio OK: ***Nessun lampeggio extra***.
+    * Se voltaggio OK (sona verde): ***1 lampeggio extra veloce***.
     * Se zona gialla (3.7V - 3.3V): ***3 lampeggi veloci***.
-    * Se batteria critica (<3.3V): ***6 lampeggi veloci*** e Heltec resta spento.
+    * Se batteria critica (sona rossa) (<3.3V): ***5 lampeggi veloci*** e Heltec resta spento.
 * ***Diagnostica Volt + Ora (2.5 - 5 sec):*** Visualizza in sequenza i millivolt della batteria e l'orario attuale dell'RTC (vedi punto 2).
 * ***Modalità Manutenzione (> 5 sec):*** Al raggiungimento dei 5 secondi, il LED emette ***10 lampeggi veloci***. Il sistema spegne il carico e il LED lampeggia lentamente (500ms ON / 500ms OFF). 
     * ***Per uscire dalla modalità manutenzione:*** Premere nuovamente per almeno ***5 secondi*** fino ai ***10 lampeggi veloci*** seguiti dai ***3 lampi*** classici di riavvio.
