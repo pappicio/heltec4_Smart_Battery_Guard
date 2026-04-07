@@ -242,15 +242,16 @@ end sub
       cicli_per_giorno = 2883
 
       spento=0
-
-
-  '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-  '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
       attivo=1
+
+  '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
   'SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
   
       RSTpin=true
+      
   
   ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   
@@ -267,9 +268,7 @@ end sub
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-      if RSTpin=true then
-         attivo=0
-      end if
+
       
       ' Forza GP4 alto: spegne il carico (Mosfet P-channel) all'accensione (Nuovo PIN)
       GPIO.4 = attivo
@@ -332,8 +331,16 @@ end sub
       ' Attesa di mezzo secondo per stabilizzare le tensioni
       delay_safe_ms(500)
 
-      ' Esegue tre lampeggi per confermare l'avvio del firmware
-      Lampi(3, 250)
+      if RSTpin=true then
+         attivo=0
+         ' Esegue tre lampeggi per confermare l'avvio del firmware brevi RST=ON
+          Lampi(3, 100)
+      else
+         ' Esegue tre lampeggi per confermare l'avvio del firmware lenti ALI=ON
+          Lampi(3, 250)
+      end if
+      
+
 
       ' Altra piccola pausa di sicurezza prima della lettura ADC
       delay_safe_ms(500)

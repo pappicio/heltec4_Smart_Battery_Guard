@@ -247,9 +247,6 @@ void Init_Hardware() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    if (RSTpin == 1) {
-        attivo = 0;
-    }
 
     // Forza GP4 alto: spegne il carico (Mosfet P-channel) all'accensione (Nuovo PIN)
     GPIO.F4 = attivo;
@@ -303,8 +300,14 @@ void Init_Hardware() {
     // Attesa di mezzo secondo per stabilizzare le tensioni
     Delay_Safe_ms(500);
 
+
     // Esegue tre lampeggi per confermare l'avvio del firmware
-    Lampi(3, 250);
+    if (RSTpin == 1) {
+        attivo = 0;
+        Lampi(3, 100);
+    } else {
+        Lampi(3, 250);
+    }
 
     // Altra piccola pausa di sicurezza prima della lettura ADC
     Delay_Safe_ms(500);

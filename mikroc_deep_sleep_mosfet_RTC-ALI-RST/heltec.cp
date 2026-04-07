@@ -242,9 +242,6 @@ void Init_Hardware() {
 
 
 
- if (RSTpin == 1) {
- attivo = 0;
- }
 
 
  GPIO.F4 = attivo;
@@ -299,7 +296,13 @@ void Init_Hardware() {
  Delay_Safe_ms(500);
 
 
+
+ if (RSTpin == 1) {
+ attivo = 0;
+ Lampi(3, 100);
+ } else {
  Lampi(3, 250);
+ }
 
 
  Delay_Safe_ms(500);
