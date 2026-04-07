@@ -89,7 +89,7 @@ sub procedure Leggi_Ora_RTC()
     dim bcd_temp as byte
 
     gpio.5 = 1           ' Accende tutto (LED su GP5)
-    delay_safe_ms(100)   ' Tempo di sveglia
+    delay_safe_ms(80)   ' Tempo di sveglia
 
     ' Reset Bus
     Soft_I2C_Start()
@@ -437,7 +437,7 @@ end sub
                     lampi (2,100)
                     Leggi_Ora_RTC()
                     gpio.5=1
-                    delay_safe_ms(100)
+                    delay_safe_ms(5)
                     gpio.5=0
                     Delay_Safe_ms(1000)
                     ' Ore

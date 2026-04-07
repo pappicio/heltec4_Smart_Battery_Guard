@@ -148,8 +148,8 @@ _Leggi_Ora_RTC:
 ;heltec.c,84 :: 		void Leggi_Ora_RTC() {
 ;heltec.c,87 :: 		GPIO.F5 = 1;          // Accende tutto (LED su GP5)
 	BSF        GPIO+0, 5
-;heltec.c,88 :: 		Delay_Safe_ms(100);   // Tempo di sveglia
-	MOVLW      100
+;heltec.c,88 :: 		Delay_Safe_ms(80);   // Tempo di sveglia
+	MOVLW      80
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1
@@ -1046,8 +1046,8 @@ L__main113:
 	CALL       _Leggi_Ora_RTC+0
 ;heltec.c,402 :: 		GPIO.F5 = 1;
 	BSF        GPIO+0, 5
-;heltec.c,403 :: 		Delay_Safe_ms(100);
-	MOVLW      100
+;heltec.c,403 :: 		Delay_Safe_ms(5);
+	MOVLW      5
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	MOVLW      0
 	MOVWF      FARG_Delay_Safe_ms_n+1

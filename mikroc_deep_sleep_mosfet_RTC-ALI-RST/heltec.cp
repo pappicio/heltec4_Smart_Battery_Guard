@@ -80,7 +80,7 @@ void Leggi_Ora_RTC() {
  unsigned char bcd_temp;
 
  GPIO.F5 = 1;
- Delay_Safe_ms(100);
+ Delay_Safe_ms(80);
 
 
  Soft_I2C_Start();
@@ -395,7 +395,7 @@ void main() {
  Lampi(2, 100);
  Leggi_Ora_RTC();
  GPIO.F5 = 1;
- Delay_Safe_ms(100);
+ Delay_Safe_ms(5);
  GPIO.F5 = 0;
  Delay_Safe_ms(1000);
 

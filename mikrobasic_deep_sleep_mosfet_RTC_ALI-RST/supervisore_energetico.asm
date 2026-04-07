@@ -157,8 +157,8 @@ _Leggi_Ora_RTC:
 ;supervisore_energetico.mbas,89 :: 		dim bcd_temp as byte
 ;supervisore_energetico.mbas,91 :: 		gpio.5 = 1           ' Accende tutto (LED su GP5)
 	BSF        GPIO+0, 5
-;supervisore_energetico.mbas,92 :: 		delay_safe_ms(100)   ' Tempo di sveglia
-	MOVLW      100
+;supervisore_energetico.mbas,92 :: 		delay_safe_ms(80)   ' Tempo di sveglia
+	MOVLW      80
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
@@ -1059,8 +1059,8 @@ L__main85:
 	CALL       _Leggi_Ora_RTC+0
 ;supervisore_energetico.mbas,439 :: 		gpio.5=1
 	BSF        GPIO+0, 5
-;supervisore_energetico.mbas,440 :: 		delay_safe_ms(100)
-	MOVLW      100
+;supervisore_energetico.mbas,440 :: 		delay_safe_ms(5)
+	MOVLW      5
 	MOVWF      FARG_Delay_Safe_ms_n+0
 	CLRF       FARG_Delay_Safe_ms_n+1
 	CALL       _Delay_Safe_ms+0
