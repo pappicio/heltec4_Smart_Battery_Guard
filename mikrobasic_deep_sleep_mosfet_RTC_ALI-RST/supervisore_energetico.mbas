@@ -240,7 +240,6 @@ end sub
 
       ' Imposta il numero di cicli per coprire 24h reali (correzione 29.9s)
       cicli_per_giorno = 2883
-
       spento=0
       attivo=1
 
@@ -250,9 +249,8 @@ end sub
 
   'SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
   
-      RSTpin=true
+      RSTpin=false
       
-  
   ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   
       RTC_presente = 1 'se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
@@ -264,7 +262,7 @@ end sub
       soglia_off   = 3300  '300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
       soglia_on    = 3600  '(45%), va piu che bene
       taratura_vcc = 5010  'segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
-      giorni_riavvio = 0
+      
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -292,7 +290,8 @@ end sub
           GPIO.0 = 1      ' SDA Alto (Idle I2C)
           GPIO.2 = 1      ' SCL Alto (Idle I2C)
 
-           giorni_riavvio = 0
+          giorni_riavvio = 0
+          
           i = 0
           while (GPIO.3 = 0) and (i < 15)
                GPIO.5 = 1 ' LED su GP5

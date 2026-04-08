@@ -224,7 +224,7 @@ void Init_Hardware() {
  attivo = 1;
 
 
- RSTpin = 1;
+ RSTpin = 0;
 
 
  RTC_presente = 1;
@@ -238,7 +238,6 @@ void Init_Hardware() {
  soglia_off = 3300;
  soglia_on = 3600;
  taratura_vcc = 5010;
- giorni_riavvio = 0;
 
 
 

@@ -229,7 +229,7 @@ void Init_Hardware() {
     attivo = 1;
 
     //SOGLIE DA MODIFICARE SECONDO LE MISURAZIONI CON MULTIMETRO!!!
-    RSTpin = 1; // true
+    RSTpin = 0; // true
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     RTC_presente = 1; //se vogliamo abilitare RTC sulla scheda, altrimenti poniamo variabile a 0
@@ -243,7 +243,6 @@ void Init_Hardware() {
     soglia_off   = 3300;  //300 mV, ma heltec a me segna 3.40V (3400) quindi 18% batteria, scendo per avere piu tempo in accensione!
     soglia_on    = 3600;  //(45%), va piu che bene
     taratura_vcc = 5010;  //segnava 5.03, (5030) ma per calibrarlo meglio ho alzato di 20 mV
-    giorni_riavvio = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
