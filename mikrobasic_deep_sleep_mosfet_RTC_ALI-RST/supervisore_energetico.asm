@@ -17,17 +17,11 @@ L__Delay_Safe_ms180:
 	BTFSS      STATUS+0, 0
 	GOTO       L__Delay_Safe_ms5
 ;supervisore_energetico.mbas,48 :: 		delay_us(978)               ' Pausa di 1ms calcolando i tempi della esecuzione altre uistruzioni in sub, si arriva ad arrotondare a 1ms circa...
-	MOVLW      2
-	MOVWF      R12+0
-	MOVLW      67
+	MOVLW      81
 	MOVWF      R13+0
 L__Delay_Safe_ms6:
 	DECFSZ     R13+0, 1
 	GOTO       L__Delay_Safe_ms6
-	DECFSZ     R12+0, 1
-	GOTO       L__Delay_Safe_ms6
-	NOP
-	NOP
 ;supervisore_energetico.mbas,50 :: 		clrwdt                       ' Reset del Watchdog ad ogni millisecondo
 	CLRWDT
 ;supervisore_energetico.mbas,51 :: 		next k

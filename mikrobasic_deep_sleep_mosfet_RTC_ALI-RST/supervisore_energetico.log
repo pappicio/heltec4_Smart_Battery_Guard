@@ -1,5 +1,10 @@
-0	1	mBPic.exe -MSF -DBG -pP12F683 -Y -DL -O11111114 -fo4 -N"C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\supervisore_energetico.mbppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Uses\P16\" -SP"C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_SoftI2C.mcl" "__Lib_ADC_A_E.mcl" "__Lib_EEPROM.mcl" "supervisore_energetico.mbas"	 
+0	1	mBPic.exe -MSF -DBG -pP12F683 -Y -DL -O11111114 -fo1 -N"C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\supervisore_energetico.mbppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Uses\P16\" -SP"C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_SoftI2C.mcl" "__Lib_ADC_A_E.mcl" "__Lib_EEPROM.mcl" "supervisore_energetico.mbas"	 
 diagnostics: 0	155	Available RAM: 112 [bytes], Available ROM: 2048 [bytes]	 
+diagnostics: 0	133	Compilation Started	C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Uses\P16\__Lib_Delays.mbas
+hint: 1	1015	Hint: Compiling unit "C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Uses\P16\__Lib_Delays.mbas"	__Lib_Delays.mbas
+warning: 30	1522	Warning: Value of Time argument is too small, no code generated	__Lib_Delays.mbas
+hint: 152	1010	Hint: Unit "__Lib_Delays.mbas" has been recompiled	__Lib_Delays.mbas
+diagnostics: 0	134	Compiled Successfully	C:\Users\Public\Documents\Mikroelektronika\mikroBasic PRO for PIC\Uses\P16\__Lib_Delays.mbas
 diagnostics: 0	133	Compilation Started	C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\supervisore_energetico.mbas
 hint: 1	1015	Hint: Compiling unit "C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\supervisore_energetico.mbas"	supervisore_energetico.mbas
 hint: 134	1011	Hint: Variable "media_pulita" has been eliminated by optimizer	supervisore_energetico.mbas
@@ -7,8 +12,8 @@ hint: 609	1010	Hint: Unit "supervisore_energetico.mbas" has been recompiled	supe
 diagnostics: 0	134	Compiled Successfully	C:\projects\accensione_heltec\mikrobasic_deep_sleep_mosfet_RTC_ALI-RST\supervisore_energetico.mbas
 diagnostics: 0	139	All files Compiled in 31 ms	 
 hint: 0	1144	Used RAM (bytes): 44 (39%)  Free RAM (bytes): 68 (61%)	Used RAM (bytes): 44 (39%)  Free RAM (bytes): 68 (61%)
-hint: 0	1144	Used ROM (program words): 1703 (83%)  Free ROM (program words): 345 (17%)	Used ROM (program words): 1703 (83%)  Free ROM (program words): 345 (17%)
+hint: 0	1144	Used ROM (program words): 1697 (83%)  Free ROM (program words): 351 (17%)	Used ROM (program words): 1697 (83%)  Free ROM (program words): 351 (17%)
 diagnostics: 0	145	Project Linked Successfully	supervisore_energetico.mbppi
 diagnostics: 0	140	Linked in 62 ms	 
-diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 250 ms	 
-diagnostics: 0	103	Finished successfully: 08 apr 2026, 17:00:44	supervisore_energetico.mbppi
+diagnostics: 0	141	Project 'supervisore_energetico.mbppi' completed: 234 ms	 
+diagnostics: 0	103	Finished successfully: 10 apr 2026, 16:52:40	supervisore_energetico.mbppi
